@@ -1,4 +1,4 @@
-public struct imx_core_sdk_swift {
+public struct IMXCoreSDK {
     public private(set) var text = "Hello, World!"
 
     public init() {
