@@ -8,13 +8,13 @@ let package = Package(
     name: "IMXCoreSDK",
     platforms: [
         .iOS(.v13),
-        .macOS(.v10_15)
+        .macOS(.v10_15),
     ],
     products: [
         .library(
             name: "IMXCoreSDK",
             targets: ["IMXCoreSDK"]
-        )
+        ),
     ],
     dependencies: [],
     targets: [
@@ -36,6 +36,6 @@ let package = Package(
         .testTarget(
             name: "IMXCoreSDKTests",
             dependencies: ["IMXCoreSDK"]
-        )
+        ),
     ]
 )
