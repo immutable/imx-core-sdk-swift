@@ -1,5 +1,5 @@
-import XCTest
 @testable import IMXCoreSDK
+import XCTest
 
 final class IMXCoreSDKTests: XCTestCase {
     func testExample() throws {
