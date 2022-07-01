@@ -6,7 +6,6 @@ on:
       - '.github/workflows/swiftformat.yml'
       - '.swiftversion'
       - '.swiftformat.yml'
-      - '**/*.swift'
 
 jobs:
   SwiftFormat:
