@@ -1,5 +1,7 @@
 disabled_rules:
   trailing_comma
 excluded:
+  - .build
   - Pods
   - Packages
+  - Sources/ImmutableXCore/Generated
