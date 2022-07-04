@@ -5,15 +5,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "IMXCoreSDK",
+    name: "ImmutableXCore",
     platforms: [
         .iOS(.v13),
         .macOS(.v10_15),
     ],
     products: [
         .library(
-            name: "IMXCoreSDK",
-            targets: ["IMXCoreSDK"]
+            name: "ImmutableXCore",
+            targets: ["ImmutableXCore"]
         ),
     ],
     dependencies: [],
@@ -29,13 +29,13 @@ let package = Package(
             dependencies: ["SwiftLintBinary"]
         ),
         .target(
-            name: "IMXCoreSDK",
+            name: "ImmutableXCore",
             dependencies: [],
             plugins: ["SwiftLintXcode"]
         ),
         .testTarget(
-            name: "IMXCoreSDKTests",
-            dependencies: ["IMXCoreSDK"]
+            name: "ImmutableXCoreTests",
+            dependencies: ["ImmutableXCore"]
         ),
     ]
 )
