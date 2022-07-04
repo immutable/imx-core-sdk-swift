@@ -16,7 +16,12 @@ let package = Package(
             targets: ["ImmutableXCore"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(
+            url: "https://github.com/Flight-School/AnyCodable",
+            from: "0.6.5"
+        ),
+    ],
     targets: [
         .binaryTarget(
             name: "SwiftLintBinary",
@@ -30,7 +35,7 @@ let package = Package(
         ),
         .target(
             name: "ImmutableXCore",
-            dependencies: [],
+            dependencies: ["AnyCodable"],
             plugins: ["SwiftLintXcode"]
         ),
         .testTarget(
