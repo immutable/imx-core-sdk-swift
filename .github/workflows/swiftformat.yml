@@ -2,10 +2,8 @@ name: SwiftFormat
 
 on:
   pull_request:
-    paths:
-      - '.github/workflows/swiftformat.yml'
-      - '.swiftversion'
-      - '.swiftformat.yml'
+    branches:
+      - '*'
 
 jobs:
   SwiftFormat:
