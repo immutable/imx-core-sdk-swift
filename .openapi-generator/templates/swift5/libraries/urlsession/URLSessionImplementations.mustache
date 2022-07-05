@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import os.log
 #if !os(macOS)
 import MobileCoreServices
 #endif
@@ -52,7 +53,6 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
      - intercept and handle errors like authorization
      - retry the request.
      */
-    @available(*, deprecated, message: "Please override execute() method to intercept and handle errors like authorization or retry the request. Check the Wiki for more info. https://github.com/OpenAPITools/openapi-generator/wiki/FAQ#how-do-i-implement-bearer-token-authentication-with-urlsession-on-the-swift-api-client")
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} var taskCompletionShouldRetry: ((Data?, URLResponse?, Error?, @escaping (Bool) -> Void) -> Void)?
 
     required {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:]) {
@@ -135,6 +135,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
         do {
             let request = try createURLRequest(urlSession: urlSession, method: xMethod, encoding: encoding, headers: headers)
+            Logger.log(request, parameters: parameters)
 
             var taskIdentifier: Int?
              let cleanupRequest = {
@@ -155,6 +156,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
                             self.execute(apiResponseQueue, completion)
                         } else {
                             apiResponseQueue.async {
+                                Logger.log(request, data: data, response: response, error: error)
                                 self.processRequestResponse(urlRequest: request, data: data, response: response, error: error, completion: completion)
                                 cleanupRequest()
                             }
@@ -162,6 +164,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
                     }
                 } else {
                     apiResponseQueue.async {
+                        Logger.log(request, data: data, response: response, error: error)
                         self.processRequestResponse(urlRequest: request, data: data, response: response, error: error, completion: completion)
                         cleanupRequest()
                     }
@@ -354,7 +357,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
             guard let data = data, !data.isEmpty else {
                 if T.self is ExpressibleByNilLiteral.Type {
-                    completion(.success(Response(response: httpResponse, body: Optional<T>.none as! T)))
+                    completion(.success(Response(response: httpResponse, body: Optional<T>.none!)))
                 } else {
                     completion(.failure(ErrorResponse.error(httpResponse.statusCode, nil, response, DecodableRequestBuilderError.emptyDataResponse)))
                 }
@@ -626,3 +629,99 @@ private extension Optional where Wrapped == Data {
 }
 
 extension JSONDataEncoding: ParameterEncoding {}
+
+private struct Logger {
+    static var networkingLogger: OSLog = OSLog(subsystem: "com.immutable.core", category: "ImmutableXCore")
+
+    static var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd HH:mm:ss.SSS"
+        return formatter
+    }()
+
+    static func log(_ request: URLRequest, parameters: [String: Any]?) {
+#if DEBUG
+        guard case let .calls(including: areas) = ImmutableXCore.logLevel else { return }
+
+        var privateLog = ""
+
+        for area in areas {
+            switch (area) {
+            case .requestHeaders:
+                guard let headers = request.allHTTPHeaderFields else { break }
+                privateLog += "\n\nHeaders: ["
+                headers.forEach { key, value in
+                    privateLog += "\n  \(key): \(value)"
+                }
+                privateLog += "\n]"
+            case .requestBody:
+                guard let parameters = parameters,
+                      let body = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) else { break }
+
+                privateLog += "\n\nBody: \(body)"
+            case .responseHeaders:
+                break
+            case .responseBody:
+                break
+            }
+        }
+
+        os_log(
+            "%{public}@\n---> Requesting\n%{public}@ '%{public}@'%{private}@",
+            log: networkingLogger,
+            type: OSLogType.debug,
+            dateFormatter.string(from: Date()),
+            request.httpMethod ?? "",
+            request.url?.absoluteString ?? "",
+            privateLog
+        )
+#endif
+    }
+
+    static func log(_ request: URLRequest, data: Data?, response: URLResponse?, error: Error?) {
+#if DEBUG
+        guard case let .calls(including: areas) = ImmutableXCore.logLevel else { return }
+
+        let response = response as? HTTPURLResponse
+        var privateLog = ""
+
+        for area in areas {
+            switch (area) {
+            case .requestHeaders:
+                break
+            case .requestBody:
+                break
+            case .responseHeaders:
+                guard let headers = response?.allHeaderFields else { break }
+                privateLog += "\n\nHeaders: ["
+                headers.forEach { key, value in
+                    privateLog += "\n  \(key): \(value)"
+                }
+                privateLog += "\n]"
+            case .responseBody:
+                guard let data = data,
+                      let object = try? JSONSerialization.jsonObject(with: data, options: []),
+                      let jsonData = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+                      let jsonString = String(data: jsonData, encoding: .utf8) else { break }
+
+                privateLog += "\n\nBody: \(jsonString)"
+            }
+        }
+
+        if let error = error {
+            privateLog += "\n\nError:\n  \(error)"
+        }
+
+        os_log(
+            "%{public}@\n<--- Response %{public}d\n%{public}@ '%{public}@'%{private}@",
+            log: networkingLogger,
+            type: OSLogType.debug,
+            dateFormatter.string(from: Date()),
+            response?.statusCode ?? 0,
+            request.httpMethod ?? "",
+            request.url?.absoluteString ?? "",
+            privateLog
+        )
+#endif
+    }
+}

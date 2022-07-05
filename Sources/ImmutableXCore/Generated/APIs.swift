@@ -14,11 +14,14 @@ import Foundation
 public typealias OpenAPIClient = OpenAPIClientAPI
 
 open class OpenAPIClientAPI {
-    public static var basePath = "https://api.ropsten.x.immutable.com"
-    public static var customHeaders: [String: String] = [:]
+    public static var customHeaders: [String: String] = ["x-sdk-version": "imx-core-sdk-swift-\(ImmutableXCore.sdkVersion)"]
     public static var credential: URLCredential?
     public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory()
     public static var apiResponseQueue: DispatchQueue = .main
+
+    public static var basePath: String {
+        return ImmutableXCore.base.publicApiUrl
+    }
 }
 
 open class RequestBuilder<T> {

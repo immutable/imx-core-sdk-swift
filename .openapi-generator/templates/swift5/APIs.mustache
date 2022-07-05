@@ -17,17 +17,20 @@ import Vapor
 {{/removeMigrationProjectNameClass}}
 
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class {{projectName}}API {
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var basePath = "{{{basePath}}}"
     {{#useVapor}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: HTTPHeaders = [:]
     {{/useVapor}}
     {{^useVapor}}
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: [String: String] = [:]
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: [String: String] = ["x-sdk-version": "imx-core-sdk-swift-\(ImmutableXCore.sdkVersion)"]
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var credential: URLCredential?{{#useAlamofire}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var apiResponseQueue: DispatchQueue = .main
     {{/useVapor}}
+
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var basePath: String {
+        return ImmutableXCore.base.publicApiUrl
+    }
 }{{^useVapor}}
 
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class RequestBuilder<T> {
