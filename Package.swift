@@ -36,6 +36,9 @@ let package = Package(
         .target(
             name: "ImmutableXCore",
             dependencies: ["AnyCodable"],
+            resources: [
+                .copy("version"),
+            ],
             plugins: ["SwiftLintXcode"]
         ),
         .testTarget(
