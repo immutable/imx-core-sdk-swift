@@ -1,0 +1,10 @@
+plugins:
+  swiftlint:
+    enabled: true
+
+exclude_patterns:
+- .build/
+- Tests/
+- Pods/
+- Packages/
+- Sources/ImmutableXCore/Generated/
