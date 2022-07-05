@@ -10,4 +10,18 @@ public enum ImmutableXCore {
 
     /// The environment the SDK will communicate with. Defaults to `.ropsten`.
     public static var base = ImmutableXBase.ropsten
+
+    /// Defines the level of logging for ImmutableXCore network calls. Defaults to `.none`.
+    ///
+    ///  Setting `logLevel` to `.calls(including: [])` will log all requests and responses with HTTP Method and URL.
+    ///  For richer logging include extra details of the calls to be logged, e.g.
+    ///
+    ///  ```swift
+    ///  logLevel = .calls(including: [
+    ///     .requestHeaders, .responseBody
+    ///  ])
+    ///  ```
+    ///
+    /// - Note: Logs are only available in debug mode.
+    public static var logLevel = ImmutableXHTTPLoggingLevel.none
 }
