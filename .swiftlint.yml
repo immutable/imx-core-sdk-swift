@@ -1,5 +1,6 @@
 disabled_rules:
-  trailing_comma
+  - trailing_comma
+  - identifier_name # Lots of math operations are written with short variable names as a standard
 excluded:
   - .build
   - Pods
