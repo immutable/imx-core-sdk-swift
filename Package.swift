@@ -21,6 +21,7 @@ let package = Package(
             url: "https://github.com/Flight-School/AnyCodable",
             from: "0.6.5"
         ),
+        .package(url: "https://github.com/attaswift/BigInt", from: "5.3.0"),
     ],
     targets: [
         .binaryTarget(
@@ -35,7 +36,7 @@ let package = Package(
         ),
         .target(
             name: "ImmutableXCore",
-            dependencies: ["AnyCodable"],
+            dependencies: ["AnyCodable", "BigInt"],
             resources: [
                 .copy("version"),
             ],
