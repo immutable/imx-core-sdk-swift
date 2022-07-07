@@ -1,0 +1,29 @@
+import BigInt
+import Foundation
+
+public extension BigInt {
+    var isEven: Bool {
+        magnitude[bitAt: 0] == false
+    }
+
+    init?(hexString: String) {
+        self.init(hexString.dropHexPrefix, radix: 16)
+    }
+
+    func asString(uppercased: Bool = false, radix: Int) -> String {
+        let stringRepresentation = String(self, radix: radix)
+        return uppercased ? stringRepresentation.uppercased() : stringRepresentation
+    }
+
+    func asHexStringLength64(uppercased: Bool = false) -> String {
+        var hexString = asString(uppercased: uppercased, radix: 16)
+        while hexString.count < 64 {
+            hexString = "0\(hexString)"
+        }
+        return hexString
+    }
+
+    func as256bitLongData() -> Data {
+        asHexStringLength64().hexToData()
+    }
+}
