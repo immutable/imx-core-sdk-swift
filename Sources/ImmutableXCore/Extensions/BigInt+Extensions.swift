@@ -10,6 +10,10 @@ public extension BigInt {
         self.init(hexString.dropHexPrefix, radix: 16)
     }
 
+    init(sign: BigInt.Sign = .plus, data: Data) {
+        self.init(sign: sign, magnitude: BigInt.Magnitude(data))
+    }
+
     func asString(uppercased: Bool = false, radix: Int) -> String {
         let stringRepresentation = String(self, radix: radix)
         return uppercased ? stringRepresentation.uppercased() : stringRepresentation
