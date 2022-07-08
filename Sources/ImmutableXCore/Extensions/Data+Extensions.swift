@@ -1,6 +1,10 @@
 import Foundation
 
 public extension Data {
+    init(hex: String) {
+        self.init([UInt8](hex: hex))
+    }
+
     func asHexString() -> String {
         lazy.reduce(into: "") {
             var s = String($1, radix: 16)

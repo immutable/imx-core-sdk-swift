@@ -1,6 +1,5 @@
 // swift-tools-version: 5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
-// swiftlint:disable line_length
 
 import PackageDescription
 
@@ -17,11 +16,9 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/Flight-School/AnyCodable",
-            from: "0.6.5"
-        ),
+        .package(url: "https://github.com/Flight-School/AnyCodable", from: "0.6.5"),
         .package(url: "https://github.com/attaswift/BigInt", from: "5.3.0"),
+        .package(url: "https://github.com/Boilertalk/secp256k1.swift.git", from: "0.1.6"),
     ],
     targets: [
         .binaryTarget(
@@ -36,7 +33,11 @@ let package = Package(
         ),
         .target(
             name: "ImmutableXCore",
-            dependencies: ["AnyCodable", "BigInt"],
+            dependencies: [
+                .product(name: "BigInt", package: "BigInt"),
+                .product(name: "AnyCodable", package: "AnyCodable"),
+                .product(name: "secp256k1", package: "secp256k1.swift"),
+            ],
             resources: [
                 .copy("version"),
             ],
@@ -44,7 +45,10 @@ let package = Package(
         ),
         .testTarget(
             name: "ImmutableXCoreTests",
-            dependencies: ["ImmutableXCore"]
+            dependencies: [
+                .target(name: "ImmutableXCore"),
+                .product(name: "BigInt", package: "BigInt"),
+            ]
         ),
     ]
 )
