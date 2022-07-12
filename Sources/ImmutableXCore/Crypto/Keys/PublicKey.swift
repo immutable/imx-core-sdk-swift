@@ -4,15 +4,16 @@ import Foundation
 /// Elliptic Curve generated public key
 public struct PublicKey: Equatable {
     public let point: CurvePoint
-    public let compressedData: Data
+    public let number: BigInt
 
-    public var compressedHex: String {
-        compressedData.asHexString()
+    /// A representation of the public key sanitized to be Stark friendly
+    public var asStarkKey: String {
+        Array(hex: number.asString(radix: 16).sanitizeBytes()).asHexString(byteLength: Constants.starkPrivateKeyLength)
     }
 
     public init(point: CurvePoint) throws {
         self.point = point
-        compressedData = Data(point.y.isEven ? [0x02] : [0x03]) + point.x.as256bitLongData()
+        number = BigInt(data: Data(point.y.isEven ? [0x02] : [0x03]) + point.x.as256bitLongData())
     }
 
     public init(privateKey: PrivateKey) throws {

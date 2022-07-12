@@ -1,3 +1,5 @@
+import Foundation
+
 // https://github.com/krzyzanowskim/CryptoSwift/blob/main/Sources/CryptoSwift/Array%2BExtension.swift#L34
 public extension Array where Element == UInt8 {
     @inlinable
@@ -48,5 +50,11 @@ public extension Array where Element == UInt8 {
         if let b = buffer {
             append(b)
         }
+    }
+
+    /// Convert array of bytes to the given ``byteLength`` prepending the given ``prefix``.
+    func asHexString(byteLength: Int, prefix: String = "0x") -> String {
+        let diff = Swift.max(count - byteLength, 0)
+        return prefix + Data(dropFirst(diff)).asHexString()
     }
 }

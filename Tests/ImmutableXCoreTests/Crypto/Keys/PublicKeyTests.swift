@@ -20,13 +20,13 @@ final class PublicKeyTests: XCTestCase {
         let publicKey = try PublicKey(privateKey: privateKey)
 
         XCTAssertEqual(publicKey.point, expectedEvenCurve)
-        XCTAssertEqual(publicKey.compressedData, Data([0x02]) + expectedEvenCurve.x.as256bitLongData())
+        XCTAssertEqual(publicKey.number, BigInt(data: Data([0x02]) + expectedEvenCurve.x.as256bitLongData()))
         XCTAssertEqual(publicKey, try PublicKey(privateKey: privateKey))
     }
 
     func testInitCurvePoint() throws {
         let publicKey = try PublicKey(point: oddCurve)
         XCTAssertEqual(publicKey.point, oddCurve)
-        XCTAssertEqual(publicKey.compressedData, Data([0x03]) + oddCurve.x.as256bitLongData())
+        XCTAssertEqual(publicKey.number, BigInt(data: Data([0x03]) + oddCurve.x.as256bitLongData()))
     }
 }
