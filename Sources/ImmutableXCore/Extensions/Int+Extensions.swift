@@ -1,6 +1,10 @@
 import Foundation
 
 public extension Int {
+    var asHexString: String {
+        String(format: "%02x", self)
+    }
+
     var byteCountFromBitCount: Int {
         Int(floor(Double(self + 7) / Double(8)))
     }
