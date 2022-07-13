@@ -12,6 +12,8 @@ import AnyCodable
 
 public struct RegisterUserRequest: Codable, JSONEncodable, Hashable {
 
+    /** User email */
+    public private(set) var email: String?
     /** Eth signature */
     public private(set) var ethSignature: String
     /** The ether key of the user */
@@ -21,7 +23,8 @@ public struct RegisterUserRequest: Codable, JSONEncodable, Hashable {
     /** Payload signature */
     public private(set) var starkSignature: String
 
-    public init(ethSignature: String, etherKey: String, starkKey: String, starkSignature: String) {
+    public init(email: String? = nil, ethSignature: String, etherKey: String, starkKey: String, starkSignature: String) {
+        self.email = email
         self.ethSignature = ethSignature
         self.etherKey = etherKey
         self.starkKey = starkKey
@@ -29,6 +32,7 @@ public struct RegisterUserRequest: Codable, JSONEncodable, Hashable {
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case email
         case ethSignature = "eth_signature"
         case etherKey = "ether_key"
         case starkKey = "stark_key"
@@ -39,6 +43,7 @@ public struct RegisterUserRequest: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(email, forKey: .email)
         try container.encode(ethSignature, forKey: .ethSignature)
         try container.encode(etherKey, forKey: .etherKey)
         try container.encode(starkKey, forKey: .starkKey)

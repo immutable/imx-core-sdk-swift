@@ -18,13 +18,16 @@ public struct Balance: Codable, JSONEncodable, Hashable {
     public private(set) var preparingWithdrawal: String
     /** Symbol of the token (e.g. ETH, IMX) */
     public private(set) var symbol: String
+    /** Address of the contract that represents this ERC20 token or empty for ETH */
+    public private(set) var tokenAddress: String
     /** Amount which is currently withdrawable from the exchange */
     public private(set) var withdrawable: String
 
-    public init(balance: String, preparingWithdrawal: String, symbol: String, withdrawable: String) {
+    public init(balance: String, preparingWithdrawal: String, symbol: String, tokenAddress: String, withdrawable: String) {
         self.balance = balance
         self.preparingWithdrawal = preparingWithdrawal
         self.symbol = symbol
+        self.tokenAddress = tokenAddress
         self.withdrawable = withdrawable
     }
 
@@ -32,6 +35,7 @@ public struct Balance: Codable, JSONEncodable, Hashable {
         case balance
         case preparingWithdrawal = "preparing_withdrawal"
         case symbol
+        case tokenAddress = "token_address"
         case withdrawable
     }
 
@@ -42,6 +46,7 @@ public struct Balance: Codable, JSONEncodable, Hashable {
         try container.encode(balance, forKey: .balance)
         try container.encode(preparingWithdrawal, forKey: .preparingWithdrawal)
         try container.encode(symbol, forKey: .symbol)
+        try container.encode(tokenAddress, forKey: .tokenAddress)
         try container.encode(withdrawable, forKey: .withdrawable)
     }
 }

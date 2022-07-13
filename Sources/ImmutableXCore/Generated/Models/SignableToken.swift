@@ -12,7 +12,7 @@ import AnyCodable
 
 public struct SignableToken: Codable, JSONEncodable, Hashable {
 
-    /** Token data */
+    /** Token data. See https://docs.x.immutable.com/docs/token-data-object\" */
     public private(set) var data: AnyCodable?
     /** Type of token */
     public private(set) var type: String?

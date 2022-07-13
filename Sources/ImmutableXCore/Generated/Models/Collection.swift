@@ -26,8 +26,10 @@ public struct Collection: Codable, JSONEncodable, Hashable {
     public private(set) var name: String
     /** The collection's project ID */
     public private(set) var projectId: Int
+    /** Project owner address */
+    public private(set) var projectOwnerAddress: String
 
-    public init(address: String, collectionImageUrl: String?, description: String?, iconUrl: String?, metadataApiUrl: String?, name: String, projectId: Int) {
+    public init(address: String, collectionImageUrl: String?, description: String?, iconUrl: String?, metadataApiUrl: String?, name: String, projectId: Int, projectOwnerAddress: String) {
         self.address = address
         self.collectionImageUrl = collectionImageUrl
         self.description = description
@@ -35,6 +37,7 @@ public struct Collection: Codable, JSONEncodable, Hashable {
         self.metadataApiUrl = metadataApiUrl
         self.name = name
         self.projectId = projectId
+        self.projectOwnerAddress = projectOwnerAddress
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -45,6 +48,7 @@ public struct Collection: Codable, JSONEncodable, Hashable {
         case metadataApiUrl = "metadata_api_url"
         case name
         case projectId = "project_id"
+        case projectOwnerAddress = "project_owner_address"
     }
 
     // Encodable protocol methods
@@ -58,6 +62,7 @@ public struct Collection: Codable, JSONEncodable, Hashable {
         try container.encode(metadataApiUrl, forKey: .metadataApiUrl)
         try container.encode(name, forKey: .name)
         try container.encode(projectId, forKey: .projectId)
+        try container.encode(projectOwnerAddress, forKey: .projectOwnerAddress)
     }
 }
 

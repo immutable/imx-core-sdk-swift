@@ -12,17 +12,21 @@ import AnyCodable
 
 public struct CreateTradeResponse: Codable, JSONEncodable, Hashable {
 
+    /** Request ID that returns when a trade initiated through risk-manager */
+    public private(set) var requestId: String?
     /** Current status of trade */
     public private(set) var status: String
     /** ID of trade within Immutable X */
     public private(set) var tradeId: Int
 
-    public init(status: String, tradeId: Int) {
+    public init(requestId: String? = nil, status: String, tradeId: Int) {
+        self.requestId = requestId
         self.status = status
         self.tradeId = tradeId
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case requestId = "request_id"
         case status
         case tradeId = "trade_id"
     }
@@ -31,6 +35,7 @@ public struct CreateTradeResponse: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encode(status, forKey: .status)
         try container.encode(tradeId, forKey: .tradeId)
     }

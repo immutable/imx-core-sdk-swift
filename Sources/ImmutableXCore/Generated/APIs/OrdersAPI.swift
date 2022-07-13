@@ -266,7 +266,7 @@ open class OrdersAPI {
     }
 
     /**
-     Get details a signable order V3
+     Get a signable order request (V3)
      
      - parameter getSignableOrderRequestV3: (body) get a signable order 
      - returns: GetSignableOrderResponse
@@ -297,9 +297,9 @@ open class OrdersAPI {
     }
 
     /**
-     Get details a signable order V3
+     Get a signable order request (V3)
      - POST /v3/signable-order-details
-     - Get details a signable order V3
+     - Get a signable order request (V3)
      - parameter getSignableOrderRequestV3: (body) get a signable order 
      - returns: RequestBuilder<GetSignableOrderResponse> 
      */
@@ -353,10 +353,10 @@ open class OrdersAPI {
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
      - parameter user: (query) Ethereum address of the user who submitted this order (optional)
      - parameter status: (query) Status of this order (optional)
-     - parameter minTimestamp: (query) Minimum created at timestamp for this order (optional)
-     - parameter maxTimestamp: (query) Maximum created at timestamp for this order (optional)
-     - parameter updatedMinTimestamp: (query) Minimum updated at timestamp for this order (optional)
-     - parameter updatedMaxTimestamp: (query) Maximum updated at timestamp for this order (optional)
+     - parameter minTimestamp: (query) Minimum created at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter maxTimestamp: (query) Maximum created at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMinTimestamp: (query) Minimum updated at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum updated at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter buyTokenType: (query) Token type of the asset this order buys (optional)
      - parameter buyTokenId: (query) ERC721 Token ID of the asset this order buys (optional)
      - parameter buyAssetId: (query) Internal IMX ID of the asset this order buys (optional)
@@ -375,10 +375,11 @@ open class OrdersAPI {
      - parameter sellMetadata: (query) JSON-encoded metadata filters for the asset this order sells (optional)
      - parameter auxiliaryFeePercentages: (query) Comma separated string of fee percentages that are to be paired with auxiliary_fee_recipients (optional)
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
+     - parameter includeFees: (query) Set flag to true to include fee object for orders (optional)
      - returns: ListOrdersResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listOrders(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> ListOrdersResponse {
+    open class func listOrders(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) async throws -> ListOrdersResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -388,7 +389,7 @@ open class OrdersAPI {
                   return
                 }
 
-                requestTask = listOrdersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, buyTokenType: buyTokenType, buyTokenId: buyTokenId, buyAssetId: buyAssetId, buyTokenAddress: buyTokenAddress, buyTokenName: buyTokenName, buyMinQuantity: buyMinQuantity, buyMaxQuantity: buyMaxQuantity, buyMetadata: buyMetadata, sellTokenType: sellTokenType, sellTokenId: sellTokenId, sellAssetId: sellAssetId, sellTokenAddress: sellTokenAddress, sellTokenName: sellTokenName, sellMinQuantity: sellMinQuantity, sellMaxQuantity: sellMaxQuantity, sellMetadata: sellMetadata, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients).execute { result in
+                requestTask = listOrdersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, buyTokenType: buyTokenType, buyTokenId: buyTokenId, buyAssetId: buyAssetId, buyTokenAddress: buyTokenAddress, buyTokenName: buyTokenName, buyMinQuantity: buyMinQuantity, buyMaxQuantity: buyMaxQuantity, buyMetadata: buyMetadata, sellTokenType: sellTokenType, sellTokenId: sellTokenId, sellAssetId: sellAssetId, sellTokenAddress: sellTokenAddress, sellTokenName: sellTokenName, sellMinQuantity: sellMinQuantity, sellMaxQuantity: sellMaxQuantity, sellMetadata: sellMetadata, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients, includeFees: includeFees).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -412,10 +413,10 @@ open class OrdersAPI {
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
      - parameter user: (query) Ethereum address of the user who submitted this order (optional)
      - parameter status: (query) Status of this order (optional)
-     - parameter minTimestamp: (query) Minimum created at timestamp for this order (optional)
-     - parameter maxTimestamp: (query) Maximum created at timestamp for this order (optional)
-     - parameter updatedMinTimestamp: (query) Minimum updated at timestamp for this order (optional)
-     - parameter updatedMaxTimestamp: (query) Maximum updated at timestamp for this order (optional)
+     - parameter minTimestamp: (query) Minimum created at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter maxTimestamp: (query) Maximum created at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMinTimestamp: (query) Minimum updated at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum updated at timestamp for this order, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter buyTokenType: (query) Token type of the asset this order buys (optional)
      - parameter buyTokenId: (query) ERC721 Token ID of the asset this order buys (optional)
      - parameter buyAssetId: (query) Internal IMX ID of the asset this order buys (optional)
@@ -434,9 +435,10 @@ open class OrdersAPI {
      - parameter sellMetadata: (query) JSON-encoded metadata filters for the asset this order sells (optional)
      - parameter auxiliaryFeePercentages: (query) Comma separated string of fee percentages that are to be paired with auxiliary_fee_recipients (optional)
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
+     - parameter includeFees: (query) Set flag to true to include fee object for orders (optional)
      - returns: RequestBuilder<ListOrdersResponse> 
      */
-    open class func listOrdersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) -> RequestBuilder<ListOrdersResponse> {
+    open class func listOrdersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) -> RequestBuilder<ListOrdersResponse> {
         let localVariablePath = "/v1/orders"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
@@ -471,6 +473,7 @@ open class OrdersAPI {
             "sell_metadata": sellMetadata?.encodeToJSON(),
             "auxiliary_fee_percentages": auxiliaryFeePercentages?.encodeToJSON(),
             "auxiliary_fee_recipients": auxiliaryFeeRecipients?.encodeToJSON(),
+            "include_fees": includeFees?.encodeToJSON(),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
