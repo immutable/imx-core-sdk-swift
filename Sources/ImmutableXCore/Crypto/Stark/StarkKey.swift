@@ -6,7 +6,11 @@ public enum StarkKey {
     private static let layer = "starkex"
     private static let application = "immutablex"
     private static let index = "1"
+}
 
+// MARK: - Stark Key Generation
+
+extension StarkKey {
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address
     /// - Returns: Stark key pair
@@ -45,11 +49,11 @@ public enum StarkKey {
         // Make sure the produced key is devided by the Stark EC order, and falls within the range
         // [0, maxAllowedVal).
         while key >= maxAllowedVal {
-            key = CryptoUtil.hashKeyWithIndex(key: key.asString(radix: 16), index: i)
+            key = CryptoUtil.hashKeyWithIndex(key: key.asHexString(), index: i)
             i += 1
         }
 
-        return key.modulus(StarkCurve.N).asString(radix: 16)
+        return key.modulus(StarkCurve.N).asHexString()
     }
 
     /// Derives the private key from the seed and path, then grinds it to find its final private key hex.

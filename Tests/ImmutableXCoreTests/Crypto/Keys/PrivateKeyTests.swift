@@ -25,7 +25,7 @@ final class PrivateKeyTests: XCTestCase {
         }
 
         let inRangeNumber = StarkCurve.N - 1
-        let privateKey = try PrivateKey(hex: inRangeNumber.asString(radix: 16))
+        let privateKey = try PrivateKey(hex: inRangeNumber.asHexString())
         XCTAssertEqual(privateKey.number, inRangeNumber)
         XCTAssertEqual(privateKey.asData, inRangeNumber.as256bitLongData())
     }
