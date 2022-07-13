@@ -12,9 +12,9 @@ import AnyCodable
 
 public struct GetSignableOrderRequest: Codable, JSONEncodable, Hashable {
 
-    /** Fee-exclusive amount to buy */
+    /** Fee-exclusive amount to buy the asset */
     public private(set) var amountBuy: String
-    /** Amount to sell */
+    /** Amount to sell (quantity) */
     public private(set) var amountSell: String
     /** ExpirationTimestamp in Unix time. Note: will be rounded down to the nearest hour */
     public private(set) var expirationTimestamp: Int?

@@ -26,8 +26,10 @@ public struct CreateCollectionRequest: Codable, JSONEncodable, Hashable {
     public private(set) var name: String
     /** Owner Public Key: The public key of the owner of the contract */
     public private(set) var ownerPublicKey: String
+    /** The collection's project ID */
+    public private(set) var projectId: Int
 
-    public init(collectionImageUrl: String? = nil, contractAddress: String, description: String? = nil, iconUrl: String? = nil, metadataApiUrl: String? = nil, name: String, ownerPublicKey: String) {
+    public init(collectionImageUrl: String? = nil, contractAddress: String, description: String? = nil, iconUrl: String? = nil, metadataApiUrl: String? = nil, name: String, ownerPublicKey: String, projectId: Int) {
         self.collectionImageUrl = collectionImageUrl
         self.contractAddress = contractAddress
         self.description = description
@@ -35,6 +37,7 @@ public struct CreateCollectionRequest: Codable, JSONEncodable, Hashable {
         self.metadataApiUrl = metadataApiUrl
         self.name = name
         self.ownerPublicKey = ownerPublicKey
+        self.projectId = projectId
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -45,6 +48,7 @@ public struct CreateCollectionRequest: Codable, JSONEncodable, Hashable {
         case metadataApiUrl = "metadata_api_url"
         case name
         case ownerPublicKey = "owner_public_key"
+        case projectId = "project_id"
     }
 
     // Encodable protocol methods
@@ -58,6 +62,7 @@ public struct CreateCollectionRequest: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(metadataApiUrl, forKey: .metadataApiUrl)
         try container.encode(name, forKey: .name)
         try container.encode(ownerPublicKey, forKey: .ownerPublicKey)
+        try container.encode(projectId, forKey: .projectId)
     }
 }
 

@@ -104,8 +104,8 @@ open class AssetsAPI {
      - parameter buyOrders: (query) Set flag to true to fetch an array of buy order details  with accepted status associated with the asset (optional)
      - parameter includeFees: (query) Set flag to include fees associated with the asset (optional)
      - parameter collection: (query) Collection contract address (optional)
-     - parameter updatedMinTimestamp: (query) Minimum timestamp for when these assets were last updated (optional)
-     - parameter updatedMaxTimestamp: (query) Maximum timestamp for when these assets were last updated (optional)
+     - parameter updatedMinTimestamp: (query) Minimum timestamp for when these assets were last updated, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum timestamp for when these assets were last updated, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter auxiliaryFeePercentages: (query) Comma separated string of fee percentages that are to be paired with auxiliary_fee_recipients (optional)
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
      - returns: ListAssetsResponse
@@ -151,8 +151,8 @@ open class AssetsAPI {
      - parameter buyOrders: (query) Set flag to true to fetch an array of buy order details  with accepted status associated with the asset (optional)
      - parameter includeFees: (query) Set flag to include fees associated with the asset (optional)
      - parameter collection: (query) Collection contract address (optional)
-     - parameter updatedMinTimestamp: (query) Minimum timestamp for when these assets were last updated (optional)
-     - parameter updatedMaxTimestamp: (query) Maximum timestamp for when these assets were last updated (optional)
+     - parameter updatedMinTimestamp: (query) Minimum timestamp for when these assets were last updated, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum timestamp for when these assets were last updated, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter auxiliaryFeePercentages: (query) Comma separated string of fee percentages that are to be paired with auxiliary_fee_recipients (optional)
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
      - returns: RequestBuilder<ListAssetsResponse> 

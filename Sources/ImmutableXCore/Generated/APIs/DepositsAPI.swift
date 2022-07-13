@@ -136,8 +136,8 @@ open class DepositsAPI {
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
      - parameter user: (query) Ethereum address of the user who submitted this deposit (optional)
      - parameter status: (query) Status of this deposit (optional)
-     - parameter minTimestamp: (query) Minimum timestamp for this deposit (optional)
-     - parameter maxTimestamp: (query) Maximum timestamp for this deposit (optional)
+     - parameter updatedMinTimestamp: (query) Minimum timestamp for this deposit, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum timestamp for this deposit, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter tokenType: (query) Token type of the deposited asset (optional)
      - parameter tokenId: (query) ERC721 Token ID of the minted asset (optional)
      - parameter assetId: (query) Internal IMX ID of the minted asset (optional)
@@ -149,7 +149,7 @@ open class DepositsAPI {
      - returns: ListDepositsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listDeposits(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListDepositsResponse {
+    open class func listDeposits(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListDepositsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -159,7 +159,7 @@ open class DepositsAPI {
                   return
                 }
 
-                requestTask = listDepositsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata).execute { result in
+                requestTask = listDepositsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -183,8 +183,8 @@ open class DepositsAPI {
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
      - parameter user: (query) Ethereum address of the user who submitted this deposit (optional)
      - parameter status: (query) Status of this deposit (optional)
-     - parameter minTimestamp: (query) Minimum timestamp for this deposit (optional)
-     - parameter maxTimestamp: (query) Maximum timestamp for this deposit (optional)
+     - parameter updatedMinTimestamp: (query) Minimum timestamp for this deposit, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter updatedMaxTimestamp: (query) Maximum timestamp for this deposit, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - parameter tokenType: (query) Token type of the deposited asset (optional)
      - parameter tokenId: (query) ERC721 Token ID of the minted asset (optional)
      - parameter assetId: (query) Internal IMX ID of the minted asset (optional)
@@ -195,7 +195,7 @@ open class DepositsAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the deposited asset (optional)
      - returns: RequestBuilder<ListDepositsResponse> 
      */
-    open class func listDepositsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListDepositsResponse> {
+    open class func listDepositsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListDepositsResponse> {
         let localVariablePath = "/v1/deposits"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
@@ -208,8 +208,8 @@ open class DepositsAPI {
             "direction": direction?.encodeToJSON(),
             "user": user?.encodeToJSON(),
             "status": status?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
+            "updated_min_timestamp": updatedMinTimestamp?.encodeToJSON(),
+            "updated_max_timestamp": updatedMaxTimestamp?.encodeToJSON(),
             "token_type": tokenType?.encodeToJSON(),
             "token_id": tokenId?.encodeToJSON(),
             "asset_id": assetId?.encodeToJSON(),

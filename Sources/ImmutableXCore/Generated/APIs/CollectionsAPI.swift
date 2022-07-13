@@ -15,7 +15,7 @@ open class CollectionsAPI {
     /**
      Create collection
      
-     - parameter iMXSignature: (header) String created by signing wallet address and timestamp 
+     - parameter iMXSignature: (header) String created by signing wallet address and timestamp. See https://docs.x.immutable.com/docs/generate-imx-signature 
      - parameter iMXTimestamp: (header) Unix Epoc timestamp 
      - parameter createCollectionRequest: (body) create a collection 
      - returns: Collection
@@ -50,7 +50,7 @@ open class CollectionsAPI {
      - POST /v1/collections
      - Create collection
      - responseHeaders: [Collection_Limit_Reset(String), Collection_Limit(String), Collection_Remaining(String)]
-     - parameter iMXSignature: (header) String created by signing wallet address and timestamp 
+     - parameter iMXSignature: (header) String created by signing wallet address and timestamp. See https://docs.x.immutable.com/docs/generate-imx-signature 
      - parameter iMXTimestamp: (header) Unix Epoc timestamp 
      - parameter createCollectionRequest: (body) create a collection 
      - returns: RequestBuilder<Collection> 

@@ -201,8 +201,8 @@ open class TradesAPI {
      - parameter cursor: (query) Cursor (optional)
      - parameter orderBy: (query) Property to sort by (optional)
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
-     - parameter minTimestamp: (query) Minimum timestamp for this trade (optional)
-     - parameter maxTimestamp: (query) Maximum timestamp for this trade (optional)
+     - parameter minTimestamp: (query) Minimum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter maxTimestamp: (query) Maximum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - returns: ListTradesResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -244,8 +244,8 @@ open class TradesAPI {
      - parameter cursor: (query) Cursor (optional)
      - parameter orderBy: (query) Property to sort by (optional)
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
-     - parameter minTimestamp: (query) Minimum timestamp for this trade (optional)
-     - parameter maxTimestamp: (query) Maximum timestamp for this trade (optional)
+     - parameter minTimestamp: (query) Minimum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+     - parameter maxTimestamp: (query) Maximum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - returns: RequestBuilder<ListTradesResponse> 
      */
     open class func listTradesWithRequestBuilder(partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyATokenId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) -> RequestBuilder<ListTradesResponse> {

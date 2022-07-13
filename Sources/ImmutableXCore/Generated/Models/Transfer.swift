@@ -12,37 +12,33 @@ import AnyCodable
 
 public struct Transfer: Codable, JSONEncodable, Hashable {
 
-    public private(set) var data: TokenData
     /** Ethereum address of the user who received this transfer */
     public private(set) var receiver: String
     /** Status of the transaction */
     public private(set) var status: String
     /** Timestamp of the transfer */
     public private(set) var timestamp: String?
+    public private(set) var token: Token
     /** Sequential transaction ID */
     public private(set) var transactionId: Int
-    /** Type of this asset (ETH/ERC20/ERC721) */
-    public private(set) var type: String
     /** Ethereum address of the user  who submitted this transfer */
     public private(set) var user: String
 
-    public init(data: TokenData, receiver: String, status: String, timestamp: String?, transactionId: Int, type: String, user: String) {
-        self.data = data
+    public init(receiver: String, status: String, timestamp: String?, token: Token, transactionId: Int, user: String) {
         self.receiver = receiver
         self.status = status
         self.timestamp = timestamp
+        self.token = token
         self.transactionId = transactionId
-        self.type = type
         self.user = user
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case data
         case receiver
         case status
         case timestamp
+        case token
         case transactionId = "transaction_id"
-        case type
         case user
     }
 
@@ -50,12 +46,11 @@ public struct Transfer: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(data, forKey: .data)
         try container.encode(receiver, forKey: .receiver)
         try container.encode(status, forKey: .status)
         try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(token, forKey: .token)
         try container.encode(transactionId, forKey: .transactionId)
-        try container.encode(type, forKey: .type)
         try container.encode(user, forKey: .user)
     }
 }
