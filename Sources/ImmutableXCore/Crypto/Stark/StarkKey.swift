@@ -92,3 +92,112 @@ public extension StarkKey {
         )
     }
 }
+
+// MARK: - Stark Signature
+
+public extension StarkKey {
+    /// Signs the given ``message`` with the given ``privateKeyHex``.
+    ///
+    /// - Parameters:
+    ///     - message: must be in hex format and 64 characters or less in length (including 0x prefix)
+    ///     - privateKeyHex: key to be used in the signature. Must be in hex format (including 0x prefix)
+    ///
+    /// - Returns: Stark signature
+    static func sign(message: String, withPrivateKeyHex privateKeyHex: String) throws -> String {
+        try sign(message: message, with: try PrivateKey(hex: privateKeyHex))
+    }
+
+    /// Signs the given ``message`` with the given ``privateKey``.
+    ///
+    /// - Parameters:
+    ///     - message: must be in hex format and 64 characters or less in length (including 0x prefix)
+    ///     - privateKey: key to be used in the signature
+    ///
+    /// - Returns: Stark signature
+    static func sign(message: String, with privateKey: PrivateKey) throws -> String {
+        let fixedMessage = try CryptoUtil.fix(message: message)
+        let message = Message(hashedHex: fixedMessage)
+        let starkSignature = try sign(message, using: privateKey)
+        return starkSignature.serialized()
+    }
+
+    // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/CommonSigning/ECDSA.swift#L32
+    // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/ECDSASigner.java#L93
+    internal static func sign(_ message: Message, using privateKey: PrivateKey) throws -> StarkSignature {
+        let messageNumber = message.asBigInt
+        var z = CryptoUtil.truncateToN(message: messageNumber)
+        let sanitised = z.asHexString().sanitizeBytes()
+        z = BigInt(hexString: sanitised)!
+
+        var r: BigInt = 0
+        var s: BigInt = 0
+        let d = privateKey.number
+
+        repeat {
+            var k = try generateK(from: privateKey, for: Message(hashedHex: sanitised))
+            k = StarkCurve.modN(k)
+
+            let point = StarkCurve.multiplyG(by: k)
+            r = StarkCurve.modN(point.x)
+
+            guard !r.isZero else { continue }
+
+            let kInverse = StarkCurve.modInverseN(1, k)
+            s = StarkCurve.modN(kInverse * (z + r * d))
+        } while s.isZero
+
+        return try StarkSignature(r: r, s: s)
+    }
+
+    // https://datatracker.ietf.org/doc/html/rfc6979#section-3.2
+    // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/SignatureNonce%2BRFC-6979.swift#L29
+    // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/HMacDSAKCalculator.java#L104
+    internal static func generateK(from privateKey: PrivateKey, for message: Message) throws -> BigInt {
+        let byteCount = message.hashedData.count
+        let d = privateKey.number.as256bitLongData()
+        let nByteCount = StarkCurve.N.magnitude.bitWidth.byteCountFromBitCount
+
+        var V = Data([UInt8](repeating: 0x01, count: byteCount))
+        var K = Data([UInt8](repeating: 0x00, count: byteCount))
+
+        func HMAC_K(_ data: Data) -> Data {
+            Data(HMAC<SHA256>.authenticationCode(for: data, using: SymmetricKey(data: K)))
+        }
+
+        K = HMAC_K(V + Data([0x00]) + d + message.hashedData)
+        V = HMAC_K(V)
+        K = HMAC_K(V + Data([0x01]) + d + message.hashedData)
+        V = HMAC_K(V)
+
+        var T: Data
+        var k = BigInt.zero
+
+        repeat {
+            T = Data()
+
+            while T.count < nByteCount {
+                V = HMAC_K(V)
+                T += V
+            }
+
+            k = CryptoUtil.truncateToN(message: BigInt(T.asHexString(), radix: 16)!, truncOnly: true)
+
+            K = HMAC_K(V + [0])
+            V = HMAC_K(V)
+
+            if k <= 1 || k >= StarkCurve.N - BigInt(1) {
+                continue
+            }
+
+            let kPoint = StarkCurve.multiplyG(by: k)
+
+            if kPoint.x.modulus(StarkCurve.N) == BigInt.zero {
+                continue
+            }
+
+            break
+        } while true
+
+        return k
+    }
+}

@@ -30,4 +30,44 @@ struct CryptoUtil {
         guard let data = input.data(using: .utf8) else { return "" }
         return Data(SHA256.hash(data: data)).asHexString()
     }
+
+    /// Does a shift-right of delta bits, if delta is positive, where
+    /// `delta = message.byteCount * 8 - StarkCurve.N.byteCount * 8 - StarkCurve.n.magnitude.leadingZeroBitCount`.
+    static func truncateToN(message: BigInt, truncOnly: Bool = false) -> BigInt {
+        // https://github.com/indutny/elliptic/blob/master/lib/elliptic/ec/index.js#L81
+        let n = StarkCurve.N
+        let nBitLength = n.byteCount * 8 - n.magnitude.leadingZeroBitCount
+        let delta = message.byteCount * 8 - nBitLength
+        var msg = message
+
+        if delta > BigInt.zero {
+            msg = msg >> delta
+        }
+
+        if !truncOnly, msg >= n {
+            return msg - n
+        } else {
+            return msg
+        }
+    }
+
+    /// The function ``CryptoUtil.truncateToN(message:truncOnly:)`` does a shift-right of delta bits,
+    /// if delta is positive, where `delta = msgHash.byteLength() * 8 - starkEx.n.bitLength()`.
+    ///
+    /// This function does the opposite operation so that
+    /// `truncateToN(fix(message: message)) == message`
+    ///
+    ///  - Throws: ``SignatureError.invalidMessageLength`` if message is larger than 63 characters
+    static func fix(message: String) throws -> String {
+        guard message.count < 64 else { throw SignatureError.invalidMessageLength }
+
+        if message.count <= 62 {
+            // In this case, msg should not be transformed, as the byteLength() is at most 31,
+            // so delta < 0 (see truncateToN(message:truncOnly:)).
+            return message
+        }
+
+        // In this case delta will be 4 so we perform a shift-left of 4 bits by adding a ZERO_BN.
+        return message + "0"
+    }
 }

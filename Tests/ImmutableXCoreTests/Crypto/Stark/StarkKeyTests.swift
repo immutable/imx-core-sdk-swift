@@ -3,6 +3,8 @@ import BigInt
 import XCTest
 
 final class StarkKeyTests: XCTestCase {
+    // MARK: - Stark Key Generation
+
     func testGenerateKeyPairFromRawSignature() throws {
         let signature = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1b"
         let address = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
@@ -92,5 +94,33 @@ final class StarkKeyTests: XCTestCase {
         } catch {
             XCTAssertTrue(error is KeyError)
         }
+    }
+}
+
+extension StarkKeyTests {
+    // MARK: - Stark Signature
+
+    func testSignWithPrivateKeyHex() throws {
+        let encodedMessage = "e2919c6f19f93d3b9e40c1eef10660bd12240a1520793a28ef21a7457037dd"
+        let privateKey = "7CEFD165C3A374AC3E05170D699BF6549E371522883B447B284A3C16FC04CCC"
+
+        let signature = try StarkKey.sign(message: encodedMessage, withPrivateKeyHex: privateKey)
+        XCTAssertEqual(signature, "0x0752063caed87ef11d6e91c4a226ebfe98f190d248b857d882ae331771e6e4620364a2c46e2190bbb243309a40da051b88f0657ea9d1c2ca11510fe18a8a22ae")
+    }
+
+    func testSignWithPrivateKey() throws {
+        let encodedMessage = "e2919c6f19f93d3b9e40c1eef10660bd12240a1520793a28ef21a7457037dd"
+        let privateKey = try PrivateKey(hex: "7CEFD165C3A374AC3E05170D699BF6549E371522883B447B284A3C16FC04CCC")
+
+        let signature = try StarkKey.sign(message: encodedMessage, with: privateKey)
+        XCTAssertEqual(signature, "0x0752063caed87ef11d6e91c4a226ebfe98f190d248b857d882ae331771e6e4620364a2c46e2190bbb243309a40da051b88f0657ea9d1c2ca11510fe18a8a22ae")
+    }
+
+    func testSignWithInvalidMessage() throws {
+        // too long
+        let encodedMessage = "e2919c6f19f93d3b9e40c1eef10660bd12240a1520793a28ef21a7457037dd02"
+        let privateKey = try PrivateKey(hex: "7CEFD165C3A374AC3E05170D699BF6549E371522883B447B284A3C16FC04CCC")
+
+        XCTAssertThrowsError(try StarkKey.sign(message: encodedMessage, with: privateKey))
     }
 }

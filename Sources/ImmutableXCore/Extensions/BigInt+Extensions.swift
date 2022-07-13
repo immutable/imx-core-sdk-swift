@@ -6,6 +6,10 @@ public extension BigInt {
         magnitude[bitAt: 0] == false
     }
 
+    var byteCount: Int {
+        magnitude.bitWidth.byteCountFromBitCount
+    }
+
     init?(hexString: String) {
         self.init(hexString.dropHexPrefix, radix: 16)
     }
