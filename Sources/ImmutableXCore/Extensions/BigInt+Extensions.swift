@@ -19,6 +19,10 @@ public extension BigInt {
         return uppercased ? stringRepresentation.uppercased() : stringRepresentation
     }
 
+    func asHexString(uppercased: Bool = false) -> String {
+        asString(uppercased: uppercased, radix: 16)
+    }
+
     func asHexStringLength64(uppercased: Bool = false) -> String {
         var hexString = asString(uppercased: uppercased, radix: 16)
         while hexString.count < 64 {

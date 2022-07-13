@@ -8,7 +8,7 @@ public struct PublicKey: Equatable {
 
     /// A representation of the public key sanitized to be Stark friendly
     public var asStarkKey: String {
-        Array(hex: number.asString(radix: 16).sanitizeBytes()).asHexString(byteLength: Constants.starkPrivateKeyLength)
+        Array(hex: number.asHexString().sanitizeBytes()).asHexString(byteLength: Constants.starkPrivateKeyLength)
     }
 
     public init(point: CurvePoint) throws {
