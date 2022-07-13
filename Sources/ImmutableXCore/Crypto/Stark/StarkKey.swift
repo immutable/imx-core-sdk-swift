@@ -10,13 +10,36 @@ public enum StarkKey {
 
 // MARK: - Stark Key Generation
 
-extension StarkKey {
+public extension StarkKey {
+    /// Generate a Stark key pair from a L1 wallet.
+    static func generateKeyPair(from signer: Signer) async throws -> KeyPair {
+        let address = try await signer.getAddress()
+        let signature = try await signer.signMessage(Constants.starkMessage)
+        return try generateKeyPairFromRawSignature(signature, ethereumAddress: address)
+    }
+
+    /// Generate a Stark key pair from a L1 wallet.
+    ///
+    /// - Note: ``onCompletion`` is executed on the Main Thread
+    static func generateKeyPair(from signer: Signer, onCompletion: @escaping (Result<KeyPair, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let pair = try await generateKeyPair(from: signer)
+                assert(Thread.isMainThread, "StarkKey.generateKeyPair(from:onCompletion:) must run on the Main Thread")
+                onCompletion(.success(pair))
+            } catch {
+                assert(Thread.isMainThread, "StarkKey.generateKeyPair(from:onCompletion:) must run on the Main Thread")
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address
     /// - Returns: Stark key pair
-    ///
-    /// https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
-    public static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> KeyPair {
+    static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> KeyPair {
+        // https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
         let seed = signature.dropHexPrefix[64 ..< 128]
         return try generateStarkKeyPairFromSeed(seed, path: accountPathFromAddress(ethereumAddress))
     }
