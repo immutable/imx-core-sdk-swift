@@ -28,6 +28,7 @@ jobs:
         build-path: .build
         target: ImmutableXCorePackageTests.xctest
         is-spm: true
+        ignore-filename-regex: ".build|Tests|Pods|Packages|Plugins|Generated|DerivedData|Signer.swift|ImmutableXHTTPLoggingLevel.swift|Constants.swift|Errors.swift"
     - name: Publish to code climate
       uses: paambaati/codeclimate-action@v3.0.0
       env:
