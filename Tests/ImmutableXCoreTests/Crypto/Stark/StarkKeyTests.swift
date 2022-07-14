@@ -51,7 +51,7 @@ final class StarkKeyTests: XCTestCase {
             expectation.fulfill()
         }
 
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 5), .completed)
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 20), .completed)
     }
 
     func testGenerateFromSignerClosureFailure() {
@@ -71,7 +71,7 @@ final class StarkKeyTests: XCTestCase {
             expectation.fulfill()
         }
 
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 5), .completed)
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 20), .completed)
     }
 
     func testGenerateFromSignerAsync() async throws {
