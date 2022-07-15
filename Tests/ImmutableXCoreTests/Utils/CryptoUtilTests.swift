@@ -31,6 +31,13 @@ final class CryptoUtilTests: XCTestCase {
         XCTAssertEqual(fixedTruncatedOnly.asHexString(), message.dropHexPrefix)
     }
 
+    func testFixMessage63Characters() throws {
+        let message = "0x4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20c"
+
+        let fixed = try CryptoUtil.fix(message: message)
+        XCTAssertEqual(fixed, "0x4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20c0", "formats message by appending a 0 to it")
+    }
+
     func testFixMessageLength() throws {
         // 64 characters
         let message = "0x4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cd"

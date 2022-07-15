@@ -9,10 +9,6 @@ public struct Message {
         BigInt(data: hashedData)
     }
 
-    public var hashedHex: String {
-        hashedData.asHexString()
-    }
-
     public init(hashedData: Data) {
         self.hashedData = hashedData
     }
