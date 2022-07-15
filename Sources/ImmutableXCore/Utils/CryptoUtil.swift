@@ -70,4 +70,27 @@ struct CryptoUtil {
         // In this case delta will be 4 so we perform a shift-left of 4 bits by adding a ZERO_BN.
         return message + "0"
     }
+
+    static func serializeEthSignature(_ signature: String, size: Int = 64) -> String {
+        func importRecoveryParam(_ v: BigInt) -> String {
+            let comp = BigInt("27") // 1b
+            if v > comp {
+                // if recovery param is greater than 27
+                return (v - comp).asHexString()
+            } else {
+                return v.asHexString()
+            }
+        }
+
+        let sig = signature.dropHexPrefix
+        let from = size * 2
+        let to = size * 2 + 2
+        let v = BigInt(hexString: sig[from ..< to])!
+
+        return (
+            sig[0 ..< size].padLeft(length: 64) +
+                sig[size ..< (size * 2)].padLeft(length: 64) +
+                importRecoveryParam(v).padLeft(length: 2)
+        ).addHexPrefix
+    }
 }
