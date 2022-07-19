@@ -2,17 +2,15 @@ import Foundation
 @testable import ImmutableXCore
 
 class TradesAPIMockGetCompanion {
-    var getSignableTradeThrowableError: Error?
-    var getSignableTradeCallsCount = 0
-    var getSignableTradeTradeRequest: GetSignableTradeRequest?
-    var getSignableTradeReturnValue: GetSignableTradeResponse!
+    var throwableError: Error?
+    var callsCount = 0
+    var returnValue: GetSignableTradeResponse!
 }
 
 class TradesAPIMockCreateCompanion {
-    var createTradeThrowableError: Error?
-    var createTradeCallsCount = 0
-    var createTradeReceivedArguments: (createTradeRequest: CreateTradeRequestV1, xImxEthAddress: String?, xImxEthSignature: String?)?
-    var createTradeReturnValue: CreateTradeResponse!
+    var throwableError: Error?
+    var callsCount = 0
+    var returnValue: CreateTradeResponse!
 }
 
 final class TradesAPIMock: TradesAPI {
@@ -36,13 +34,12 @@ final class TradesAPIMock: TradesAPI {
 
     override public class func getSignableTrade(getSignableTradeRequest: GetSignableTradeRequest) async throws -> GetSignableTradeResponse {
         let companion = getRequests[getSignableTradeRequest.orderId]!
-        if let error = companion.getSignableTradeThrowableError {
+        if let error = companion.throwableError {
             throw error
         }
 
-        companion.getSignableTradeCallsCount += 1
-        companion.getSignableTradeTradeRequest = getSignableTradeRequest
-        return companion.getSignableTradeReturnValue
+        companion.callsCount += 1
+        return companion.returnValue
     }
 
     // MARK: - createTrade
@@ -50,12 +47,11 @@ final class TradesAPIMock: TradesAPI {
     override public class func createTrade(createTradeRequest: CreateTradeRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTradeResponse {
         let companion = createRequests[createTradeRequest.orderId]!
 
-        if let error = companion.createTradeThrowableError {
+        if let error = companion.throwableError {
             throw error
         }
 
-        companion.createTradeCallsCount += 1
-        companion.createTradeReceivedArguments = (createTradeRequest: createTradeRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature)
-        return companion.createTradeReturnValue
+        companion.callsCount += 1
+        return companion.returnValue
     }
 }

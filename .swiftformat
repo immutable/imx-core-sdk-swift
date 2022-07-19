@@ -1,1 +1,2 @@
+--stripunusedargs closure-only 
 --exclude Pods,Packages,Sources/ImmutableXCore/Generated
