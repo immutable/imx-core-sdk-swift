@@ -4,7 +4,7 @@ import Foundation
 import secp256k1
 
 struct BIP32Key {
-    /// - Parameters
+    /// - Parameters:
     ///     - seed: seed data for derivation, e.g. personal signature
     ///     - path: hashed values in the expected format as per Starkware docs `m/purpose'/layer'/application'/ethAddress1'/ethAddress2'/index`
     /// - Returns: derived private key hex
