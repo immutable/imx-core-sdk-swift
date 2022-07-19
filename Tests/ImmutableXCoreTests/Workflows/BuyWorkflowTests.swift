@@ -12,7 +12,7 @@ final class BuyWorkflowTests: XCTestCase {
         tradesAPI.resetMock()
 
         let orderCompanion = OrdersAPIMockGetCompanion()
-        orderCompanion.getOrderReturnValue = orderFilledStub1
+        orderCompanion.getOrderReturnValue = orderActiveStub2
         ordersAPI.mock(orderCompanion, id: "1")
 
         let tradeGetCompanion = TradesAPIMockGetCompanion()
@@ -71,7 +71,7 @@ final class BuyWorkflowTests: XCTestCase {
 
     func testBuyFlowThrowsWhenPurchaseOwnOrder() async throws {
         let signer = SignerMock()
-        signer.getAddressReturnValue = orderFilledStub1.user
+        signer.getAddressReturnValue = orderActiveStub2.user
 
         do {
             _ = try await BuyWorkflow.buy(
@@ -88,9 +88,9 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenOrderStatusIsActive() async throws {
+    func testBuyFlowThrowsWhenOrderStatusIsNotActive() async throws {
         let orderCompanion = OrdersAPIMockGetCompanion()
-        orderCompanion.getOrderReturnValue = orderActiveStub2
+        orderCompanion.getOrderReturnValue = orderFilledStub1
         ordersAPI.mock(orderCompanion, id: "1")
 
         do {

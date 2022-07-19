@@ -41,7 +41,7 @@ class BuyWorkflow {
 
     private static func getSignableTrade(order: Order, address: String, fees: [FeeEntry], api: TradesAPI.Type) async throws -> GetSignableTradeResponse {
         guard order.user != address else { throw WorkflowError.invalidRequest(reason: "Cannot purchase own order") }
-        guard order.status != OrderStatus.active.rawValue else { throw WorkflowError.invalidRequest(reason: "Order not available for purchase") }
+        guard order.status == OrderStatus.active.rawValue else { throw WorkflowError.invalidRequest(reason: "Order not available for purchase") }
         return try await Workflow.mapAPIErrors(caller: "Signable trade") {
             try await api.getSignableTrade(
                 getSignableTradeRequest: GetSignableTradeRequest(
