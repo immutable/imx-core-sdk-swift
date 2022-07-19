@@ -9,7 +9,7 @@ public protocol Signer {
 
     /// This method relies on a closure so that a ``Signer`` can be designed around an asynchronous source,
     /// such as hardware wallets.
-    /// - Returns: the account address as part of the ``onCompletion`` argument.
+    /// - Returns: the account address as part of the `onCompletion` argument.
     func getAddress(onCompletion: @escaping (Result<String, Error>) -> Void)
 
     /// A signed message is prefixed with "\x19Ethereum Signed Message:\n" and the length of the
@@ -26,11 +26,11 @@ public protocol Signer {
     /// message, using the hashMessage method, so that it is EIP-191 compliant. If recovering the
     /// address in Solidity, this prefix will be required to create a matching hash.
     ///
-    /// Sub-classes must implement this, however they may return an error as part of the ``onCompletion``
+    /// Sub-classes must implement this, however they may return an error as part of the `onCompletion`
     /// argument if signing a message is not supported, such as in a Contract-based Wallet or
     /// Meta-Transaction-based Wallet.
     ///
-    /// - Returns: signature as part of the ``onCompletion`` argument.
+    /// - Returns: signature as part of the `onCompletion` argument.
     func signMessage(_ message: String, onCompletion: @escaping (Result<String, Error>) -> Void)
 }
 
@@ -43,22 +43,22 @@ public protocol StarkSigner {
 
     /// This method relies on a closure so that a ``Signer`` can be designed around an asynchronous source,
     /// such as hardware wallets.
-    /// - Returns: the account address as part of the ``onCompletion`` argument.
+    /// - Returns: the account address as part of the `onCompletion` argument.
     func getAddress(onCompletion: @escaping (Result<String, Error>) -> Void)
 
-    /// Signs the ``message`` with the user's L2 Stark keys.
+    /// Signs the `message` with the user's L2 Stark keys.
     ///
-    /// When implementing this, make sure ``message`` is in hex format and pass it and the L2 Stark key pair to the
-    /// ``StarkKey.sign`` function.
+    /// When implementing this, make sure `message` is in hex format and pass it and the L2 Stark key pair to the
+    /// ``StarkKey/sign(message:with:)`` function.
     ///
     /// - Returns: serialized Stark signature
     func signMessage(_ message: String) async throws -> String
 
-    /// Signs the ``message`` with the user's L2 Stark keys.
+    /// Signs the `message` with the user's L2 Stark keys.
     ///
-    /// When implementing this, make sure ``message`` is in hex format and pass it and the L2 Stark key pair to the
-    /// ``StarkKey.sign`` function.
+    /// When implementing this, make sure `message` is in hex format and pass it and the L2 Stark key pair to the
+    /// ``StarkKey/sign(message:with:)`` function.
     ///
-    /// - Returns: serialized Stark signature as part of the ``onCompletion`` argument.
+    /// - Returns: serialized Stark signature as part of the `onCompletion` argument.
     func signMessage(_ message: String, onCompletion: @escaping (Result<String, Error>) -> Void)
 }

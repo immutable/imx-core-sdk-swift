@@ -20,7 +20,7 @@ public extension StarkKey {
 
     /// Generate a Stark key pair from a L1 wallet.
     ///
-    /// - Note: ``onCompletion`` is executed on the Main Thread
+    /// - Note: `onCompletion` is executed on the Main Thread
     static func generateKeyPair(from signer: Signer, onCompletion: @escaping (Result<KeyPair, Error>) -> Void) {
         Task { @MainActor in
             do {
@@ -96,7 +96,7 @@ public extension StarkKey {
 // MARK: - Stark Signature
 
 public extension StarkKey {
-    /// Signs the given ``message`` with the given ``privateKeyHex``.
+    /// Signs the given `message` with the given `privateKeyHex`.
     ///
     /// - Parameters:
     ///     - message: must be in hex format and 64 characters or less in length (including 0x prefix)
@@ -107,7 +107,7 @@ public extension StarkKey {
         try sign(message: message, with: try PrivateKey(hex: privateKeyHex))
     }
 
-    /// Signs the given ``message`` with the given ``privateKey``.
+    /// Signs the given `message` with the given `privateKey`.
     ///
     /// - Parameters:
     ///     - message: must be in hex format and 64 characters or less in length (including 0x prefix)
