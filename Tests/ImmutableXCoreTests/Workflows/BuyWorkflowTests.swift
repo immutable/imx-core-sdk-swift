@@ -12,15 +12,15 @@ final class BuyWorkflowTests: XCTestCase {
         tradesAPI.resetMock()
 
         let orderCompanion = OrdersAPIMockGetCompanion()
-        orderCompanion.getOrderReturnValue = orderActiveStub2
+        orderCompanion.returnValue = orderActiveStub2
         ordersAPI.mock(orderCompanion, id: "1")
 
         let tradeGetCompanion = TradesAPIMockGetCompanion()
-        tradeGetCompanion.getSignableTradeReturnValue = signableTradeResponseStub1
+        tradeGetCompanion.returnValue = signableTradeResponseStub1
         tradesAPI.mock(tradeGetCompanion, id: 1)
 
         let tradeCreateCompanion = TradesAPIMockCreateCompanion()
-        tradeCreateCompanion.createTradeReturnValue = createTradeResponseStub1
+        tradeCreateCompanion.returnValue = createTradeResponseStub1
         tradesAPI.mock(tradeCreateCompanion, id: 1)
     }
 
@@ -90,7 +90,7 @@ final class BuyWorkflowTests: XCTestCase {
 
     func testBuyFlowThrowsWhenOrderStatusIsNotActive() async throws {
         let orderCompanion = OrdersAPIMockGetCompanion()
-        orderCompanion.getOrderReturnValue = orderFilledStub1
+        orderCompanion.returnValue = orderFilledStub1
         ordersAPI.mock(orderCompanion, id: "1")
 
         do {
@@ -110,7 +110,7 @@ final class BuyWorkflowTests: XCTestCase {
 
     func testBuyFlowThrowsWhenGetOrderFails() async throws {
         let orderCompanion = OrdersAPIMockGetCompanion()
-        orderCompanion.getOrderThrowableError = DummyError.something
+        orderCompanion.throwableError = DummyError.something
         ordersAPI.mock(orderCompanion, id: "1")
 
         do {
@@ -130,7 +130,7 @@ final class BuyWorkflowTests: XCTestCase {
 
     func testBuyFlowThrowsWhenGetSignableTradeFails() async throws {
         let tradeGetCompanion = TradesAPIMockGetCompanion()
-        tradeGetCompanion.getSignableTradeThrowableError = DummyError.something
+        tradeGetCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeGetCompanion, id: 1)
 
         do {
@@ -150,7 +150,7 @@ final class BuyWorkflowTests: XCTestCase {
 
     func testBuyFlowThrowsWhenCreateSignableTradeFails() async throws {
         let tradeCreateCompanion = TradesAPIMockCreateCompanion()
-        tradeCreateCompanion.createTradeThrowableError = DummyError.something
+        tradeCreateCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeCreateCompanion, id: 1)
 
         do {
