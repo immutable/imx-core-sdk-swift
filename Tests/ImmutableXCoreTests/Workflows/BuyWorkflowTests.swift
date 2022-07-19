@@ -8,6 +8,9 @@ final class BuyWorkflowTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        ordersAPI.resetMock()
+        tradesAPI.resetMock()
+
         let orderCompanion = OrdersAPIMockGetCompanion()
         orderCompanion.getOrderReturnValue = orderFilledStub1
         ordersAPI.mock(orderCompanion, id: "1")
@@ -19,12 +22,6 @@ final class BuyWorkflowTests: XCTestCase {
         let tradeCreateCompanion = TradesAPIMockCreateCompanion()
         tradeCreateCompanion.createTradeReturnValue = createTradeResponseStub1
         tradesAPI.mock(tradeCreateCompanion, id: 1)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-        ordersAPI.tearDown()
-        tradesAPI.tearDown()
     }
 
     func testBuyFlowSuccess() async throws {
