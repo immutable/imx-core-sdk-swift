@@ -15,7 +15,7 @@ public class OrdersAPIMock: OrdersAPI {
         requests[id] = companion
     }
 
-    static func tearDown() {
+    static func resetMock() {
         requests.removeAll()
     }
 

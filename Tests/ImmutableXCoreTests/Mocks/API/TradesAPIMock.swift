@@ -27,7 +27,7 @@ final class TradesAPIMock: TradesAPI {
         createRequests[id] = companion
     }
 
-    static func tearDown() {
+    static func resetMock() {
         getRequests.removeAll()
         createRequests.removeAll()
     }

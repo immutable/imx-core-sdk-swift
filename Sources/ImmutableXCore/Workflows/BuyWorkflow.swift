@@ -1,6 +1,6 @@
 import Foundation
 
-struct BuyWorkflow {
+class BuyWorkflow {
     /// This is a utility function that will chain the necessary calls to buy an existing order.
     ///
     /// - Parameters:
@@ -11,7 +11,7 @@ struct BuyWorkflow {
     ///
     /// - Returns: ``CreateTradeResponse`` that will provide the Trade id if successful.
     /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
-    static func buy(orderId: String, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self, tradesAPI: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
+    class func buy(orderId: String, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self, tradesAPI: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
         let address = try await signer.getAddress()
         let order = try await getOrderDetails(orderId: orderId, fees: fees, api: ordersAPI)
         let signableTrade = try await getSignableTrade(order: order, address: address, fees: fees, api: tradesAPI)

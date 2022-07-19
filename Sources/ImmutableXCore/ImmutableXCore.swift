@@ -32,8 +32,52 @@ public struct ImmutableXCore {
         return try! String(contentsOfFile: file).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
 
+    private let buyWorkflow: BuyWorkflow.Type
+
+    /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self) {
+        self.base = base
+        self.logLevel = logLevel
+        self.buyWorkflow = buyWorkflow
+    }
+
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
     public static func initialize(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none) {
         ImmutableXCore.shared = ImmutableXCore(base: base, logLevel: logLevel)
+    }
+
+    /// This is a utility function that will chain the necessary calls to buy an existing order.
+    ///
+    ///  - Parameters:
+    ///     - orderId: the id of an existing order to be bought
+    ///     - fees: taker fees information to be used in the buy order.
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
+    /// - Throws: An error confirming to ``ImmutableXError`` protocol
+    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner) async throws -> CreateTradeResponse {
+        try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
+    }
+
+    /// This is a utility function that will chain the necessary calls to buy an existing order.
+    ///
+    ///  - Parameters:
+    ///     - orderId: the id of an existing order to be bought
+    ///     - fees: taker fees information to be used in the buy order.
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful or an error confirming
+    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let response = try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
+                onCompletion(.success(response))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
     }
 }
