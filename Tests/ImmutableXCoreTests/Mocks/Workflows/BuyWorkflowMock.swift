@@ -2,9 +2,9 @@ import Foundation
 @testable import ImmutableXCore
 
 class BuyWorkflowCompanion {
-    var buyThrowableError: Error?
-    var buyCallsCount = 0
-    var buyReturnValue: CreateTradeResponse!
+    var throwableError: Error?
+    var callsCount = 0
+    var returnValue: CreateTradeResponse!
 }
 
 class BuyWorkflowMock: BuyWorkflow {
@@ -21,11 +21,11 @@ class BuyWorkflowMock: BuyWorkflow {
     override class func buy(orderId: String, fees _: [FeeEntry], signer _: Signer, starkSigner _: StarkSigner, ordersAPI _: OrdersAPI.Type = OrdersAPI.self, tradesAPI _: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
         let companion = requests[orderId]!
 
-        if let error = companion.buyThrowableError {
+        if let error = companion.throwableError {
             throw error
         }
 
-        companion.buyCallsCount += 1
-        return companion.buyReturnValue
+        companion.callsCount += 1
+        return companion.returnValue
     }
 }
