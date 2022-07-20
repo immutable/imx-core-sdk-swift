@@ -1,5 +1,6 @@
 import Foundation
 
+// swiftlint:disable function_parameter_count
 public struct ImmutableXCore {
     /// A shared instance of ``ImmutableXCore`` that holds configuration for ``base``, ``logLevel`` and
     /// a set o utility methods for the most common workflows for the core SDK.
@@ -33,12 +34,14 @@ public struct ImmutableXCore {
     }
 
     private let buyWorkflow: BuyWorkflow.Type
+    private let sellWorkflow: SellWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self) {
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
+        self.sellWorkflow = sellWorkflow
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
@@ -74,6 +77,43 @@ public struct ImmutableXCore {
         Task { @MainActor in
             do {
                 let response = try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
+                onCompletion(.success(response))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// This is a utility function that will chain the necessary calls to sell an asset.
+    ///
+    /// - Parameters:
+    ///     - asset: the asset to sell
+    ///     - sellToken: the type of token and how much of it to sell the asset for
+    ///     - fees: maker fees information to be used in the sell order.
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
+    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner) async throws -> CreateOrderResponse {
+        try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
+    }
+
+    /// This is a utility function that will chain the necessary calls to sell an asset.
+    ///
+    /// - Parameters:
+    ///     - asset: the asset to sell
+    ///     - sellToken: the type of token and how much of it to sell the asset for
+    ///     - fees: maker fees information to be used in the sell order.
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: a ``CreateOrderResponse`` that will provide the Trade id if successful or an error confirming
+    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let response = try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
                 onCompletion(.failure(error))
