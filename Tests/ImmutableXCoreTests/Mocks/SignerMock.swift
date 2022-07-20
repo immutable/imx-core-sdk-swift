@@ -21,24 +21,6 @@ final class SignerMock: Signer {
         return try getAddressClosure.map { try $0() } ?? getAddressReturnValue
     }
 
-    // MARK: - getAddress
-
-    var getAddressOnCompletionCallsCount = 0
-    var getAddressOnCompletionCalled: Bool {
-        getAddressOnCompletionCallsCount > 0
-    }
-
-    var getAddressOnCompletionReceivedOnCompletion: ((Result<String, Error>) -> Void)?
-    var getAddressOnCompletionReceivedInvocations: [(Result<String, Error>) -> Void] = []
-    var getAddressOnCompletionClosure: ((@escaping (Result<String, Error>) -> Void) -> Void)?
-
-    func getAddress(onCompletion: @escaping (Result<String, Error>) -> Void) {
-        getAddressOnCompletionCallsCount += 1
-        getAddressOnCompletionReceivedOnCompletion = onCompletion
-        getAddressOnCompletionReceivedInvocations.append(onCompletion)
-        getAddressOnCompletionClosure?(onCompletion)
-    }
-
     // MARK: - signMessage
 
     var signMessageThrowableError: Error?
@@ -60,23 +42,5 @@ final class SignerMock: Signer {
         signMessageReceivedMessage = message
         signMessageReceivedInvocations.append(message)
         return try signMessageClosure.map { try $0(message) } ?? signMessageReturnValue
-    }
-
-    // MARK: - signMessage
-
-    var signMessageOnCompletionCallsCount = 0
-    var signMessageOnCompletionCalled: Bool {
-        signMessageOnCompletionCallsCount > 0
-    }
-
-    var signMessageOnCompletionReceivedArguments: (message: String, onCompletion: (Result<String, Error>) -> Void)?
-    var signMessageOnCompletionReceivedInvocations: [(message: String, onCompletion: (Result<String, Error>) -> Void)] = []
-    var signMessageOnCompletionClosure: ((String, @escaping (Result<String, Error>) -> Void) -> Void)?
-
-    func signMessage(_ message: String, onCompletion: @escaping (Result<String, Error>) -> Void) {
-        signMessageOnCompletionCallsCount += 1
-        signMessageOnCompletionReceivedArguments = (message: message, onCompletion: onCompletion)
-        signMessageOnCompletionReceivedInvocations.append((message: message, onCompletion: onCompletion))
-        signMessageOnCompletionClosure?(message, onCompletion)
     }
 }
