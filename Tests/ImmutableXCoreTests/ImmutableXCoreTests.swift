@@ -4,12 +4,14 @@ import XCTest
 final class ImmutableXCoreTests: XCTestCase {
     let buyWorkflow = BuyWorkflowMock.self
     let sellWorkflow = SellWorkflowMock.self
-    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow)
+    let cancelOrderWorkflow = CancelOrderWorkflowMock.self
+    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow)
 
     override func setUp() {
         super.setUp()
         buyWorkflow.resetMock()
         sellWorkflow.resetMock()
+        cancelOrderWorkflow.resetMock()
         ImmutableXCore.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -19,6 +21,10 @@ final class ImmutableXCoreTests: XCTestCase {
         let sellCompanion = SellWorkflowCompanion()
         sellCompanion.returnValue = createOrderResponseStub1
         sellWorkflow.mock(sellCompanion)
+
+        let cancelOrderCompanion = CancelOrderWorkflowCompanion()
+        cancelOrderCompanion.returnValue = cancelOrderResponseStub1
+        cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
     }
 
     func testSdkVersion() {
@@ -134,6 +140,61 @@ final class ImmutableXCoreTests: XCTestCase {
 
         let expectation = expectation(description: "testSellFlowFailureClosure")
         core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case .success:
+                XCTFail("Should not have succeeded")
+            case let .failure(error):
+                XCTAssertTrue(error is DummyError)
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    // MARK: - Cancel
+
+    func testCancelOrderFlowSuccessAsync() async throws {
+        let response = try await core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock())
+        XCTAssertEqual(response, cancelOrderResponseStub1)
+    }
+
+    func testCancelOrderFlowFailureAsync() async throws {
+        let cancelOrderCompanion = CancelOrderWorkflowCompanion()
+        cancelOrderCompanion.throwableError = DummyError.something
+        cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
+
+        do {
+            _ = try await core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock())
+            XCTFail("Should have failed")
+        } catch {
+            XCTAssertTrue(error is DummyError)
+        }
+    }
+
+    func testCancelOrderFlowSuccessClosure() {
+        let expectation = expectation(description: "testCancelOrderFlowSuccessClosure")
+
+        core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case let .success(response):
+                XCTAssertEqual(response, cancelOrderResponseStub1)
+            case .failure:
+                XCTFail("Should not have failed")
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    func testCancelOrderFlowFailureClosure() {
+        let cancelOrderCompanion = CancelOrderWorkflowCompanion()
+        cancelOrderCompanion.throwableError = DummyError.something
+        cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
+
+        let expectation = expectation(description: "testCancelOrderFlowFailureClosure")
+        core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
             expectation.fulfill()
             switch result {
             case .success:

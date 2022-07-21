@@ -19,27 +19,51 @@ class OrdersAPIMockCreateOrderCompanion {
     var returnValue: CreateOrderResponse!
 }
 
+class OrdersAPIMockGetSinableCancelCompanion {
+    var throwableError: Error?
+    var callsCount = 0
+    var returnValue: GetSignableCancelOrderResponse!
+}
+
+class OrdersAPIMockCancelOrderCompanion {
+    var throwableError: Error?
+    var callsCount = 0
+    var returnValue: CancelOrderResponse!
+}
+
 public class OrdersAPIMock: OrdersAPI {
     static var requests: [String: OrdersAPIMockGetCompanion] = [:]
-    static var getSinableCompanion: OrdersAPIMockGetSignableCompanion?
+    static var getSignableCompanion: OrdersAPIMockGetSignableCompanion?
     static var createOrderCompanion: OrdersAPIMockCreateOrderCompanion?
+    static var getSignableCancelCompanion: OrdersAPIMockGetSinableCancelCompanion?
+    static var cancelOrderCompanion: OrdersAPIMockCancelOrderCompanion?
 
     static func mock(_ companion: OrdersAPIMockGetCompanion, id: String) {
         requests[id] = companion
     }
 
     static func mock(_ companion: OrdersAPIMockGetSignableCompanion) {
-        getSinableCompanion = companion
+        getSignableCompanion = companion
     }
 
     static func mock(_ companion: OrdersAPIMockCreateOrderCompanion) {
         createOrderCompanion = companion
     }
 
+    static func mock(_ companion: OrdersAPIMockGetSinableCancelCompanion) {
+        getSignableCancelCompanion = companion
+    }
+
+    static func mock(_ companion: OrdersAPIMockCancelOrderCompanion) {
+        cancelOrderCompanion = companion
+    }
+
     static func resetMock() {
         requests.removeAll()
-        getSinableCompanion = nil
+        getSignableCompanion = nil
         createOrderCompanion = nil
+        getSignableCancelCompanion = nil
+        cancelOrderCompanion = nil
     }
 
     // MARK: - getOrder
@@ -58,7 +82,7 @@ public class OrdersAPIMock: OrdersAPI {
     // MARK: - getSignableOrder
 
     override public class func getSignableOrder(getSignableOrderRequestV3: GetSignableOrderRequest) async throws -> GetSignableOrderResponse {
-        let companion = getSinableCompanion!
+        let companion = getSignableCompanion!
 
         if let error = companion.throwableError {
             throw error
@@ -72,6 +96,32 @@ public class OrdersAPIMock: OrdersAPI {
 
     override public class func createOrder(createOrderRequest: CreateOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateOrderResponse {
         let companion = createOrderCompanion!
+
+        if let error = companion.throwableError {
+            throw error
+        }
+
+        companion.callsCount += 1
+        return companion.returnValue
+    }
+
+    // MARK: - getSignableCancelOrder
+
+    override public class func getSignableCancelOrder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) async throws -> GetSignableCancelOrderResponse {
+        let companion = getSignableCancelCompanion!
+
+        if let error = companion.throwableError {
+            throw error
+        }
+
+        companion.callsCount += 1
+        return companion.returnValue
+    }
+
+    // MARK: - cancelOrder
+
+    override public class func cancelOrder(id: String, cancelOrderRequest: CancelOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CancelOrderResponse {
+        let companion = cancelOrderCompanion!
 
         if let error = companion.throwableError {
             throw error

@@ -35,13 +35,15 @@ public struct ImmutableXCore {
 
     private let buyWorkflow: BuyWorkflow.Type
     private let sellWorkflow: SellWorkflow.Type
+    private let cancelOrderWorkflow: CancelOrderWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self) {
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
         self.sellWorkflow = sellWorkflow
+        self.cancelOrderWorkflow = cancelOrderWorkflow
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
@@ -114,6 +116,39 @@ public struct ImmutableXCore {
         Task { @MainActor in
             do {
                 let response = try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
+                onCompletion(.success(response))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// This is a utility function that will chain the necessary calls to cancel an existing order.
+    ///
+    /// - Parameters:
+    ///     - orderId: the id of an existing order to be bought
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
+    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner) async throws -> CancelOrderResponse {
+        try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
+    }
+
+    /// This is a utility function that will chain the necessary calls to cancel an existing order.
+    ///
+    /// - Parameters:
+    ///     - orderId: the id of an existing order to be bought
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: a ``CancelOrderResponse`` that will provide the Trade id if successful or an error confirming
+    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let response = try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
                 onCompletion(.failure(error))
