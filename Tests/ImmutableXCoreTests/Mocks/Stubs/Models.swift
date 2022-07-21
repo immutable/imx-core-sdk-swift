@@ -105,3 +105,14 @@ let erc20AssetStub1 = ERC20Asset(
 let ethAssetStub1 = ETHAsset(
     quantity: "0.0101"
 )
+
+let signableCancelOrderResponseStub1 = GetSignableCancelOrderResponse(
+    orderId: 1,
+    payloadHash: "cancelOrderPayloadHash",
+    signableMessage: "messageForL1"
+)
+
+let cancelOrderResponseStub1 = CancelOrderResponse(
+    orderId: 1,
+    status: OrderStatus.cancelled.rawValue
+)
