@@ -9,9 +9,9 @@ final class CancelOrderWorkflowTests: XCTestCase {
 
         ordersAPI.resetMock()
 
-        let sinableCompanion = OrdersAPIMockGetSinableCancelCompanion()
-        sinableCompanion.returnValue = signableCancelOrderResponseStub1
-        ordersAPI.mock(sinableCompanion)
+        let signableCompanion = OrdersAPIMockGetSignableCancelCompanion()
+        signableCompanion.returnValue = signableCancelOrderResponseStub1
+        ordersAPI.mock(signableCompanion)
 
         let cancelOrderCompanion = OrdersAPIMockCancelOrderCompanion()
         cancelOrderCompanion.returnValue = cancelOrderResponseStub1
@@ -30,9 +30,9 @@ final class CancelOrderWorkflowTests: XCTestCase {
     }
 
     func testCancelFlowThrowsWhenGetSignableCancelOrderFails() async throws {
-        let sinableCompanion = OrdersAPIMockGetSinableCancelCompanion()
-        sinableCompanion.throwableError = DummyError.something
-        ordersAPI.mock(sinableCompanion)
+        let signableCompanion = OrdersAPIMockGetSignableCancelCompanion()
+        signableCompanion.throwableError = DummyError.something
+        ordersAPI.mock(signableCompanion)
 
         do {
             _ = try await CancelOrderWorkflow.cancel(

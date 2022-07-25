@@ -9,9 +9,9 @@ final class SellWorkflowTests: XCTestCase {
 
         ordersAPI.resetMock()
 
-        let sinableCompanion = OrdersAPIMockGetSignableCompanion()
-        sinableCompanion.returnValue = signableOrderResponseStub1
-        ordersAPI.mock(sinableCompanion)
+        let signableCompanion = OrdersAPIMockGetSignableCompanion()
+        signableCompanion.returnValue = signableOrderResponseStub1
+        ordersAPI.mock(signableCompanion)
 
         let createOrderCompanion = OrdersAPIMockCreateOrderCompanion()
         createOrderCompanion.returnValue = createOrderResponseStub1
@@ -32,9 +32,9 @@ final class SellWorkflowTests: XCTestCase {
     }
 
     func testSellFlowFailureWhenSignableOrderThrows() async throws {
-        let sinableCompanion = OrdersAPIMockGetSignableCompanion()
-        sinableCompanion.throwableError = DummyError.something
-        ordersAPI.mock(sinableCompanion)
+        let signableCompanion = OrdersAPIMockGetSignableCompanion()
+        signableCompanion.throwableError = DummyError.something
+        ordersAPI.mock(signableCompanion)
 
         do {
             _ = try await SellWorkflow.sell(
