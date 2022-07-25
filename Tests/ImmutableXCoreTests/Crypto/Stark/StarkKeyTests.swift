@@ -10,14 +10,14 @@ final class StarkKeyTests: XCTestCase {
         let address = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
         let pair = try StarkKey.generateKeyPairFromRawSignature(signature, ethereumAddress: address)
 
-        XCTAssertEqual(pair.publicKey.asStarkKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
+        XCTAssertEqual(pair.publicKey.asStarkPublicKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
     }
 
     func testGetKeyFromRawSignatureWithExtraGrinding() throws {
         let signature = "0x6d1550458c7a9a1257d73adbcf0fabc12f4497e970d9fa62dd88bf7d9e12719148c96225c1402d8707fd061b1aae2222bdf13571dfc82b3aa9974039f247f2b81b"
         let address = "0xa4864d977b944315389d1765ffa7e66F74ee8cd7"
         let pair = try StarkKey.generateKeyPairFromRawSignature(signature, ethereumAddress: address)
-        XCTAssertEqual(pair.publicKey.asStarkKey, "0x035919acd61e97b3ecdc75ff8beed8d1803f7ea3cad2937926ae59cc3f8070d4")
+        XCTAssertEqual(pair.publicKey.asStarkPublicKey, "0x035919acd61e97b3ecdc75ff8beed8d1803f7ea3cad2937926ae59cc3f8070d4")
     }
 
     func testGetPrivateKeySignature() throws {
@@ -47,7 +47,7 @@ final class StarkKeyTests: XCTestCase {
         let expectation = XCTestExpectation(description: "testGenerateFromSignerClosure")
 
         StarkKey.generateKeyPair(from: signer) { result in
-            XCTAssertEqual(try? result.get().publicKey.asStarkKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
+            XCTAssertEqual(try? result.get().publicKey.asStarkPublicKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
             expectation.fulfill()
         }
 
@@ -80,7 +80,7 @@ final class StarkKeyTests: XCTestCase {
         signer.signMessageReturnValue = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1b"
 
         let pair = try await StarkKey.generateKeyPair(from: signer)
-        XCTAssertEqual(pair.publicKey.asStarkKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
+        XCTAssertEqual(pair.publicKey.asStarkPublicKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
     }
 
     func testGenerateFromSignerAsyncFailure() async throws {
