@@ -36,14 +36,16 @@ public struct ImmutableXCore {
     private let buyWorkflow: BuyWorkflow.Type
     private let sellWorkflow: SellWorkflow.Type
     private let cancelOrderWorkflow: CancelOrderWorkflow.Type
+    private let transferWorkflow: TransferWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self) {
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
         self.sellWorkflow = sellWorkflow
         self.cancelOrderWorkflow = cancelOrderWorkflow
+        self.transferWorkflow = transferWorkflow
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
@@ -59,7 +61,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
-    /// - Throws: An error confirming to ``ImmutableXError`` protocol
+    /// - Throws: An error conforming to ``ImmutableXError`` protocol
     public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner) async throws -> CreateTradeResponse {
         try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
     }
@@ -71,8 +73,8 @@ public struct ImmutableXCore {
     ///     - fees: taker fees information to be used in the buy order.
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful or an error confirming
-    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    /// - Returns: a ``CreateTradeResponse`` tthat will provide the Trade id if successful
+    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, Error>) -> Void) {
@@ -108,8 +110,8 @@ public struct ImmutableXCore {
     ///     - fees: maker fees information to be used in the sell order.
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: a ``CreateOrderResponse`` that will provide the Trade id if successful or an error confirming
-    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    /// - Returns: a ``CreateOrderResponse`` that will provide the Order id if successful
+    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, Error>) -> Void) {
@@ -141,14 +143,49 @@ public struct ImmutableXCore {
     ///     - orderId: the id of an existing order to be bought
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: a ``CancelOrderResponse`` that will provide the Trade id if successful or an error confirming
-    ///  to ``ImmutableXError`` protocol through the `onCompletion` callback
+    /// - Returns: a ``CancelOrderResponse`` that will provide the cancelled Order id if successful
+    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, Error>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
+                onCompletion(.success(response))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// This is a utility function that will chain the necessary calls to transfer a token.
+    ///
+    /// - Parameters:
+    ///     - token: to be transferred (ETH, ERC20, or ERC721)
+    ///     - recipientAddress: of the wallet that will receive the token
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
+    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner) async throws -> CreateTransferResponse {
+        try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
+    }
+
+    /// This is a utility function that will chain the necessary calls to transfer a token.
+    ///
+    /// - Parameters:
+    ///     - token: to be transferred (ETH, ERC20, or ERC721)
+    ///     - recipientAddress: of the wallet that will receive the token
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: a ``CreateTransferResponse`` that will provide the transfer id if successful
+    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let response = try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
                 onCompletion(.failure(error))

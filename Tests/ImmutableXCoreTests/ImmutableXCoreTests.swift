@@ -5,13 +5,15 @@ final class ImmutableXCoreTests: XCTestCase {
     let buyWorkflow = BuyWorkflowMock.self
     let sellWorkflow = SellWorkflowMock.self
     let cancelOrderWorkflow = CancelOrderWorkflowMock.self
-    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow)
+    let transferWorkflowMock = TransferWorkflowMock.self
+    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock)
 
     override func setUp() {
         super.setUp()
         buyWorkflow.resetMock()
         sellWorkflow.resetMock()
         cancelOrderWorkflow.resetMock()
+        transferWorkflowMock.resetMock()
         ImmutableXCore.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -25,6 +27,10 @@ final class ImmutableXCoreTests: XCTestCase {
         let cancelOrderCompanion = CancelOrderWorkflowCompanion()
         cancelOrderCompanion.returnValue = cancelOrderResponseStub1
         cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
+
+        let transferCompanion = TransferWorkflowCompanion()
+        transferCompanion.returnValue = createTransferResponseStub1
+        transferWorkflowMock.mock(transferCompanion)
     }
 
     func testSdkVersion() {
@@ -195,6 +201,62 @@ final class ImmutableXCoreTests: XCTestCase {
 
         let expectation = expectation(description: "testCancelOrderFlowFailureClosure")
         core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case .success:
+                XCTFail("Should not have succeeded")
+            case let .failure(error):
+                XCTAssertTrue(error is DummyError)
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    // MARK: - Transfer
+
+    func testTransferFlowSuccessAsync() async throws {
+        let response = try await core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
+        XCTAssertEqual(response, createTransferResponseStub1)
+    }
+
+    func testTransferFlowFailureAsync() async throws {
+        let transferCompanion = TransferWorkflowCompanion()
+        transferCompanion.throwableError = DummyError.something
+        transferWorkflowMock.mock(transferCompanion)
+
+        do {
+            _ = try await core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
+            XCTFail("Should have failed")
+        } catch {
+            XCTAssertTrue(error is DummyError)
+        }
+    }
+
+    func testTransferFlowSuccessClosure() {
+        let expectation = expectation(description: "testTransferFlowSuccessClosure")
+
+        core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case let .success(response):
+                XCTAssertEqual(response, createTransferResponseStub1)
+            case .failure:
+                XCTFail("Should not have failed")
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    func testTransferFlowFailureClosure() {
+        let transferCompanion = TransferWorkflowCompanion()
+        transferCompanion.throwableError = DummyError.something
+        transferWorkflowMock.mock(transferCompanion)
+
+        let expectation = expectation(description: "testTransferFlowFailureClosure")
+
+        core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
             expectation.fulfill()
             switch result {
             case .success:
