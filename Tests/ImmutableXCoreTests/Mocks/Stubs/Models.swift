@@ -116,3 +116,32 @@ let cancelOrderResponseStub1 = CancelOrderResponse(
     orderId: 1,
     status: OrderStatus.cancelled.rawValue
 )
+
+let signableTransferResponseDetailsStub1 = SignableTransferResponseDetails(
+    amount: "1",
+    assetId: "0x0400018c7bd712ffd55027823f43277c11070bbaae94c8817552471a7abfcb02",
+    expirationTimestamp: 1_325_907,
+    nonce: 596_252_354,
+    payloadHash: "hash",
+    receiverStarkKey: "0x06588251eea34f39848302f991b8bc7098e2bb5fd2eba120255f91e971a23485",
+    receiverVaultId: 1_502_450_104,
+    senderVaultId: 1_502_450_105,
+    token: ERC721Asset(
+        tokenAddress: "tokenAddress",
+        tokenId: "tokenId"
+    ).asSignableToken()
+)
+
+let signableTransferResponseStub1 = GetSignableTransferResponse(
+    senderStarkKey: "0x06588251eea34f39848302f991b8bc7098e2bb5fd2eba120255f91e971a23486",
+    signableMessage: "messageForL1",
+    signableResponses: [signableTransferResponseDetailsStub1]
+)
+
+let signableTransferResponseStub2 = GetSignableTransferResponse(
+    senderStarkKey: "0x06588251eea34f39848302f991b8bc7098e2bb5fd2eba120255f91e971a23486",
+    signableMessage: "messageForL1",
+    signableResponses: []
+)
+
+let createTransferResponseStub1 = CreateTransferResponse(transferIds: [1])

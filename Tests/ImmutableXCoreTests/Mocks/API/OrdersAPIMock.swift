@@ -19,7 +19,7 @@ class OrdersAPIMockCreateOrderCompanion {
     var returnValue: CreateOrderResponse!
 }
 
-class OrdersAPIMockGetSinableCancelCompanion {
+class OrdersAPIMockGetSignableCancelCompanion {
     var throwableError: Error?
     var callsCount = 0
     var returnValue: GetSignableCancelOrderResponse!
@@ -35,7 +35,7 @@ public class OrdersAPIMock: OrdersAPI {
     static var requests: [String: OrdersAPIMockGetCompanion] = [:]
     static var getSignableCompanion: OrdersAPIMockGetSignableCompanion?
     static var createOrderCompanion: OrdersAPIMockCreateOrderCompanion?
-    static var getSignableCancelCompanion: OrdersAPIMockGetSinableCancelCompanion?
+    static var getSignableCancelCompanion: OrdersAPIMockGetSignableCancelCompanion?
     static var cancelOrderCompanion: OrdersAPIMockCancelOrderCompanion?
 
     static func mock(_ companion: OrdersAPIMockGetCompanion, id: String) {
@@ -50,7 +50,7 @@ public class OrdersAPIMock: OrdersAPI {
         createOrderCompanion = companion
     }
 
-    static func mock(_ companion: OrdersAPIMockGetSinableCancelCompanion) {
+    static func mock(_ companion: OrdersAPIMockGetSignableCancelCompanion) {
         getSignableCancelCompanion = companion
     }
 
