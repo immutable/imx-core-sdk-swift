@@ -7,7 +7,7 @@ public struct PublicKey: Equatable {
     public let number: BigInt
 
     /// A representation of the public key sanitized to be Stark friendly
-    public var asStarkKey: String {
+    public var asStarkPublicKey: String {
         Array(hex: number.asHexString().sanitizeBytes()).asHexString(byteLength: Constants.starkPrivateKeyLength)
     }
 
