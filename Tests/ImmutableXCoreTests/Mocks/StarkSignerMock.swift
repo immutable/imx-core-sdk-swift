@@ -10,7 +10,7 @@ final class StarkSignerMock: StarkSigner {
         getAddressCallsCount > 0
     }
 
-    var getAddressReturnValue: String!
+    var getAddressReturnValue: String! = "0x06ce33125b4813073157461d020e1537e66d90f9f32ffc83624d5e20d6abbc76"
     var getAddressClosure: (() throws -> String)?
 
     func getAddress() throws -> String {

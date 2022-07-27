@@ -145,3 +145,12 @@ let signableTransferResponseStub2 = GetSignableTransferResponse(
 )
 
 let createTransferResponseStub1 = CreateTransferResponse(transferIds: [1])
+
+let usersAPIResponseStub1 = GetUsersApiResponse(accounts: ["0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"])
+
+let signableRegistrationOffchainResponseStub1 = GetSignableRegistrationOffchainResponse(
+    payloadHash: "payload",
+    signableMessage: "signable"
+)
+
+let registerUserResponseStub1 = RegisterUserResponse(txHash: "hash")
