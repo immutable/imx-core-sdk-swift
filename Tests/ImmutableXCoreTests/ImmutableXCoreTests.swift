@@ -6,7 +6,9 @@ final class ImmutableXCoreTests: XCTestCase {
     let sellWorkflow = SellWorkflowMock.self
     let cancelOrderWorkflow = CancelOrderWorkflowMock.self
     let transferWorkflowMock = TransferWorkflowMock.self
-    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock)
+    let registerWorkflowMock = RegisterWorkflowMock.self
+
+    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock)
 
     override func setUp() {
         super.setUp()
@@ -14,6 +16,7 @@ final class ImmutableXCoreTests: XCTestCase {
         sellWorkflow.resetMock()
         cancelOrderWorkflow.resetMock()
         transferWorkflowMock.resetMock()
+        registerWorkflowMock.resetMock()
         ImmutableXCore.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -31,6 +34,10 @@ final class ImmutableXCoreTests: XCTestCase {
         let transferCompanion = TransferWorkflowCompanion()
         transferCompanion.returnValue = createTransferResponseStub1
         transferWorkflowMock.mock(transferCompanion)
+
+        let registerCompanion = RegisterWorkflowCompanion()
+        registerCompanion.returnValue = true
+        registerWorkflowMock.mock(registerCompanion)
     }
 
     func testSdkVersion() {
@@ -257,6 +264,62 @@ final class ImmutableXCoreTests: XCTestCase {
         let expectation = expectation(description: "testTransferFlowFailureClosure")
 
         core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case .success:
+                XCTFail("Should not have succeeded")
+            case let .failure(error):
+                XCTAssertTrue(error is DummyError)
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    // MARK: - Register
+
+    func testRegisterFlowSuccessAsync() async throws {
+        try await core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock())
+        XCTAssertEqual(registerWorkflowMock.companion.callsCount, 1)
+    }
+
+    func testRegisterFlowFailureAsync() async throws {
+        let registerCompanion = RegisterWorkflowCompanion()
+        registerCompanion.throwableError = DummyError.something
+        registerWorkflowMock.mock(registerCompanion)
+
+        do {
+            _ = try await core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock())
+            XCTFail("Should have failed")
+        } catch {
+            XCTAssertTrue(error is DummyError)
+        }
+    }
+
+    func testRegisterFlowSuccessClosure() {
+        let expectation = expectation(description: "testRegisterFlowSuccessClosure")
+
+        core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock()) { [weak self] result in
+            expectation.fulfill()
+            switch result {
+            case .success:
+                XCTAssertEqual(self?.registerWorkflowMock.companion.callsCount, 1)
+            case .failure:
+                XCTFail("Should not have failed")
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    func testRegisterFlowFailureClosure() {
+        let registerCompanion = RegisterWorkflowCompanion()
+        registerCompanion.throwableError = DummyError.something
+        registerWorkflowMock.mock(registerCompanion)
+
+        let expectation = expectation(description: "testRegisterFlowFailureClosure")
+
+        core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
             expectation.fulfill()
             switch result {
             case .success:

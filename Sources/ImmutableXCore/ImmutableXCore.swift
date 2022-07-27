@@ -37,15 +37,17 @@ public struct ImmutableXCore {
     private let sellWorkflow: SellWorkflow.Type
     private let cancelOrderWorkflow: CancelOrderWorkflow.Type
     private let transferWorkflow: TransferWorkflow.Type
+    private let registerWorkflow: RegisterWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self) {
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
         self.sellWorkflow = sellWorkflow
         self.cancelOrderWorkflow = cancelOrderWorkflow
         self.transferWorkflow = transferWorkflow
+        self.registerWorkflow = registerWorkflow
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
@@ -187,6 +189,37 @@ public struct ImmutableXCore {
             do {
                 let response = try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// This is a utility function that will register a user to Immutable X if they aren't already
+    ///
+    /// - Parameters:
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``Void`` if user is registered
+    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    public func registerOffchain(signer: Signer, starkSigner: StarkSigner) async throws {
+        _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
+    }
+
+    /// This is a utility function that will register a user to Immutable X if they aren't already
+    ///
+    /// - Parameters:
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``Void`` if user is registered or an error conforming to ``ImmutableXError`` protocol through
+    /// the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func registerOffchain(signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<Void, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
+                onCompletion(.success(()))
             } catch {
                 onCompletion(.failure(error))
             }
