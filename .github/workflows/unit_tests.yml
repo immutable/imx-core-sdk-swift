@@ -20,13 +20,10 @@ jobs:
     - name: Run iOS tests
       run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild test-without-building -scheme ImmutableXCore -destination "platform=iOS Simulator,OS=latest,name=iPhone 13"
     - name: Run macOS tests
-      run: set -o pipefail && swift test --enable-code-coverage -v
-    - uses: michaelhenry/swifty-code-coverage@v1.0.0
-      with:
-        build-path: .build
-        target: ImmutableXCorePackageTests.xctest
-        is-spm: true
-        ignore-filename-regex: ".build|Tests|Pods|Packages|Plugins|Generated|DerivedData|Signer.swift|ImmutableXHTTPLoggingLevel.swift|Constants.swift|Errors.swift"
+      run: set -o pipefail && swift test --enable-code-coverage
+    - name: Parse coverage
+      run: sh ./lcov.sh --build-path .build --target ImmutableXCorePackageTests.xctest --is-spm true --ignore-filename-regex ".build|Tests|Pods|Packages|Plugins|Generated|DerivedData|Signer.swift|ImmutableXHTTPLoggingLevel.swift|Constants.swift|Errors.swift"
+      shell: bash
     - name: Publish to code climate
       uses: paambaati/codeclimate-action@v3.0.0
       env:
@@ -34,3 +31,4 @@ jobs:
       with:
         coverageLocations: |
           coverage/lcov.info:lcov
+        debug: true
