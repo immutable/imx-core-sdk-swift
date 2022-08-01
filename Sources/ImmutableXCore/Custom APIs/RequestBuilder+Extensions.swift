@@ -1,6 +1,7 @@
 import Foundation
 
 extension RequestBuilder {
+    /// Wraps ``RequestBuilder/execute(_:_:)`` callback style API into async await style
     func execute(_ apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue) async throws -> T {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
