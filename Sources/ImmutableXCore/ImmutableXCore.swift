@@ -7,7 +7,7 @@ public struct ImmutableXCore {
     ///
     /// - Note: ``initialize(base:logLevel:)`` must be called before this instance
     /// is accessed.
-    public private(set) static var shared: ImmutableXCore!
+    public internal(set) static var shared: ImmutableXCore!
 
     /// The environment the SDK will communicate with. Defaults to `.ropsten`.
     public let base: ImmutableXBase

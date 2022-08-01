@@ -1,6 +1,8 @@
 import Foundation
 @testable import ImmutableXCore
 
+let coreStub1 = ImmutableXCore(base: .ropsten, buyWorkflow: BuyWorkflowMock.self, sellWorkflow: SellWorkflowMock.self, cancelOrderWorkflow: CancelOrderWorkflowMock.self, transferWorkflow: TransferWorkflowMock.self, registerWorkflow: RegisterWorkflowMock.self)
+
 let tokenETHStub1 = Token(
     data: TokenData(
         decimals: 18,
@@ -154,3 +156,5 @@ let signableRegistrationOffchainResponseStub1 = GetSignableRegistrationOffchainR
 )
 
 let registerUserResponseStub1 = RegisterUserResponse(txHash: "hash")
+
+let signedMoonpayResponseStub1 = GetSignedMoonpayResponse(signature: "signature")
