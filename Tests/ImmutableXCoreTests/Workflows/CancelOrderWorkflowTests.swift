@@ -29,41 +29,33 @@ final class CancelOrderWorkflowTests: XCTestCase {
         XCTAssertEqual(response, cancelOrderResponseStub1)
     }
 
-    func testCancelFlowThrowsWhenGetSignableCancelOrderFails() async throws {
+    func testCancelFlowThrowsWhenGetSignableCancelOrderFails() {
         let signableCompanion = OrdersAPIMockGetSignableCancelCompanion()
         signableCompanion.throwableError = DummyError.something
         ordersAPI.mock(signableCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await CancelOrderWorkflow.cancel(
                 orderId: "1",
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI
+                ordersAPI: self.ordersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 
-    func testCancelFlowThrowsWhenCancelOrderFails() async throws {
+    func testCancelFlowThrowsWhenCancelOrderFails() {
         let cancelOrderCompanion = OrdersAPIMockCancelOrderCompanion()
         cancelOrderCompanion.throwableError = DummyError.something
         ordersAPI.mock(cancelOrderCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await CancelOrderWorkflow.cancel(
                 orderId: "1",
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI
+                ordersAPI: self.ordersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 }

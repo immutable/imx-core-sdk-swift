@@ -62,16 +62,13 @@ final class ImmutableXCoreTests: XCTestCase {
         XCTAssertEqual(response, createTradeResponseStub1)
     }
 
-    func testBuyFlowFailureAsync() async throws {
+    func testBuyFlowFailureAsync() {
         let buyCompanion = BuyWorkflowCompanion()
         buyCompanion.throwableError = DummyError.something
         buyWorkflow.mock(buyCompanion, id: "1")
 
-        do {
-            _ = try await core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock())
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is DummyError)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock())
         }
     }
 
@@ -117,16 +114,13 @@ final class ImmutableXCoreTests: XCTestCase {
         XCTAssertEqual(response, createOrderResponseStub1)
     }
 
-    func testSellFlowFailureAsync() async throws {
+    func testSellFlowFailureAsync() {
         let sellCompanion = SellWorkflowCompanion()
         sellCompanion.throwableError = DummyError.something
         sellWorkflow.mock(sellCompanion)
 
-        do {
-            _ = try await core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock())
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is DummyError)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock())
         }
     }
 
@@ -172,16 +166,13 @@ final class ImmutableXCoreTests: XCTestCase {
         XCTAssertEqual(response, cancelOrderResponseStub1)
     }
 
-    func testCancelOrderFlowFailureAsync() async throws {
+    func testCancelOrderFlowFailureAsync() {
         let cancelOrderCompanion = CancelOrderWorkflowCompanion()
         cancelOrderCompanion.throwableError = DummyError.something
         cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
 
-        do {
-            _ = try await core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock())
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is DummyError)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock())
         }
     }
 
@@ -227,16 +218,13 @@ final class ImmutableXCoreTests: XCTestCase {
         XCTAssertEqual(response, createTransferResponseStub1)
     }
 
-    func testTransferFlowFailureAsync() async throws {
+    func testTransferFlowFailureAsync() {
         let transferCompanion = TransferWorkflowCompanion()
         transferCompanion.throwableError = DummyError.something
         transferWorkflowMock.mock(transferCompanion)
 
-        do {
-            _ = try await core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is DummyError)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
         }
     }
 
@@ -283,16 +271,13 @@ final class ImmutableXCoreTests: XCTestCase {
         XCTAssertEqual(registerWorkflowMock.companion.callsCount, 1)
     }
 
-    func testRegisterFlowFailureAsync() async throws {
+    func testRegisterFlowFailureAsync() {
         let registerCompanion = RegisterWorkflowCompanion()
         registerCompanion.throwableError = DummyError.something
         registerWorkflowMock.mock(registerCompanion)
 
-        do {
-            _ = try await core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock())
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is DummyError)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock())
         }
     }
 

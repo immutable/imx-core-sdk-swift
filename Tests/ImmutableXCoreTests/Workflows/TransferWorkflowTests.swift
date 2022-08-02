@@ -57,43 +57,35 @@ final class TransferWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createTransferResponseStub1)
     }
 
-    func testTransferFlowFailsOnSignableTransferError() async throws {
+    func testTransferFlowFailsOnSignableTransferError() {
         let signableCompanion = TransfersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         transfersAPI.mock(signableCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await TransferWorkflow.transfer(
                 token: erc721Token,
                 recipientAddress: recipientAddress,
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                transfersAPI: transfersAPI
+                transfersAPI: self.transfersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 
-    func testTransferFlowFailsOnInvalidSignableResponse() async throws {
+    func testTransferFlowFailsOnInvalidSignableResponse() {
         let signableCompanion = TransfersAPIMockGetSignableCompanion()
         signableCompanion.returnValue = signableTransferResponseStub2
         transfersAPI.mock(signableCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await TransferWorkflow.transfer(
                 token: erc721Token,
                 recipientAddress: recipientAddress,
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                transfersAPI: transfersAPI
+                transfersAPI: self.transfersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 }

@@ -30,14 +30,11 @@ final class MoonpayAPITests: XCTestCase {
         XCTAssertEqual(url, "https://buy-staging.moonpay.io/?apiKey=pk_test_nGdsu1IBkjiFzmEvN8ddf4gM9GNy5Sgz&baseCurrencyCode=usd&colorCode=%23#008000&externalTransactionId=123&walletAddress=0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f&walletAddresses=%7B%22gods_immutable%22%3A%220xa76e3eeb2f7143165618ab8feaabcd395b6fac7f%22%7D&signature=signature")
     }
 
-    func testGetBuyCryptoURLFailure() async throws {
+    func testGetBuyCryptoURLFailure() {
         builderMock.mock(Result<Response<GetSignedMoonpayResponse>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
 
-        do {
-            _ = try await moonpayAPI.getBuyCryptoURL(request)
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is ErrorResponse)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.moonpayAPI.getBuyCryptoURL(request)
         }
     }
 }

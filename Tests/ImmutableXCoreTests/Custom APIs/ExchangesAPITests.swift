@@ -17,14 +17,11 @@ final class ExchangesAPITests: XCTestCase {
         XCTAssertEqual(response.id, 123)
     }
 
-    func testGetTransactionIdFailure() async throws {
+    func testGetTransactionIdFailure() {
         builderMock.mock(Result<Response<GetSignedMoonpayResponse>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
 
-        do {
-            _ = try await exchangesAPI.getTransactionId(GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay))
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is ErrorResponse)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.exchangesAPI.getTransactionId(GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay))
         }
     }
 
@@ -36,14 +33,11 @@ final class ExchangesAPITests: XCTestCase {
         XCTAssertEqual(response.currencyCodes, ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"])
     }
 
-    func testGetCurrenciesFailure() async throws {
+    func testGetCurrenciesFailure() {
         builderMock.mock(Result<Response<[CurrencyCode]>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
 
-        do {
-            _ = try await exchangesAPI.getCurrencies(address: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f")
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is ErrorResponse)
+        XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await self.exchangesAPI.getCurrencies(address: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f")
         }
     }
 }

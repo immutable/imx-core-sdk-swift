@@ -31,45 +31,37 @@ final class SellWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createOrderResponseStub1)
     }
 
-    func testSellFlowFailureWhenSignableOrderThrows() async throws {
+    func testSellFlowFailureWhenSignableOrderThrows() {
         let signableCompanion = OrdersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         ordersAPI.mock(signableCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await SellWorkflow.sell(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI
+                ordersAPI: self.ordersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 
-    func testSellFlowFailureWhenCreateOrderThrows() async throws {
+    func testSellFlowFailureWhenCreateOrderThrows() {
         let createOrderCompanion = OrdersAPIMockCreateOrderCompanion()
         createOrderCompanion.throwableError = DummyError.something
         ordersAPI.mock(createOrderCompanion)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await SellWorkflow.sell(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI
+                ordersAPI: self.ordersAPI
             )
-
-            XCTFail("Should have not succeeded")
-        } catch {
-            XCTAssertTrue(error is WorkflowError, "non-Immutable X errors gets mapped to WorkflowError")
         }
     }
 }

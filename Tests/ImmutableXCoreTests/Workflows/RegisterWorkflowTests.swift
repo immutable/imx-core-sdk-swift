@@ -46,51 +46,48 @@ final class RegisterWorkflowTests: XCTestCase {
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfGetUsersResponseFails() async throws {
+    func testRegistrationThrowsIfGetUsersResponseFails() {
         let usersCompanion = UsersAPIMockGetUsersCompanion()
         usersCompanion.throwableError = ErrorResponse.error(400, nil, nil, DummyError.something)
         usersAPI.mock(usersCompanion)
 
-        do {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: usersAPI)
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
-            XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
-            XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 0)
-            XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
+        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
+
+        XCTAssertTrue(error is WorkflowError)
+        XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
+        XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 0)
+        XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfSignableResponseFails() async throws {
+    func testRegistrationThrowsIfSignableResponseFails() {
         let signableCompanion = UsersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         usersAPI.mock(signableCompanion)
 
-        do {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: usersAPI)
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
-            XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
-            XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
-            XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
+        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
+
+        XCTAssertTrue(error is WorkflowError)
+        XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
+        XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
+        XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfRegisterResponseFails() async throws {
+    func testRegistrationThrowsIfRegisterResponseFails() {
         let registerCompanion = UsersAPIMockRegisterCompanion()
         registerCompanion.throwableError = DummyError.something
         usersAPI.mock(registerCompanion)
 
-        do {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: usersAPI)
-            XCTFail("Should have failed")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
-            XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
-            XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
-            XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 1)
+        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
+
+        XCTAssertTrue(error is WorkflowError)
+        XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
+        XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
+        XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 1)
     }
 }

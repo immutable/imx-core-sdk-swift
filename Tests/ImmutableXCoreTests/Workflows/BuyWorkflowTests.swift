@@ -37,134 +37,113 @@ final class BuyWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createTradeResponseStub1)
     }
 
-    func testBuyFlowThrowsWhenFeePercentageIsInvalid() async throws {
-        do {
+    func testBuyFlowThrowsWhenFeePercentageIsInvalid() {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [FeeEntry(address: "address", feePercentage: nil)],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenFeeAddressIsInvalid() async throws {
-        do {
+    func testBuyFlowThrowsWhenFeeAddressIsInvalid() {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [FeeEntry(address: nil, feePercentage: 2)],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenPurchaseOwnOrder() async throws {
+    func testBuyFlowThrowsWhenPurchaseOwnOrder() {
         let signer = SignerMock()
         signer.getAddressReturnValue = orderActiveStub2.user
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
                 signer: signer,
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenOrderStatusIsNotActive() async throws {
+    func testBuyFlowThrowsWhenOrderStatusIsNotActive() {
         let orderCompanion = OrdersAPIMockGetCompanion()
         orderCompanion.returnValue = orderFilledStub1
         ordersAPI.mock(orderCompanion, id: "1")
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenGetOrderFails() async throws {
+    func testBuyFlowThrowsWhenGetOrderFails() {
         let orderCompanion = OrdersAPIMockGetCompanion()
         orderCompanion.throwableError = DummyError.something
         ordersAPI.mock(orderCompanion, id: "1")
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenGetSignableTradeFails() async throws {
+    func testBuyFlowThrowsWhenGetSignableTradeFails() {
         let tradeGetCompanion = TradesAPIMockGetCompanion()
         tradeGetCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeGetCompanion, id: 1)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 
-    func testBuyFlowThrowsWhenCreateSignableTradeFails() async throws {
+    func testBuyFlowThrowsWhenCreateSignableTradeFails() {
         let tradeCreateCompanion = TradesAPIMockCreateCompanion()
         tradeCreateCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeCreateCompanion, id: 1)
 
-        do {
+        XCTAssertThrowsErrorAsync { [unowned self] in
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
-                ordersAPI: ordersAPI,
-                tradesAPI: tradesAPI
+                ordersAPI: self.ordersAPI,
+                tradesAPI: self.tradesAPI
             )
-            XCTFail("Should have thrown")
-        } catch {
-            XCTAssertTrue(error is WorkflowError)
         }
     }
 }
