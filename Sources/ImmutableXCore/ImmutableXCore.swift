@@ -38,9 +38,10 @@ public struct ImmutableXCore {
     private let cancelOrderWorkflow: CancelOrderWorkflow.Type
     private let transferWorkflow: TransferWorkflow.Type
     private let registerWorkflow: RegisterWorkflow.Type
+    private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self) {
+    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self, buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
@@ -48,6 +49,7 @@ public struct ImmutableXCore {
         self.cancelOrderWorkflow = cancelOrderWorkflow
         self.transferWorkflow = transferWorkflow
         self.registerWorkflow = registerWorkflow
+        self.buyCryptoWorkflow = buyCryptoWorkflow
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
@@ -220,6 +222,39 @@ public struct ImmutableXCore {
             do {
                 _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(()))
+            } catch {
+                onCompletion(.failure(error))
+            }
+        }
+    }
+
+    /// This is a utility function that will chain the necessary calls to return a website URL to buy crypto.
+    ///
+    /// - Parameters:
+    ///     - colorCodeHex: the color code in hex (e.g. #00818e) for the Moon pay widget main color.
+    ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
+    ///     - signer: represents the users L1 wallet to get the address
+    /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto
+    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer) async throws -> String {
+        try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
+    }
+
+    /// This is a utility function that will chain the necessary calls to return a website URL to buy crypto.
+    ///
+    /// - Parameters:
+    ///     - colorCodeHex: the color code in hex (e.g. #00818e) for the Moon pay widget main color.
+    ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
+    ///     - signer: represents the users L1 wallet to get the address
+    /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto if successful
+    /// or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///
+    /// - Note: `onCompletion` is executed on the Main Thread
+    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, Error>) -> Void) {
+        Task { @MainActor in
+            do {
+                let response = try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
+                onCompletion(.success(response))
             } catch {
                 onCompletion(.failure(error))
             }
