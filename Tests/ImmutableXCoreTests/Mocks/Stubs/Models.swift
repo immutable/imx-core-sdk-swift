@@ -160,3 +160,7 @@ let registerUserResponseStub1 = RegisterUserResponse(txHash: "hash")
 let signedMoonpayResponseStub1 = GetSignedMoonpayResponse(signature: "signature")
 
 let transactionIdResponseStub1 = GetTransactionIdResponse(id: 123, walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay)
+
+let currenciesReponseStub1 = GetCurrenciesResponse(
+    currencyCodes: ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"]
+)

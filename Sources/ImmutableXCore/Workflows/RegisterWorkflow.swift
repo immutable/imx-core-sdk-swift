@@ -22,7 +22,7 @@ class RegisterWorkflow {
         return try await registerUser(address: address, starkAddress: starkAddress, signatures: signatures, api: usersAPI)
     }
 
-    private static func isUserRegistered(address: String, api: UsersAPI.Type) async throws -> Bool {
+    internal static func isUserRegistered(address: String, api: UsersAPI.Type) async throws -> Bool {
         try await Workflow.mapAPIErrors(caller: "Get user") {
             do {
                 let response = try await api.getUsers(user: address)
