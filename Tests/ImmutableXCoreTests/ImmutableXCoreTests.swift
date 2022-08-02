@@ -7,8 +7,9 @@ final class ImmutableXCoreTests: XCTestCase {
     let cancelOrderWorkflow = CancelOrderWorkflowMock.self
     let transferWorkflowMock = TransferWorkflowMock.self
     let registerWorkflowMock = RegisterWorkflowMock.self
+    let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
 
-    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock)
+    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock, buyCryptoWorkflow: buyCryptoWorkflowMock)
 
     override func setUp() {
         super.setUp()
@@ -17,6 +18,7 @@ final class ImmutableXCoreTests: XCTestCase {
         cancelOrderWorkflow.resetMock()
         transferWorkflowMock.resetMock()
         registerWorkflowMock.resetMock()
+        buyCryptoWorkflowMock.resetMock()
         ImmutableXCore.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -38,6 +40,10 @@ final class ImmutableXCoreTests: XCTestCase {
         let registerCompanion = RegisterWorkflowCompanion()
         registerCompanion.returnValue = true
         registerWorkflowMock.mock(registerCompanion)
+
+        let buyCryptoCompanion = BuyCryptoWorkflowCompanion()
+        buyCryptoCompanion.returnValue = "expected url"
+        buyCryptoWorkflowMock.mock(buyCryptoCompanion)
     }
 
     func testSdkVersion() {
@@ -305,6 +311,59 @@ final class ImmutableXCoreTests: XCTestCase {
         let expectation = expectation(description: "testRegisterFlowFailureClosure")
 
         core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case .success:
+                XCTFail("Should not have succeeded")
+            case let .failure(error):
+                XCTAssertTrue(error is DummyError)
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    // MARK: - Buy Crypto
+
+    func testBuyCryptoFlowSuccessAsync() async throws {
+        let url = try await core.buyCryptoURL(signer: SignerMock())
+        XCTAssertEqual(url, "expected url")
+    }
+
+    func testBuyCryptoFlowFailureAsync() {
+        let buyCryptoCompanion = BuyCryptoWorkflowCompanion()
+        buyCryptoCompanion.throwableError = DummyError.something
+        buyCryptoWorkflowMock.mock(buyCryptoCompanion)
+
+        XCTAssertThrowsErrorAsync {
+            _ = try await self.core.buyCryptoURL(signer: SignerMock())
+        }
+    }
+
+    func testBuyCryptoFlowSuccessClosure() {
+        let expectation = expectation(description: "testBuyCryptoFlowSuccessClosure")
+
+        core.buyCryptoURL(signer: SignerMock()) { result in
+            expectation.fulfill()
+            switch result {
+            case let .success(url):
+                XCTAssertEqual(url, "expected url")
+            case .failure:
+                XCTFail("Should not have failed")
+            }
+        }
+
+        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
+    }
+
+    func testBuyCryptoFlowFailureClosure() {
+        let buyCryptoCompanion = BuyCryptoWorkflowCompanion()
+        buyCryptoCompanion.throwableError = DummyError.something
+        buyCryptoWorkflowMock.mock(buyCryptoCompanion)
+
+        let expectation = expectation(description: "testBuyCryptoFlowFailureClosure")
+
+        core.buyCryptoURL(signer: SignerMock()) { result in
             expectation.fulfill()
             switch result {
             case .success:
