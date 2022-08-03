@@ -17,11 +17,11 @@ struct GetBuyCryptoURLRequest: Codable {
 
     func asURLEncodedString() throws -> String {
         let currenciesJson = try JSONSerialization.data(withJSONObject: currencies, options: .fragmentsAllowed)
-        let jsonString = try String(data: currenciesJson, encoding: .utf8).orThrow(WorkflowError.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
+        let jsonString = try String(data: currenciesJson, encoding: .utf8).orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
 
         // Moonpay won't allow colon or comma as query parameter
         let jsonEncoded = try jsonString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed.subtracting(CharacterSet(charactersIn: ":,")))
-            .orThrow(WorkflowError.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
+            .orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
 
         // URLComponents applies encoding in a way that won't work with Moonpay
         return "apiKey=\(apiKey)" +

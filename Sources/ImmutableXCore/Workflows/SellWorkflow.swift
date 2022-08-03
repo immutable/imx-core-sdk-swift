@@ -10,7 +10,7 @@ class SellWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     class func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self) async throws -> CreateOrderResponse {
         let address = try await signer.getAddress()
         let orderResponse = try await getSignableOrder(asset: asset, sellToken: sellToken, address: address, fees: fees, api: ordersAPI)

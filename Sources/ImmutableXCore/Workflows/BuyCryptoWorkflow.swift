@@ -9,13 +9,13 @@ class BuyCryptoWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - base: the config to be used for API keys and providers URLs
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     class func buyCryptoURL(colorCodeHex: String, signer: Signer, base: ImmutableXBase = ImmutableXCore.shared.base, moonpayAPI: MoonpayAPI = MoonpayAPI(), exchangesAPI: ExchangesAPI = ExchangesAPI(), usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> String {
         let address = try await signer.getAddress()
         let isRegistered = try await RegisterWorkflow.isUserRegistered(address: address, api: usersAPI)
 
         guard isRegistered else {
-            throw WorkflowError.invalidRequest(
+            throw ImmutableXCoreError.invalidRequest(
                 reason: "Wallet is not registered. Call ImmutableXCore.shared.registerOffChain() to register your wallet."
             )
         }

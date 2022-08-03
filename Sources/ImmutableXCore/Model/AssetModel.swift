@@ -15,7 +15,7 @@ internal extension AssetModel {
     /// Helper function to calculate the quantity field
     func formatQuantity() throws -> String {
         guard let decimalQuantity = Decimal(string: quantity) else {
-            throw WorkflowError.invalidRequest(reason: "Invalid asset quantity")
+            throw ImmutableXCoreError.invalidRequest(reason: "Invalid asset quantity")
         }
 
         let decimals: Int
@@ -27,7 +27,7 @@ internal extension AssetModel {
         } else if self is ETHAsset {
             decimals = Constants.ETHDecimals
         } else {
-            throw WorkflowError.invalidRequest(reason: "Unimplemented asset")
+            throw ImmutableXCoreError.invalidRequest(reason: "Unimplemented asset")
         }
 
         return "\(pow(10, decimals) * decimalQuantity)"

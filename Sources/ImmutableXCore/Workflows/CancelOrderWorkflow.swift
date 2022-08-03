@@ -8,7 +8,7 @@ class CancelOrderWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     class func cancel(orderId: String, signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self) async throws -> CancelOrderResponse {
         let address = try await signer.getAddress()
         let signableOrder = try await getSignableCancelOrder(orderId: orderId, api: ordersAPI)
