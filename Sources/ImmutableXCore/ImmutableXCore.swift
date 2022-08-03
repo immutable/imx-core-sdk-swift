@@ -65,7 +65,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
-    /// - Throws: An error conforming to ``ImmutableXError`` protocol
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner) async throws -> CreateTradeResponse {
         try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
     }
@@ -78,7 +78,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` tthat will provide the Trade id if successful
-    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, Error>) -> Void) {
@@ -101,7 +101,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner) async throws -> CreateOrderResponse {
         try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
     }
@@ -115,7 +115,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateOrderResponse`` that will provide the Order id if successful
-    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, Error>) -> Void) {
@@ -136,7 +136,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner) async throws -> CancelOrderResponse {
         try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
     }
@@ -148,7 +148,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CancelOrderResponse`` that will provide the cancelled Order id if successful
-    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, Error>) -> Void) {
@@ -170,7 +170,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner) async throws -> CreateTransferResponse {
         try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
     }
@@ -183,7 +183,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTransferResponse`` that will provide the transfer id if successful
-    ///  or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, Error>) -> Void) {
@@ -202,8 +202,8 @@ public struct ImmutableXCore {
     /// - Parameters:
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: ``Void`` if user is registered
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Returns: `Void` if user is registered
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func registerOffchain(signer: Signer, starkSigner: StarkSigner) async throws {
         _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
     }
@@ -213,7 +213,7 @@ public struct ImmutableXCore {
     /// - Parameters:
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: ``Void`` if user is registered or an error conforming to ``ImmutableXError`` protocol through
+    /// - Returns: `Void` if user is registered or an ``ImmutableXCoreError`` error through
     /// the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
@@ -235,7 +235,7 @@ public struct ImmutableXCore {
     ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
     ///     - signer: represents the users L1 wallet to get the address
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer) async throws -> String {
         try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
     }
@@ -247,7 +247,7 @@ public struct ImmutableXCore {
     ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
     ///     - signer: represents the users L1 wallet to get the address
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto if successful
-    /// or an error conforming to ``ImmutableXError`` protocol through the `onCompletion` callback
+    /// or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
     public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, Error>) -> Void) {

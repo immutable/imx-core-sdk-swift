@@ -9,7 +9,7 @@ class BuyWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTradeResponse`` that will provide the Trade id if successful.
-    /// - Throws: A variation of ``ImmutableXError`` including ``WorkflowError``
+    /// - Throws: A variation of ``ImmutableXCoreError``
     class func buy(orderId: String, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self, tradesAPI: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
         let address = try await signer.getAddress()
         let order = try await getOrderDetails(orderId: orderId, fees: fees, api: ordersAPI)
@@ -21,11 +21,11 @@ class BuyWorkflow {
     }
 
     private static func getOrderDetails(orderId: String, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> Order {
-        let feePercentages = try fees.map { try $0.feePercentage.orThrow(WorkflowError.invalidRequest(reason: "Invalid fee percentage")) }
+        let feePercentages = try fees.map { try $0.feePercentage.orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid fee percentage")) }
             .map(\.asString)
             .joined(separator: ",")
 
-        let feeRecipients = try fees.map { try $0.address.orThrow(WorkflowError.invalidRequest(reason: "Invalid fee address")) }
+        let feeRecipients = try fees.map { try $0.address.orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid fee address")) }
             .joined(separator: ",")
 
         return try await Workflow.mapAPIErrors(caller: "Order details") {
@@ -39,8 +39,8 @@ class BuyWorkflow {
     }
 
     private static func getSignableTrade(order: Order, address: String, fees: [FeeEntry], api: TradesAPI.Type) async throws -> GetSignableTradeResponse {
-        guard order.user != address else { throw WorkflowError.invalidRequest(reason: "Cannot purchase own order") }
-        guard order.status == OrderStatus.active.rawValue else { throw WorkflowError.invalidRequest(reason: "Order not available for purchase") }
+        guard order.user != address else { throw ImmutableXCoreError.invalidRequest(reason: "Cannot purchase own order") }
+        guard order.status == OrderStatus.active.rawValue else { throw ImmutableXCoreError.invalidRequest(reason: "Order not available for purchase") }
         return try await Workflow.mapAPIErrors(caller: "Signable trade") {
             try await api.getSignableTrade(
                 getSignableTradeRequest: GetSignableTradeRequest(

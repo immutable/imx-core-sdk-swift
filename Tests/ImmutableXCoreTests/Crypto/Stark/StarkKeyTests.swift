@@ -57,14 +57,14 @@ final class StarkKeyTests: XCTestCase {
     func testGenerateFromSignerClosureFailure() {
         let signer = SignerMock()
         signer.getAddressReturnValue = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
-        signer.signMessageThrowableError = KeyError.invalidData
+        signer.signMessageThrowableError = ImmutableXCoreError.invalidKeyData
 
         let expectation = XCTestExpectation(description: "testGenerateFromSignerClosure")
 
         StarkKey.generateKeyPair(from: signer) { result in
             switch result {
             case let .failure(error):
-                XCTAssertTrue(error is KeyError)
+                XCTAssertTrue(error is ImmutableXCoreError)
             case .success:
                 XCTFail("Shouldnt have been successful")
             }
@@ -86,13 +86,13 @@ final class StarkKeyTests: XCTestCase {
     func testGenerateFromSignerAsyncFailure() async throws {
         let signer = SignerMock()
         signer.getAddressReturnValue = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
-        signer.signMessageThrowableError = KeyError.invalidData
+        signer.signMessageThrowableError = ImmutableXCoreError.invalidKeyData
 
         do {
             _ = try await StarkKey.generateKeyPair(from: signer)
             XCTFail("Expected to throw while awaiting, but succeeded")
         } catch {
-            XCTAssertTrue(error is KeyError)
+            XCTAssertTrue(error is ImmutableXCoreError)
         }
     }
 }

@@ -8,7 +8,7 @@ final class BIP32KeyTests: XCTestCase {
     func testDeriveThrowsForInvalidPath() throws {
         let path = "m/purpose'/layer'/application'/ethAddress1'/ethAddress2'/1"
         XCTAssertThrowsError(try BIP32Key.derive(seed: seed, path: path), "unhashed/formatted path") { error in
-            XCTAssertTrue(error is KeyError)
+            XCTAssertTrue(error is ImmutableXCoreError)
         }
     }
 
