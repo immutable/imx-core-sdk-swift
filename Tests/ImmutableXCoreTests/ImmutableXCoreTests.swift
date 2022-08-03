@@ -105,8 +105,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
@@ -157,8 +157,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
@@ -209,8 +209,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
@@ -262,8 +262,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
@@ -315,8 +315,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
@@ -368,8 +368,8 @@ final class ImmutableXCoreTests: XCTestCase {
             switch result {
             case .success:
                 XCTFail("Should not have succeeded")
-            case let .failure(error):
-                XCTAssertTrue(error is DummyError)
+            case .failure:
+                break
             }
         }
 
