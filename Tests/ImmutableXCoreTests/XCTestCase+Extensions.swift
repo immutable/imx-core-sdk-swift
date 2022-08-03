@@ -1,5 +1,4 @@
 import Foundation
-import ImmutableXCore
 import XCTest
 
 extension XCTestCase {

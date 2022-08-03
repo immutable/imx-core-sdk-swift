@@ -21,11 +21,11 @@ class BuyWorkflow {
     }
 
     private static func getOrderDetails(orderId: String, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> Order {
-        let feePercentages = try fees.map { try $0.feePercentage.orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid fee percentage")) }
+        let feePercentages = try fees.map { try $0.feePercentage.orThrow(.invalidRequest(reason: "Invalid fee percentage")) }
             .map(\.asString)
             .joined(separator: ",")
 
-        let feeRecipients = try fees.map { try $0.address.orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid fee address")) }
+        let feeRecipients = try fees.map { try $0.address.orThrow(.invalidRequest(reason: "Invalid fee address")) }
             .joined(separator: ",")
 
         return try await Workflow.mapAPIErrors(caller: "Order details") {

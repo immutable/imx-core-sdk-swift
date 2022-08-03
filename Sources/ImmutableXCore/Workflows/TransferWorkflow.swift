@@ -13,7 +13,7 @@ class TransferWorkflow {
     class func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, transfersAPI: TransfersAPI.Type = TransfersAPI.self) async throws -> CreateTransferResponse {
         let address = try await signer.getAddress()
         let response = try await getSignableTransfer(address: address, token: token, recipientAddress: recipientAddress, api: transfersAPI)
-        let signableResponse = try response.signableResponses.first.orThrow(ImmutableXCoreError.invalidRequest(reason: "Invalid signable response"))
+        let signableResponse = try response.signableResponses.first.orThrow(.invalidRequest(reason: "Invalid signable response"))
         let starkSignature = try await starkSigner.signMessage(signableResponse.payloadHash)
         let ethSignature = try await signer.signMessage(response.signableMessage)
         let signatures = WorkflowSignatures(ethAddress: address, ethSignature: ethSignature, starkSignature: starkSignature)
