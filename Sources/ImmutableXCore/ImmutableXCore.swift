@@ -28,7 +28,11 @@ public struct ImmutableXCore {
 
     /// Returns the version of the sdk reading from the `version` file, e.g. `"1.0.0"`
     internal var sdkVersion: String {
-        let file = Bundle.module.path(forResource: "version", ofType: "")!
+        #if SWIFT_PACKAGE
+            let file = Bundle.module.path(forResource: "version", ofType: "")!
+        #else
+            let file = Bundle(for: BuyWorkflow.self).path(forResource: "version", ofType: "")!
+        #endif
         // swiftlint:disable:next force_try
         return try! String(contentsOfFile: file).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
