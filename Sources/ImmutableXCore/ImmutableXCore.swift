@@ -81,13 +81,13 @@ public struct ImmutableXCore {
     ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, Error>) -> Void) {
+    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }
@@ -118,13 +118,13 @@ public struct ImmutableXCore {
     ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, Error>) -> Void) {
+    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }
@@ -151,13 +151,13 @@ public struct ImmutableXCore {
     ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, Error>) -> Void) {
+    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }
@@ -186,13 +186,13 @@ public struct ImmutableXCore {
     ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, Error>) -> Void) {
+    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }
@@ -217,13 +217,13 @@ public struct ImmutableXCore {
     /// the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func registerOffchain(signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<Void, Error>) -> Void) {
+    public func registerOffchain(signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<Void, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(()))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }
@@ -250,13 +250,13 @@ public struct ImmutableXCore {
     /// or an ``ImmutableXCoreError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, Error>) -> Void) {
+    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, ImmutableXCoreError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error))
+                onCompletion(.failure(error.asImmutableXCoreError))
             }
         }
     }

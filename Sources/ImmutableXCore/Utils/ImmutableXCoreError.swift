@@ -16,3 +16,11 @@ public enum ImmutableXCoreError: Error {
     /// Error related to an API failure in one of the utility methods
     case apiFailure(caller: String, error: Error)
 }
+
+internal extension Error {
+    /// Returns error as ``ImmutableXCoreError/invalidRequest(reason:)`` with `localizedDescription`
+    /// if it's not an ``ImmutableXCoreError``
+    var asImmutableXCoreError: ImmutableXCoreError {
+        self as? ImmutableXCoreError ?? ImmutableXCoreError.invalidRequest(reason: localizedDescription)
+    }
+}
