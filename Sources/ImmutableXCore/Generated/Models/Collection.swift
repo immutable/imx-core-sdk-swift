@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Collection: Codable, JSONEncodable, Hashable {
+public struct Collection: Codable, Hashable {
 
     /** Ethereum address of the ERC721 contract */
     public private(set) var address: String

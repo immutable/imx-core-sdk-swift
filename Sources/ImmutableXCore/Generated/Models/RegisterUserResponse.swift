@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct RegisterUserResponse: Codable, JSONEncodable, Hashable {
+public struct RegisterUserResponse: Codable, Hashable {
 
     /** Immutable signature authorising registration */
     public private(set) var txHash: String

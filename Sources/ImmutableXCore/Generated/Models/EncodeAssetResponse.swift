@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct EncodeAssetResponse: Codable, JSONEncodable, Hashable {
+public struct EncodeAssetResponse: Codable, Hashable {
 
     /** Stark encoded asset id */
     public private(set) var assetId: String

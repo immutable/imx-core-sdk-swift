@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct EncodeAssetTokenData: Codable, JSONEncodable, Hashable {
+public struct EncodeAssetTokenData: Codable, Hashable {
 
     /** Blueprint information of the token to be encoded. Used if token is mintable. */
     public private(set) var blueprint: String?

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MetadataSchemaProperty: Codable, JSONEncodable, Hashable {
+public struct MetadataSchemaProperty: Codable, Hashable {
 
     /** Sets the metadata as filterable */
     public private(set) var filterable: Bool

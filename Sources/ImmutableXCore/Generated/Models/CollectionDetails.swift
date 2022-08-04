@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CollectionDetails: Codable, JSONEncodable, Hashable {
+public struct CollectionDetails: Codable, Hashable {
 
     /** URL of the icon of the collection */
     public private(set) var iconUrl: String?

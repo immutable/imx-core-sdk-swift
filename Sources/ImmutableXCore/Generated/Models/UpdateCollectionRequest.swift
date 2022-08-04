@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct UpdateCollectionRequest: Codable, JSONEncodable, Hashable {
+public struct UpdateCollectionRequest: Codable, Hashable {
 
     /** URL of the tile image for this collection */
     public private(set) var collectionImageUrl: String?

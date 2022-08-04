@@ -15,13 +15,13 @@ open class TradesAPI {
     /**
      Create a Trade between two parties
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTradeRequest: (body) create a trade 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CreateTradeResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createTrade(createTradeRequest: CreateTradeRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTradeResponse {
+    open class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -31,7 +31,7 @@ open class TradesAPI {
                   return
                 }
 
-                requestTask = createTradeWithRequestBuilder(createTradeRequest: createTradeRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = createTradeWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTradeRequest: createTradeRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -49,12 +49,12 @@ open class TradesAPI {
      Create a Trade between two parties
      - POST /v1/trades
      - Create a Trade
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTradeRequest: (body) create a trade 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CreateTradeResponse> 
      */
-    open class func createTradeWithRequestBuilder(createTradeRequest: CreateTradeRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CreateTradeResponse> {
+    open class func createTradeWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) -> RequestBuilder<CreateTradeResponse> {
         let localVariablePath = "/v1/trades"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTradeRequest)
@@ -62,8 +62,8 @@ open class TradesAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
@@ -191,12 +191,13 @@ open class TradesAPI {
     /**
      Get a list of trades
      
-     - parameter partyATokenType: (query) Party A&#39;s sell token type (optional)
-     - parameter partyATokenAddress: (query) Party A&#39;s sell token address (optional)
-     - parameter partyATokenId: (query) Party A&#39;s sell token id (optional)
-     - parameter partyBTokenType: (query) Party B&#39;s sell token type (optional)
-     - parameter partyBTokenAddress: (query) Party B&#39;s sell token address (optional)
-     - parameter partyBTokenId: (query) Party B&#39;s sell token id (optional)
+     - parameter partyAOrderId: (query) Party A&#39;s (buy order) order id (optional)
+     - parameter partyATokenType: (query) Party A&#39;s (buy order) token type of currency used to buy (optional)
+     - parameter partyATokenAddress: (query) Party A&#39;s (buy order) token address of currency used to buy (optional)
+     - parameter partyBOrderId: (query) Party B&#39;s (sell order) order id (optional)
+     - parameter partyBTokenType: (query) Party B&#39;s (sell order) token type of NFT sold - always ERC721 (optional)
+     - parameter partyBTokenAddress: (query) Party B&#39;s (sell order) collection address of NFT sold (optional)
+     - parameter partyBTokenId: (query) Party B&#39;s (sell order) token id of NFT sold (optional)
      - parameter pageSize: (query) Page size of the result (optional)
      - parameter cursor: (query) Cursor (optional)
      - parameter orderBy: (query) Property to sort by (optional)
@@ -206,7 +207,7 @@ open class TradesAPI {
      - returns: ListTradesResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listTrades(partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyATokenId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) async throws -> ListTradesResponse {
+    open class func listTrades(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) async throws -> ListTradesResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -216,7 +217,7 @@ open class TradesAPI {
                   return
                 }
 
-                requestTask = listTradesWithRequestBuilder(partyATokenType: partyATokenType, partyATokenAddress: partyATokenAddress, partyATokenId: partyATokenId, partyBTokenType: partyBTokenType, partyBTokenAddress: partyBTokenAddress, partyBTokenId: partyBTokenId, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp).execute { result in
+                requestTask = listTradesWithRequestBuilder(partyAOrderId: partyAOrderId, partyATokenType: partyATokenType, partyATokenAddress: partyATokenAddress, partyBOrderId: partyBOrderId, partyBTokenType: partyBTokenType, partyBTokenAddress: partyBTokenAddress, partyBTokenId: partyBTokenId, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -234,12 +235,13 @@ open class TradesAPI {
      Get a list of trades
      - GET /v1/trades
      - Get a list of trades
-     - parameter partyATokenType: (query) Party A&#39;s sell token type (optional)
-     - parameter partyATokenAddress: (query) Party A&#39;s sell token address (optional)
-     - parameter partyATokenId: (query) Party A&#39;s sell token id (optional)
-     - parameter partyBTokenType: (query) Party B&#39;s sell token type (optional)
-     - parameter partyBTokenAddress: (query) Party B&#39;s sell token address (optional)
-     - parameter partyBTokenId: (query) Party B&#39;s sell token id (optional)
+     - parameter partyAOrderId: (query) Party A&#39;s (buy order) order id (optional)
+     - parameter partyATokenType: (query) Party A&#39;s (buy order) token type of currency used to buy (optional)
+     - parameter partyATokenAddress: (query) Party A&#39;s (buy order) token address of currency used to buy (optional)
+     - parameter partyBOrderId: (query) Party B&#39;s (sell order) order id (optional)
+     - parameter partyBTokenType: (query) Party B&#39;s (sell order) token type of NFT sold - always ERC721 (optional)
+     - parameter partyBTokenAddress: (query) Party B&#39;s (sell order) collection address of NFT sold (optional)
+     - parameter partyBTokenId: (query) Party B&#39;s (sell order) token id of NFT sold (optional)
      - parameter pageSize: (query) Page size of the result (optional)
      - parameter cursor: (query) Cursor (optional)
      - parameter orderBy: (query) Property to sort by (optional)
@@ -248,16 +250,17 @@ open class TradesAPI {
      - parameter maxTimestamp: (query) Maximum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - returns: RequestBuilder<ListTradesResponse> 
      */
-    open class func listTradesWithRequestBuilder(partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyATokenId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) -> RequestBuilder<ListTradesResponse> {
+    open class func listTradesWithRequestBuilder(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) -> RequestBuilder<ListTradesResponse> {
         let localVariablePath = "/v1/trades"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
+            "party_a_order_id": partyAOrderId?.encodeToJSON(),
             "party_a_token_type": partyATokenType?.encodeToJSON(),
             "party_a_token_address": partyATokenAddress?.encodeToJSON(),
-            "party_a_token_id": partyATokenId?.encodeToJSON(),
+            "party_b_order_id": partyBOrderId?.encodeToJSON(),
             "party_b_token_type": partyBTokenType?.encodeToJSON(),
             "party_b_token_address": partyBTokenAddress?.encodeToJSON(),
             "party_b_token_id": partyBTokenId?.encodeToJSON(),

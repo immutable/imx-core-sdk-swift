@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateTradeResponse: Codable, JSONEncodable, Hashable {
+public struct CreateTradeResponse: Codable, Hashable {
 
     /** Request ID that returns when a trade initiated through risk-manager */
     public private(set) var requestId: String?

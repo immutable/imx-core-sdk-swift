@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Project: Codable, JSONEncodable, Hashable {
+public struct Project: Codable, Hashable {
 
     /** The current period expiry date for collection limit */
     public private(set) var collectionLimitExpiresAt: String

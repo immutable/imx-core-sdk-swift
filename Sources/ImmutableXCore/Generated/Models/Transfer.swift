@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Transfer: Codable, JSONEncodable, Hashable {
+public struct Transfer: Codable, Hashable {
 
     /** Ethereum address of the user who received this transfer */
     public private(set) var receiver: String

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Fee: Codable, JSONEncodable, Hashable {
+public struct Fee: Codable, Hashable {
 
     /** Wallet address */
     public private(set) var address: String

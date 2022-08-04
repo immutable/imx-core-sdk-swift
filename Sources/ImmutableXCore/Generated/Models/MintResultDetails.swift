@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MintResultDetails: Codable, JSONEncodable, Hashable {
+public struct MintResultDetails: Codable, Hashable {
 
     /** Contract address of this token */
     public private(set) var contractAddress: String

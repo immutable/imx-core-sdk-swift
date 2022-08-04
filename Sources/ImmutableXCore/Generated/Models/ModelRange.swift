@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct ModelRange: Codable, JSONEncodable, Hashable {
+public struct ModelRange: Codable, Hashable {
 
     /** Maximum value */
     public private(set) var max: Int?

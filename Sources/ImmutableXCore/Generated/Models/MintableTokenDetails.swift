@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MintableTokenDetails: Codable, JSONEncodable, Hashable {
+public struct MintableTokenDetails: Codable, Hashable {
 
     /** Blueprint of this token */
     public private(set) var blueprint: String

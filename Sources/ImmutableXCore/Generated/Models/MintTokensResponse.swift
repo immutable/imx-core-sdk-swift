@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MintTokensResponse: Codable, JSONEncodable, Hashable {
+public struct MintTokensResponse: Codable, Hashable {
 
     /** List of mint result details */
     public private(set) var results: [MintResultDetails]

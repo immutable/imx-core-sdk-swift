@@ -40,6 +40,8 @@ class TransferWorkflow {
     private static func createTransfer(response: GetSignableTransferResponse, signableResponse: SignableTransferResponseDetails, signatures: WorkflowSignatures, api: TransfersAPI.Type) async throws -> CreateTransferResponse {
         try await Workflow.mapAPIErrors(caller: "Create transfer") {
             try await api.createTransfer(
+                xImxEthAddress: signatures.ethAddress,
+                xImxEthSignature: signatures.serializedEthSignature,
                 createTransferRequestV2: CreateTransferRequest(
                     requests: [
                         TransferRequest(
@@ -54,9 +56,7 @@ class TransferWorkflow {
                         ),
                     ],
                     senderStarkKey: response.senderStarkKey
-                ),
-                xImxEthAddress: signatures.ethAddress,
-                xImxEthSignature: signatures.serializedEthSignature
+                )
             )
         }
     }

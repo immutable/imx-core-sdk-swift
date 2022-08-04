@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Balance: Codable, JSONEncodable, Hashable {
+public struct Balance: Codable, Hashable {
 
     /** Amount which is currently inside the exchange */
     public private(set) var balance: String

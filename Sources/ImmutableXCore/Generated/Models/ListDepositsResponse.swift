@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct ListDepositsResponse: Codable, JSONEncodable, Hashable {
+public struct ListDepositsResponse: Codable, Hashable {
 
     /** Generated cursor returned by previous query */
     public private(set) var cursor: String

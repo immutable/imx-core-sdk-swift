@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct FeeData: Codable, JSONEncodable, Hashable {
+public struct FeeData: Codable, Hashable {
 
     /** Address of ERC721/ERC20 contract */
     public private(set) var contractAddress: String?

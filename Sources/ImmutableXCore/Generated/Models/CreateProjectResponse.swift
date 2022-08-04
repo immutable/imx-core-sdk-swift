@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateProjectResponse: Codable, JSONEncodable, Hashable {
+public struct CreateProjectResponse: Codable, Hashable {
 
     /** The project ID */
     public private(set) var id: Int

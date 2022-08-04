@@ -10,16 +10,16 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct ListAssetsResponse: Codable, JSONEncodable, Hashable {
+public struct ListAssetsResponse: Codable, Hashable {
 
     /** Generated cursor returned by previous query */
     public private(set) var cursor: String
     /** Remaining results flag. 1: there are remaining results matching this query, 0: no remaining results */
     public private(set) var remaining: Int
     /** Assets matching query parameters */
-    public private(set) var result: [Asset]
+    public private(set) var result: [AssetWithOrders]
 
-    public init(cursor: String, remaining: Int, result: [Asset]) {
+    public init(cursor: String, remaining: Int, result: [AssetWithOrders]) {
         self.cursor = cursor
         self.remaining = remaining
         self.result = result

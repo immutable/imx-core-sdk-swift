@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableDepositRequest: Codable, JSONEncodable, Hashable {
+public struct GetSignableDepositRequest: Codable, Hashable {
 
     /** Amount of the token the user is depositing */
     public private(set) var amount: String

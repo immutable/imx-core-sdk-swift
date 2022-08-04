@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableTransferRequest: Codable, JSONEncodable, Hashable {
+public struct GetSignableTransferRequest: Codable, Hashable {
 
     /** Ethereum address of the transferring user */
     public private(set) var senderEtherKey: String

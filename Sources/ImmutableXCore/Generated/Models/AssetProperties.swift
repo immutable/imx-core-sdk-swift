@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct AssetProperties: Codable, JSONEncodable, Hashable {
+public struct AssetProperties: Codable, Hashable {
 
     public private(set) var collection: CollectionDetails?
     /** Image URL of this asset */

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableRegistrationRequest: Codable, JSONEncodable, Hashable {
+public struct GetSignableRegistrationRequest: Codable, Hashable {
 
     /** Ether key of user */
     public private(set) var etherKey: String

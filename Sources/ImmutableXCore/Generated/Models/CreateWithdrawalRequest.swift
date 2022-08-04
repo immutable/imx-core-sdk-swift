@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateWithdrawalRequest: Codable, JSONEncodable, Hashable {
+public struct CreateWithdrawalRequest: Codable, Hashable {
 
     /** Amount to withdraw */
     public private(set) var amount: String

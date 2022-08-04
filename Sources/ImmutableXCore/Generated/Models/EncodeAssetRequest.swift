@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct EncodeAssetRequest: Codable, JSONEncodable, Hashable {
+public struct EncodeAssetRequest: Codable, Hashable {
 
     public private(set) var token: EncodeAssetRequestToken
 

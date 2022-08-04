@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableRegistrationOffchainResponse: Codable, JSONEncodable, Hashable {
+public struct GetSignableRegistrationOffchainResponse: Codable, Hashable {
 
     /** Hash of the payload to be signed for user registration offchain */
     public private(set) var payloadHash: String

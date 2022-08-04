@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateTradeRequestV1: Codable, JSONEncodable, Hashable {
+public struct CreateTradeRequestV1: Codable, Hashable {
 
     /** Amount to buy */
     public private(set) var amountBuy: String
@@ -25,7 +25,7 @@ public struct CreateTradeRequestV1: Codable, JSONEncodable, Hashable {
     public private(set) var feeInfo: FeeInfo?
     /** Fee information */
     public private(set) var fees: [FeeEntry]?
-    /** Whether to include fees in trade */
+    /** [deprecated] All orders include fees since the introduction of protocol fees */
     public private(set) var includeFees: Bool?
     /** Nonce of the trade */
     public private(set) var nonce: Int

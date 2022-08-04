@@ -38,6 +38,8 @@ class SellWorkflow {
     private static func createOrder(response: GetSignableOrderResponse, signatures: WorkflowSignatures, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> CreateOrderResponse {
         try await Workflow.mapAPIErrors(caller: "Create order") {
             try await api.createOrder(
+                xImxEthAddress: signatures.ethAddress,
+                xImxEthSignature: signatures.serializedEthSignature,
                 createOrderRequest: CreateOrderRequest(
                     amountBuy: response.amountBuy,
                     amountSell: response.amountSell,
@@ -51,9 +53,7 @@ class SellWorkflow {
                     starkSignature: signatures.starkSignature,
                     vaultIdBuy: response.vaultIdBuy,
                     vaultIdSell: response.vaultIdSell
-                ),
-                xImxEthAddress: signatures.ethAddress,
-                xImxEthSignature: signatures.serializedEthSignature
+                )
             )
         }
     }

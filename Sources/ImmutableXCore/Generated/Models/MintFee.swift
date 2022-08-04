@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MintFee: Codable, JSONEncodable, Hashable {
+public struct MintFee: Codable, Hashable {
 
     /** Fee percentage */
     public private(set) var percentage: Double

@@ -15,13 +15,13 @@ open class WithdrawalsAPI {
     /**
      Creates a withdrawal of a token
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createWithdrawalRequest: (body) create a withdrawal 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CreateWithdrawalResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createWithdrawal(createWithdrawalRequest: CreateWithdrawalRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateWithdrawalResponse {
+    open class func createWithdrawal(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) async throws -> CreateWithdrawalResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -31,7 +31,7 @@ open class WithdrawalsAPI {
                   return
                 }
 
-                requestTask = createWithdrawalWithRequestBuilder(createWithdrawalRequest: createWithdrawalRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = createWithdrawalWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createWithdrawalRequest: createWithdrawalRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -49,12 +49,12 @@ open class WithdrawalsAPI {
      Creates a withdrawal of a token
      - POST /v1/withdrawals
      - Creates a withdrawal
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createWithdrawalRequest: (body) create a withdrawal 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CreateWithdrawalResponse> 
      */
-    open class func createWithdrawalWithRequestBuilder(createWithdrawalRequest: CreateWithdrawalRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CreateWithdrawalResponse> {
+    open class func createWithdrawalWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) -> RequestBuilder<CreateWithdrawalResponse> {
         let localVariablePath = "/v1/withdrawals"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createWithdrawalRequest)
@@ -62,8 +62,8 @@ open class WithdrawalsAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
