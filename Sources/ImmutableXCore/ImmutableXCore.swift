@@ -228,7 +228,7 @@ public struct ImmutableXCore {
         }
     }
 
-    /// This is a utility function that will chain the necessary calls to return a website URL to buy crypto.
+    /// Gets a URL to MoonPay that provides a service for buying crypto directly on Immutable in exchange for fiat.
     ///
     /// - Parameters:
     ///     - colorCodeHex: the color code in hex (e.g. #00818e) for the Moon pay widget main color.
@@ -240,7 +240,7 @@ public struct ImmutableXCore {
         try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
     }
 
-    /// This is a utility function that will chain the necessary calls to return a website URL to buy crypto.
+    /// Gets a URL to MoonPay that provides a service for buying crypto directly on Immutable in exchange for fiat.
     ///
     /// - Parameters:
     ///     - colorCodeHex: the color code in hex (e.g. #00818e) for the Moon pay widget main color.
