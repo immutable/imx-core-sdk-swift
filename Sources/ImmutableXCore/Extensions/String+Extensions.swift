@@ -1,6 +1,6 @@
 import Foundation
 
-public extension String {
+extension String {
     /// Drops "0x" prefix if exists
     var dropHexPrefix: String {
         hasPrefix("0x") ? String(dropFirst(2)) : self

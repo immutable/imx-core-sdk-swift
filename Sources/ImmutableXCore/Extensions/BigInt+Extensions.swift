@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
 
-public extension BigInt {
+extension BigInt {
     var isEven: Bool {
         magnitude[bitAt: 0] == false
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Int {
+extension Int {
     var asHexString: String {
         String(format: "%02x", self)
     }
