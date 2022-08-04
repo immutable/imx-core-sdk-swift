@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateTransferResponse: Codable, JSONEncodable, Hashable {
+public struct CreateTransferResponse: Codable, Hashable {
 
     /** List of transfer IDs */
     public private(set) var transferIds: [Int]

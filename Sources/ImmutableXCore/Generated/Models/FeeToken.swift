@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct FeeToken: Codable, JSONEncodable, Hashable {
+public struct FeeToken: Codable, Hashable {
 
     public enum ModelType: String, Codable, CaseIterable {
         case eth = "ETH"

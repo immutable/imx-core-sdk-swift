@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct TokenDetails: Codable, JSONEncodable, Hashable {
+public struct TokenDetails: Codable, Hashable {
 
     /** Number of decimals for token */
     public private(set) var decimals: String

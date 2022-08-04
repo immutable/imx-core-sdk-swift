@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct SignableToken: Codable, JSONEncodable, Hashable {
+public struct SignableToken: Codable, Hashable {
 
     /** Token data. See https://docs.x.immutable.com/docs/token-data-object\" */
     public private(set) var data: AnyCodable?

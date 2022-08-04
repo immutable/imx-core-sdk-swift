@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Token: Codable, JSONEncodable, Hashable {
+public struct Token: Codable, Hashable {
 
     public private(set) var data: TokenData
     /** Type of this asset (ETH/ERC20/ERC721) */

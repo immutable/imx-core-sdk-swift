@@ -13,16 +13,16 @@ import AnyCodable
 open class OrdersAPI {
 
     /**
-     cancel an order
+     Cancel an order
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter id: (path) Order ID to cancel 
      - parameter cancelOrderRequest: (body) cancel an order 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CancelOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func cancelOrder(id: String, cancelOrderRequest: CancelOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CancelOrderResponse {
+    open class func cancelOrder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) async throws -> CancelOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -32,7 +32,7 @@ open class OrdersAPI {
                   return
                 }
 
-                requestTask = cancelOrderWithRequestBuilder(id: id, cancelOrderRequest: cancelOrderRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = cancelOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, id: id, cancelOrderRequest: cancelOrderRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -47,16 +47,16 @@ open class OrdersAPI {
     }
 
     /**
-     cancel an order
+     Cancel an order
      - DELETE /v1/orders/{id}
      - Cancel an order
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter id: (path) Order ID to cancel 
      - parameter cancelOrderRequest: (body) cancel an order 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CancelOrderResponse> 
      */
-    open class func cancelOrderWithRequestBuilder(id: String, cancelOrderRequest: CancelOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CancelOrderResponse> {
+    open class func cancelOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) -> RequestBuilder<CancelOrderResponse> {
         var localVariablePath = "/v1/orders/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -67,8 +67,8 @@ open class OrdersAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
@@ -81,13 +81,13 @@ open class OrdersAPI {
     /**
      Create an order
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createOrderRequest: (body) create an order 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CreateOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createOrder(createOrderRequest: CreateOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateOrderResponse {
+    open class func createOrder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) async throws -> CreateOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -97,7 +97,7 @@ open class OrdersAPI {
                   return
                 }
 
-                requestTask = createOrderWithRequestBuilder(createOrderRequest: createOrderRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = createOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createOrderRequest: createOrderRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -115,12 +115,12 @@ open class OrdersAPI {
      Create an order
      - POST /v1/orders
      - Create an order
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createOrderRequest: (body) create an order 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CreateOrderResponse> 
      */
-    open class func createOrderWithRequestBuilder(createOrderRequest: CreateOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CreateOrderResponse> {
+    open class func createOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) -> RequestBuilder<CreateOrderResponse> {
         let localVariablePath = "/v1/orders"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createOrderRequest)
@@ -128,8 +128,8 @@ open class OrdersAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
@@ -360,7 +360,7 @@ open class OrdersAPI {
      - parameter buyTokenType: (query) Token type of the asset this order buys (optional)
      - parameter buyTokenId: (query) ERC721 Token ID of the asset this order buys (optional)
      - parameter buyAssetId: (query) Internal IMX ID of the asset this order buys (optional)
-     - parameter buyTokenAddress: (query) Comma separated string of token addresses of the asset this order buys (optional)
+     - parameter buyTokenAddress: (query) Token address of the asset this order buys (optional)
      - parameter buyTokenName: (query) Token name of the asset this order buys (optional)
      - parameter buyMinQuantity: (query) Min quantity for the asset this order buys (optional)
      - parameter buyMaxQuantity: (query) Max quantity for the asset this order buys (optional)
@@ -368,7 +368,7 @@ open class OrdersAPI {
      - parameter sellTokenType: (query) Token type of the asset this order sells (optional)
      - parameter sellTokenId: (query) ERC721 Token ID of the asset this order sells (optional)
      - parameter sellAssetId: (query) Internal IMX ID of the asset this order sells (optional)
-     - parameter sellTokenAddress: (query) Comma separated string of token addresses of the asset this order sells (optional)
+     - parameter sellTokenAddress: (query) Token address of the asset this order sells (optional)
      - parameter sellTokenName: (query) Token name of the asset this order sells (optional)
      - parameter sellMinQuantity: (query) Min quantity for the asset this order sells (optional)
      - parameter sellMaxQuantity: (query) Max quantity for the asset this order sells (optional)
@@ -420,7 +420,7 @@ open class OrdersAPI {
      - parameter buyTokenType: (query) Token type of the asset this order buys (optional)
      - parameter buyTokenId: (query) ERC721 Token ID of the asset this order buys (optional)
      - parameter buyAssetId: (query) Internal IMX ID of the asset this order buys (optional)
-     - parameter buyTokenAddress: (query) Comma separated string of token addresses of the asset this order buys (optional)
+     - parameter buyTokenAddress: (query) Token address of the asset this order buys (optional)
      - parameter buyTokenName: (query) Token name of the asset this order buys (optional)
      - parameter buyMinQuantity: (query) Min quantity for the asset this order buys (optional)
      - parameter buyMaxQuantity: (query) Max quantity for the asset this order buys (optional)
@@ -428,7 +428,7 @@ open class OrdersAPI {
      - parameter sellTokenType: (query) Token type of the asset this order sells (optional)
      - parameter sellTokenId: (query) ERC721 Token ID of the asset this order sells (optional)
      - parameter sellAssetId: (query) Internal IMX ID of the asset this order sells (optional)
-     - parameter sellTokenAddress: (query) Comma separated string of token addresses of the asset this order sells (optional)
+     - parameter sellTokenAddress: (query) Token address of the asset this order sells (optional)
      - parameter sellTokenName: (query) Token name of the asset this order sells (optional)
      - parameter sellMinQuantity: (query) Min quantity for the asset this order sells (optional)
      - parameter sellMaxQuantity: (query) Max quantity for the asset this order sells (optional)

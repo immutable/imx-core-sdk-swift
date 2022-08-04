@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableTradeRequest: Codable, JSONEncodable, Hashable {
+public struct GetSignableTradeRequest: Codable, Hashable {
 
     /** ExpirationTimestamp in Unix time. Note: will be rounded down to the nearest hour */
     public private(set) var expirationTimestamp: Int?

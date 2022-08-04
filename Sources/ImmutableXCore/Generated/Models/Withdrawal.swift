@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Withdrawal: Codable, JSONEncodable, Hashable {
+public struct Withdrawal: Codable, Hashable {
 
     /** Status of the on-chain batch confirmation for this withdrawal */
     public private(set) var rollupStatus: String

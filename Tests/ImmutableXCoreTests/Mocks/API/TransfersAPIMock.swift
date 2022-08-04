@@ -45,7 +45,7 @@ final class TransfersAPIMock: TransfersAPI {
 
     // MARK: - createTransfer
 
-    override class func createTransfer(createTransferRequestV2: CreateTransferRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTransferResponse {
+    override class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
         let companion = createTransferCompanion!
 
         if let error = companion.throwableError {

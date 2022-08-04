@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MintRequest: Codable, JSONEncodable, Hashable {
+public struct MintRequest: Codable, Hashable {
 
     /** Signature from authorised minter */
     public private(set) var authSignature: String

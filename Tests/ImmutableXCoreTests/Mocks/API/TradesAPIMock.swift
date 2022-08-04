@@ -44,7 +44,7 @@ final class TradesAPIMock: TradesAPI {
 
     // MARK: - createTrade
 
-    override public class func createTrade(createTradeRequest: CreateTradeRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTradeResponse {
+    override public class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
         let companion = createRequests[createTradeRequest.orderId]!
 
         if let error = companion.throwableError {

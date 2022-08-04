@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateTransferRequest: Codable, JSONEncodable, Hashable {
+public struct CreateTransferRequest: Codable, Hashable {
 
     /** List of transfers */
     public private(set) var requests: [TransferRequest]

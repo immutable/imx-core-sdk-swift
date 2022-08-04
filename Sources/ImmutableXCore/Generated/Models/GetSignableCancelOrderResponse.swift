@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableCancelOrderResponse: Codable, JSONEncodable, Hashable {
+public struct GetSignableCancelOrderResponse: Codable, Hashable {
 
     /** ID of the order to be cancelled */
     public private(set) var orderId: Int

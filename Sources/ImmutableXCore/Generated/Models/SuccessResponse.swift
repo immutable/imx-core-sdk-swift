@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct SuccessResponse: Codable, JSONEncodable, Hashable {
+public struct SuccessResponse: Codable, Hashable {
 
     public private(set) var result: String
 

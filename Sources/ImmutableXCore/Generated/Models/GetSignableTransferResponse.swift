@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableTransferResponse: Codable, JSONEncodable, Hashable {
+public struct GetSignableTransferResponse: Codable, Hashable {
 
     /** Sender of the transfer */
     public private(set) var senderStarkKey: String

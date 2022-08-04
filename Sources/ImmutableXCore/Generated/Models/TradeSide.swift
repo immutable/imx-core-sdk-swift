@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct TradeSide: Codable, JSONEncodable, Hashable {
+public struct TradeSide: Codable, Hashable {
 
     /** The ID of the order involved in the trade */
     public private(set) var orderId: Int

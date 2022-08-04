@@ -201,6 +201,17 @@ open class CollectionsAPI {
     }
 
     /**
+     * enum for parameter orderBy
+     */
+    public enum OrderBy_listCollections: String, CaseIterable {
+        case name = "name"
+        case address = "address"
+        case projectId = "project_id"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+
+    /**
      Get a list of collections
      
      - parameter pageSize: (query) Page size of the result (optional)
@@ -213,7 +224,7 @@ open class CollectionsAPI {
      - returns: ListCollectionsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
+    open class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -250,7 +261,7 @@ open class CollectionsAPI {
      - parameter keyword: (query) Keyword to search in collection name and description (optional)
      - returns: RequestBuilder<ListCollectionsResponse> 
      */
-    open class func listCollectionsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) -> RequestBuilder<ListCollectionsResponse> {
+    open class func listCollectionsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) -> RequestBuilder<ListCollectionsResponse> {
         let localVariablePath = "/v1/collections"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

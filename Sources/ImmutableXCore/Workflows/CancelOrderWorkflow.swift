@@ -31,13 +31,13 @@ class CancelOrderWorkflow {
     private static func cancelOrder(orderId: String, signatures: WorkflowSignatures, api: OrdersAPI.Type) async throws -> CancelOrderResponse {
         try await Workflow.mapAPIErrors(caller: "Cancel order") {
             try await api.cancelOrder(
+                xImxEthAddress: signatures.ethAddress,
+                xImxEthSignature: signatures.serializedEthSignature,
                 id: orderId,
                 cancelOrderRequest: CancelOrderRequest(
                     orderId: Int(orderId)!,
                     starkSignature: signatures.starkSignature
-                ),
-                xImxEthAddress: signatures.ethAddress,
-                xImxEthSignature: signatures.serializedEthSignature
+                )
             )
         }
     }

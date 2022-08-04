@@ -15,13 +15,13 @@ open class TransfersAPI {
     /**
      Creates a transfer of multiple tokens between two parties
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTransferRequestV2: (body) Create transfer 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CreateTransferResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createTransfer(createTransferRequestV2: CreateTransferRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTransferResponse {
+    open class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -31,7 +31,7 @@ open class TransfersAPI {
                   return
                 }
 
-                requestTask = createTransferWithRequestBuilder(createTransferRequestV2: createTransferRequestV2, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = createTransferWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequestV2: createTransferRequestV2).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -49,12 +49,12 @@ open class TransfersAPI {
      Creates a transfer of multiple tokens between two parties
      - POST /v2/transfers
      - Create a new transfer request
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTransferRequestV2: (body) Create transfer 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CreateTransferResponse> 
      */
-    open class func createTransferWithRequestBuilder(createTransferRequestV2: CreateTransferRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CreateTransferResponse> {
+    open class func createTransferWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) -> RequestBuilder<CreateTransferResponse> {
         let localVariablePath = "/v2/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTransferRequestV2)
@@ -62,8 +62,8 @@ open class TransfersAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
@@ -76,13 +76,13 @@ open class TransfersAPI {
     /**
      Creates a transfer of tokens between two parties
      
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTransferRequest: (body) Create transfer 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: CreateTransferResponseV1
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createTransferV1(createTransferRequest: CreateTransferRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateTransferResponseV1 {
+    open class func createTransferV1(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) async throws -> CreateTransferResponseV1 {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -92,7 +92,7 @@ open class TransfersAPI {
                   return
                 }
 
-                requestTask = createTransferV1WithRequestBuilder(createTransferRequest: createTransferRequest, xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature).execute { result in
+                requestTask = createTransferV1WithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequest: createTransferRequest).execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -110,12 +110,12 @@ open class TransfersAPI {
      Creates a transfer of tokens between two parties
      - POST /v1/transfers
      - Create a new transfer request
+     - parameter xImxEthAddress: (header) eth address 
+     - parameter xImxEthSignature: (header) eth signature 
      - parameter createTransferRequest: (body) Create transfer 
-     - parameter xImxEthAddress: (header) eth address (optional)
-     - parameter xImxEthSignature: (header) eth signature (optional)
      - returns: RequestBuilder<CreateTransferResponseV1> 
      */
-    open class func createTransferV1WithRequestBuilder(createTransferRequest: CreateTransferRequestV1, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) -> RequestBuilder<CreateTransferResponseV1> {
+    open class func createTransferV1WithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) -> RequestBuilder<CreateTransferResponseV1> {
         let localVariablePath = "/v1/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTransferRequest)
@@ -123,8 +123,8 @@ open class TransfersAPI {
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "x-imx-eth-address": xImxEthAddress?.encodeToJSON(),
-            "x-imx-eth-signature": xImxEthSignature?.encodeToJSON(),
+            "x-imx-eth-address": xImxEthAddress.encodeToJSON(),
+            "x-imx-eth-signature": xImxEthSignature.encodeToJSON(),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
@@ -306,6 +306,17 @@ open class TransfersAPI {
     }
 
     /**
+     * enum for parameter orderBy
+     */
+    public enum OrderBy_listTransfers: String, CaseIterable {
+        case transactionId = "transaction_id"
+        case updatedAt = "updated_at"
+        case createdAt = "created_at"
+        case senderEtherKey = "sender_ether_key"
+        case receiverEtherKey = "receiver_ether_key"
+    }
+
+    /**
      * enum for parameter status
      */
     public enum Status_listTransfers: String, CaseIterable {
@@ -336,7 +347,7 @@ open class TransfersAPI {
      - returns: ListTransfersResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listTransfers(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListTransfersResponse {
+    open class func listTransfers(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListTransfersResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -383,7 +394,7 @@ open class TransfersAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the transferred asset (optional)
      - returns: RequestBuilder<ListTransfersResponse> 
      */
-    open class func listTransfersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListTransfersResponse> {
+    open class func listTransfersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListTransfersResponse> {
         let localVariablePath = "/v1/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

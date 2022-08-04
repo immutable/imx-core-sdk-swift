@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CollectionFilter: Codable, JSONEncodable, Hashable {
+public struct CollectionFilter: Codable, Hashable {
 
     /** Key of this property */
     public private(set) var key: String?

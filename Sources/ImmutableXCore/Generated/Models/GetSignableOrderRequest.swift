@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableOrderRequest: Codable, JSONEncodable, Hashable {
+public struct GetSignableOrderRequest: Codable, Hashable {
 
     /** Fee-exclusive amount to buy the asset */
     public private(set) var amountBuy: String

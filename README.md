@@ -84,7 +84,7 @@ e.g. Get a list of collections ordered by name in ascending order
 ```swift
 let collections = try await CollectionsAPI.listCollections(
     pageSize: 20,
-    orderBy: "name",
+    orderBy: .name,
     direction: "asc"
 )
 ```

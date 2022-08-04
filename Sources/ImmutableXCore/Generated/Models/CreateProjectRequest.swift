@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateProjectRequest: Codable, JSONEncodable, Hashable {
+public struct CreateProjectRequest: Codable, Hashable {
 
     /** The company name */
     public private(set) var companyName: String

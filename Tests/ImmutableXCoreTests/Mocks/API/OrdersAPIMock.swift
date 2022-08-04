@@ -94,7 +94,7 @@ public class OrdersAPIMock: OrdersAPI {
 
     // MARK: - createOrder
 
-    override public class func createOrder(createOrderRequest: CreateOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CreateOrderResponse {
+    override public class func createOrder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) async throws -> CreateOrderResponse {
         let companion = createOrderCompanion!
 
         if let error = companion.throwableError {
@@ -120,7 +120,7 @@ public class OrdersAPIMock: OrdersAPI {
 
     // MARK: - cancelOrder
 
-    override public class func cancelOrder(id: String, cancelOrderRequest: CancelOrderRequest, xImxEthAddress: String? = nil, xImxEthSignature: String? = nil) async throws -> CancelOrderResponse {
+    override public class func cancelOrder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) async throws -> CancelOrderResponse {
         let companion = cancelOrderCompanion!
 
         if let error = companion.throwableError {

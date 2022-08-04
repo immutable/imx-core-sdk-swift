@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct MetadataSchemaRequest: Codable, JSONEncodable, Hashable {
+public struct MetadataSchemaRequest: Codable, Hashable {
 
     public enum ModelType: String, Codable, CaseIterable {
         case _enum = "enum"

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct CreateTransferResponseV1: Codable, JSONEncodable, Hashable {
+public struct CreateTransferResponseV1: Codable, Hashable {
 
     /** [deprecated] Sent signature */
     public private(set) var sentSignature: String

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct GetSignableRegistrationResponse: Codable, JSONEncodable, Hashable {
+public struct GetSignableRegistrationResponse: Codable, Hashable {
 
     /** Signature from authorised operator */
     public private(set) var operatorSignature: String

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-public struct Deposit: Codable, JSONEncodable, Hashable {
+public struct Deposit: Codable, Hashable {
 
     /** Status of this deposit in Immutable X */
     public private(set) var status: String
