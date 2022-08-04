@@ -8,7 +8,7 @@
 
 ---
 
-# Immutable X Core SDK
+# Immutable X Core SDK Swift
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/maintainability)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/test_coverage)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/test_coverage)
 
@@ -97,7 +97,7 @@ NOTE: Closure based APIs are also available.
 
 In order to use any workflow functions, you will need to pass in the connected wallet provider. This means you will need to implement your own Wallet L1 [Signer](https://github.com/immutable/imx-core-sdk-swift/blob/main/Sources/ImmutableXCore/Signer.swift) and L2 [StarkSigner](https://github.com/immutable/imx-core-sdk-swift/blob/main/Sources/ImmutableXCore/Signer.swift).
 
-Once you have a `Signer` instance you can generate the user's Stark key pair and use the result to implement a `StarkSigner`.
+Once you have a `Signer` instance you can generate the user's Stark key pair and use the result to instantiate a `StarkSigner`, for example, by using the default `StandardStarkSigner` provided by the SDK.
 
 ```swift
 let keyPair = try await StarkKey.generateKeyPair(from: signer)
