@@ -1,9 +1,9 @@
 import Foundation
 
 // https://github.com/krzyzanowskim/CryptoSwift/blob/main/Sources/CryptoSwift/Array%2BExtension.swift#L34
-public extension Array where Element == UInt8 {
+extension Array where Element == UInt8 {
     @inlinable
-    internal init(reserveCapacity: Int) {
+    init(reserveCapacity: Int) {
         self = [Element]()
         self.reserveCapacity(reserveCapacity)
     }

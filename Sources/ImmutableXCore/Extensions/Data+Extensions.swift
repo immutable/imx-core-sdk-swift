@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Data {
+extension Data {
     init(hex: String) {
         self.init([UInt8](hex: hex))
     }
