@@ -63,8 +63,8 @@ final class StarkKeyTests: XCTestCase {
 
         StarkKey.generateKeyPair(from: signer) { result in
             switch result {
-            case let .failure(error):
-                XCTAssertTrue(error is ImmutableXCoreError)
+            case .failure:
+                break
             case .success:
                 XCTFail("Shouldnt have been successful")
             }
