@@ -1,0 +1,1 @@
+$(xcrun --find docc) process-archive transform-for-static-hosting ImmutableXCore.doccarchive --output-path docs --hosting-base-path /imx-core-sdk-swift
