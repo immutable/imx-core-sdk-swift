@@ -26,3 +26,20 @@ for now removed features.
 ### Fixed
 
 for any bug fixes.
+
+## [0.2.0] - 2022-08-11
+
+### Added
+
+Support to Cocoapods
+
+## [0.1.0] - 2022-08-08
+
+Initial release with a client for the public API and the following workflows:
+
+Buy
+Sell
+Cancel sell
+Transfer
+Register
+Buy crypto
