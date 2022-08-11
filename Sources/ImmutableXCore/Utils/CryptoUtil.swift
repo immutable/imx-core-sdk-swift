@@ -73,9 +73,8 @@ struct CryptoUtil {
 
     static func serializeEthSignature(_ signature: String, size: Int = 64) -> String {
         func importRecoveryParam(_ v: BigInt) -> String {
-            let comp = BigInt("27") // 1b
-            if v > comp {
-                // if recovery param is greater than 27
+            let comp = BigInt("27")
+            if v >= comp {
                 return (v - comp).asHexString()
             } else {
                 return v.asHexString()
