@@ -655,10 +655,11 @@ private struct Logger {
                 }
                 privateLog += "\n]"
             case .requestBody:
-                guard let parameters = parameters,
-                      let body = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) else { break }
-
-                privateLog += "\n\nBody: \(body)"
+                guard let data = parameters?["jsonData"] as? Data,
+                      let object = try? JSONSerialization.jsonObject(with: data, options: []),
+                      let jsonData = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+                      let jsonString = String(data: jsonData, encoding: .utf8) else { break }
+                privateLog += "\n\nBody: \(jsonString)"
             case .responseHeaders:
                 break
             case .responseBody:
