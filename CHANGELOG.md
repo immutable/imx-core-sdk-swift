@@ -27,6 +27,13 @@ for now removed features.
 
 for any bug fixes.
 
+## [0.2.1] - 2022-08-11
+
+### Fixed
+
+- An incorrect ETH signature being passed in as part of the workflows.
+- A crash in debug mode when using the optional log level `.requestBody`.
+
 ## [0.2.0] - 2022-08-11
 
 ### Added
