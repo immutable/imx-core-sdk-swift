@@ -46,8 +46,10 @@ final class CryptoUtilTests: XCTestCase {
 
     func testSerializeEthSignature() {
         let ethSignaturev26 = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1a"
+        let ethSignaturev27 = "0x3fd09e980e4ed9de2175d6aef23ee1e9fe38bf28eafb5bdb209ac7adc56bd30a70a6cb19b6153fbe1a2fa9f13f6b81ee6a0b28d39a4ec861bf1928ba16594c731b"
         let ethSignaturev28 = "0x21fbf0696d5e0aa2ef41a2b4ffb623bcaf070461d61cf7251c74161f82fec3a4370854bc0a34b3ab487c1bc021cd318c734c51ae29374f2beb0e6f2dd49b4bf41c"
         XCTAssertEqual(CryptoUtil.serializeEthSignature(ethSignaturev26), ethSignaturev26)
+        XCTAssertEqual(CryptoUtil.serializeEthSignature(ethSignaturev27), "0x3fd09e980e4ed9de2175d6aef23ee1e9fe38bf28eafb5bdb209ac7adc56bd30a70a6cb19b6153fbe1a2fa9f13f6b81ee6a0b28d39a4ec861bf1928ba16594c7300")
         XCTAssertEqual(CryptoUtil.serializeEthSignature(ethSignaturev28), "0x21fbf0696d5e0aa2ef41a2b4ffb623bcaf070461d61cf7251c74161f82fec3a4370854bc0a34b3ab487c1bc021cd318c734c51ae29374f2beb0e6f2dd49b4bf401")
     }
 }
