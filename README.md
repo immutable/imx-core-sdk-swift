@@ -33,7 +33,7 @@ In your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/immutable/imx-core-sdk-swift.git", from: "0.1.0")
+    .package(url: "https://github.com/immutable/imx-core-sdk-swift.git", from: "0.2.1")
 ]
 ```
 
@@ -161,7 +161,7 @@ for any bug fixes.
 The `Sources/version` file will hold the value of the previous release
 
 ```yaml
-0.1.0
+0.2.1
 ```
 
 ## Contributing
