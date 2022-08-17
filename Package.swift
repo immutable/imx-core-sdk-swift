@@ -21,16 +21,6 @@ let package = Package(
         .package(url: "https://github.com/Boilertalk/secp256k1.swift.git", from: "0.1.6"),
     ],
     targets: [
-        .binaryTarget(
-            name: "SwiftLintBinary",
-            url: "https://github.com/juozasvalancius/SwiftLint/releases/download/spm-accommodation/SwiftLintBinary-macos.artifactbundle.zip",
-            checksum: "cdc36c26225fba80efc3ac2e67c2e3c3f54937145869ea5dbcaa234e57fc3724"
-        ),
-        .plugin(
-            name: "SwiftLintXcode",
-            capability: .buildTool(),
-            dependencies: ["SwiftLintBinary"]
-        ),
         .target(
             name: "ImmutableXCore",
             dependencies: [
@@ -40,8 +30,7 @@ let package = Package(
             ],
             resources: [
                 .copy("version"),
-            ],
-            plugins: ["SwiftLintXcode"]
+            ]
         ),
         .testTarget(
             name: "ImmutableXCoreTests",
