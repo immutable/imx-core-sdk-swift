@@ -27,6 +27,13 @@ for now removed features.
 
 for any bug fixes.
 
+## [0.2.2] - 2022-08-17
+
+### Removed
+
+- SwiftLint as a Plugin. Since SPM doesn't support package alias for now, this plugin would conflict with apps that use 
+it and try to import this library.
+
 ## [0.2.1] - 2022-08-11
 
 ### Fixed
