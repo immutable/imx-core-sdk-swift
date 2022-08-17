@@ -13,7 +13,7 @@ for added features.
 
 ### Changed
 
-for changed features.
+- Make PrivateKey, PublicKey, KeyPair and CurvePoint conform to Codable in order to make data persistence easier.
 
 ### Deprecated
 

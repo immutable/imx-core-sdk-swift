@@ -2,7 +2,7 @@ import BigInt
 import Foundation
 
 /// Elliptic Curve generated private key
-public struct PrivateKey: Equatable {
+public struct PrivateKey: Equatable, Codable {
     public let number: BigInt
 
     public var asData: Data {
