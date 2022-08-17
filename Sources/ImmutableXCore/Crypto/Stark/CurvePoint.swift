@@ -2,7 +2,7 @@ import BigInt
 import Foundation
 
 /// A representation of an Affine Elliptic Curve Point
-public struct CurvePoint: Equatable {
+public struct CurvePoint: Equatable, Codable {
     public let x: BigInt
     public let y: BigInt
 

@@ -2,7 +2,7 @@ import BigInt
 import Foundation
 
 /// Elliptic Curve generated public key
-public struct PublicKey: Equatable {
+public struct PublicKey: Equatable, Codable {
     public let point: CurvePoint
     public let number: BigInt
 
