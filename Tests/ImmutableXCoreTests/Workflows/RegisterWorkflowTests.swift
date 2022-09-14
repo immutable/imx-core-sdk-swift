@@ -46,12 +46,12 @@ final class RegisterWorkflowTests: XCTestCase {
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfGetUsersResponseFails() {
+    func testRegistrationThrowsIfGetUsersResponseFails() async {
         let usersCompanion = UsersAPIMockGetUsersCompanion()
         usersCompanion.throwableError = ErrorResponse.error(400, nil, nil, DummyError.something)
         usersAPI.mock(usersCompanion)
 
-        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+        let error = await XCTAssertThrowsErrorAsync {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 
@@ -61,12 +61,12 @@ final class RegisterWorkflowTests: XCTestCase {
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfSignableResponseFails() {
+    func testRegistrationThrowsIfSignableResponseFails() async {
         let signableCompanion = UsersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         usersAPI.mock(signableCompanion)
 
-        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+        let error = await XCTAssertThrowsErrorAsync {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 
@@ -76,12 +76,12 @@ final class RegisterWorkflowTests: XCTestCase {
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
     }
 
-    func testRegistrationThrowsIfRegisterResponseFails() {
+    func testRegistrationThrowsIfRegisterResponseFails() async {
         let registerCompanion = UsersAPIMockRegisterCompanion()
         registerCompanion.throwableError = DummyError.something
         usersAPI.mock(registerCompanion)
 
-        let error = XCTAssertThrowsErrorAsync { [unowned self] in
+        let error = await XCTAssertThrowsErrorAsync {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 

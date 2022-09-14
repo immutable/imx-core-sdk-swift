@@ -45,12 +45,12 @@ final class BuyCryptoWorkflowTests: XCTestCase {
         XCTAssertEqual(response, "expected url")
     }
 
-    func testBuyCryptoURLThrowsWhenNotRegistered() {
+    func testBuyCryptoURLThrowsWhenNotRegistered() async {
         let usersCompanion = UsersAPIMockGetUsersCompanion()
         usersCompanion.returnValue = GetUsersApiResponse(accounts: [])
         usersAPI.mock(usersCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
@@ -62,12 +62,12 @@ final class BuyCryptoWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyCryptoURLThrowsWhenTransactionIdFails() {
+    func testBuyCryptoURLThrowsWhenTransactionIdFails() async {
         let transactionCompanion = ExchangesAPIMockTransactionIdCompanion()
         transactionCompanion.throwableError = DummyError.something
         exchangesAPI.mock(transactionCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
@@ -79,12 +79,12 @@ final class BuyCryptoWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyCryptoURLThrowsWhenSupportedCurrenciesFails() {
+    func testBuyCryptoURLThrowsWhenSupportedCurrenciesFails() async {
         let currenciesCompanion = ExchangesAPIMockCurrenciesCompanion()
         currenciesCompanion.throwableError = DummyError.something
         exchangesAPI.mock(currenciesCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
@@ -96,12 +96,12 @@ final class BuyCryptoWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyCryptoURLThrowsWhenBuyCryptoFails() {
+    func testBuyCryptoURLThrowsWhenBuyCryptoFails() async {
         let buyCryptoComanion = MoonpayAPIMockBuyCryptoURLCompanion()
         buyCryptoComanion.throwableError = DummyError.something
         moonpayAPI.mock(buyCryptoComanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),

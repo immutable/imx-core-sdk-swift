@@ -37,8 +37,8 @@ final class BuyWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createTradeResponseStub1)
     }
 
-    func testBuyFlowThrowsWhenFeePercentageIsInvalid() {
-        XCTAssertThrowsErrorAsync { [unowned self] in
+    func testBuyFlowThrowsWhenFeePercentageIsInvalid() async {
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [FeeEntry(address: "address", feePercentage: nil)],
@@ -50,8 +50,8 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenFeeAddressIsInvalid() {
-        XCTAssertThrowsErrorAsync { [unowned self] in
+    func testBuyFlowThrowsWhenFeeAddressIsInvalid() async {
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [FeeEntry(address: nil, feePercentage: 2)],
@@ -63,11 +63,11 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenPurchaseOwnOrder() {
+    func testBuyFlowThrowsWhenPurchaseOwnOrder() async {
         let signer = SignerMock()
         signer.getAddressReturnValue = orderActiveStub2.user
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
@@ -79,12 +79,12 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenOrderStatusIsNotActive() {
+    func testBuyFlowThrowsWhenOrderStatusIsNotActive() async {
         let orderCompanion = OrdersAPIMockGetCompanion()
         orderCompanion.returnValue = orderFilledStub1
         ordersAPI.mock(orderCompanion, id: "1")
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
@@ -96,12 +96,12 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenGetOrderFails() {
+    func testBuyFlowThrowsWhenGetOrderFails() async {
         let orderCompanion = OrdersAPIMockGetCompanion()
         orderCompanion.throwableError = DummyError.something
         ordersAPI.mock(orderCompanion, id: "1")
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
@@ -113,12 +113,12 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenGetSignableTradeFails() {
+    func testBuyFlowThrowsWhenGetSignableTradeFails() async {
         let tradeGetCompanion = TradesAPIMockGetCompanion()
         tradeGetCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeGetCompanion, id: 1)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],
@@ -130,12 +130,12 @@ final class BuyWorkflowTests: XCTestCase {
         }
     }
 
-    func testBuyFlowThrowsWhenCreateSignableTradeFails() {
+    func testBuyFlowThrowsWhenCreateSignableTradeFails() async {
         let tradeCreateCompanion = TradesAPIMockCreateCompanion()
         tradeCreateCompanion.throwableError = DummyError.something
         tradesAPI.mock(tradeCreateCompanion, id: 1)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await BuyWorkflow.buy(
                 orderId: "1",
                 fees: [],

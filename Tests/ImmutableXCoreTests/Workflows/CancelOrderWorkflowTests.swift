@@ -29,12 +29,12 @@ final class CancelOrderWorkflowTests: XCTestCase {
         XCTAssertEqual(response, cancelOrderResponseStub1)
     }
 
-    func testCancelFlowThrowsWhenGetSignableCancelOrderFails() {
+    func testCancelFlowThrowsWhenGetSignableCancelOrderFails() async {
         let signableCompanion = OrdersAPIMockGetSignableCancelCompanion()
         signableCompanion.throwableError = DummyError.something
         ordersAPI.mock(signableCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await CancelOrderWorkflow.cancel(
                 orderId: "1",
                 signer: SignerMock(),
@@ -44,12 +44,12 @@ final class CancelOrderWorkflowTests: XCTestCase {
         }
     }
 
-    func testCancelFlowThrowsWhenCancelOrderFails() {
+    func testCancelFlowThrowsWhenCancelOrderFails() async {
         let cancelOrderCompanion = OrdersAPIMockCancelOrderCompanion()
         cancelOrderCompanion.throwableError = DummyError.something
         ordersAPI.mock(cancelOrderCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await CancelOrderWorkflow.cancel(
                 orderId: "1",
                 signer: SignerMock(),

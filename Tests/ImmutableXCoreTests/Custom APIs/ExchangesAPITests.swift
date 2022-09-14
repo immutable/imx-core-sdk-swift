@@ -17,10 +17,10 @@ final class ExchangesAPITests: XCTestCase {
         XCTAssertEqual(response.id, 123)
     }
 
-    func testGetTransactionIdFailure() {
+    func testGetTransactionIdFailure() async {
         builderMock.mock(Result<Response<GetSignedMoonpayResponse>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await self.exchangesAPI.getTransactionId(GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay))
         }
     }
@@ -33,10 +33,10 @@ final class ExchangesAPITests: XCTestCase {
         XCTAssertEqual(response.currencyCodes, ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"])
     }
 
-    func testGetCurrenciesFailure() {
+    func testGetCurrenciesFailure() async {
         builderMock.mock(Result<Response<[CurrencyCode]>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await self.exchangesAPI.getCurrencies(address: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f")
         }
     }
