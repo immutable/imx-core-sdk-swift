@@ -31,12 +31,12 @@ final class SellWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createOrderResponseStub1)
     }
 
-    func testSellFlowFailureWhenSignableOrderThrows() {
+    func testSellFlowFailureWhenSignableOrderThrows() async {
         let signableCompanion = OrdersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         ordersAPI.mock(signableCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await SellWorkflow.sell(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,
@@ -48,12 +48,12 @@ final class SellWorkflowTests: XCTestCase {
         }
     }
 
-    func testSellFlowFailureWhenCreateOrderThrows() {
+    func testSellFlowFailureWhenCreateOrderThrows() async {
         let createOrderCompanion = OrdersAPIMockCreateOrderCompanion()
         createOrderCompanion.throwableError = DummyError.something
         ordersAPI.mock(createOrderCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await SellWorkflow.sell(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,

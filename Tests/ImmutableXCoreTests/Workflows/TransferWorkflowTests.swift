@@ -57,12 +57,12 @@ final class TransferWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createTransferResponseStub1)
     }
 
-    func testTransferFlowFailsOnSignableTransferError() {
+    func testTransferFlowFailsOnSignableTransferError() async {
         let signableCompanion = TransfersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         transfersAPI.mock(signableCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await TransferWorkflow.transfer(
                 token: erc721Token,
                 recipientAddress: recipientAddress,
@@ -73,12 +73,12 @@ final class TransferWorkflowTests: XCTestCase {
         }
     }
 
-    func testTransferFlowFailsOnInvalidSignableResponse() {
+    func testTransferFlowFailsOnInvalidSignableResponse() async {
         let signableCompanion = TransfersAPIMockGetSignableCompanion()
         signableCompanion.returnValue = signableTransferResponseStub2
         transfersAPI.mock(signableCompanion)
 
-        XCTAssertThrowsErrorAsync { [unowned self] in
+        await XCTAssertThrowsErrorAsync {
             _ = try await TransferWorkflow.transfer(
                 token: erc721Token,
                 recipientAddress: recipientAddress,
