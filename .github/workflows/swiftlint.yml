@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: sinoru/actions-setup-swift@v2
         with:
-          swift-version: '5.6.1'
+          swift-version: '5.7'
       - name: GitHub Actions for SwiftLint with --strict
         uses: sinoru/actions-swiftlint@v6
         with:
