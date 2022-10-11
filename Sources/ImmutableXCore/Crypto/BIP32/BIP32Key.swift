@@ -1,7 +1,6 @@
 import BigInt
 import CryptoKit
 import Foundation
-import secp256k1
 
 struct BIP32Key {
     /// - Parameters:
@@ -32,7 +31,7 @@ struct BIP32Key {
                 data += UInt8(0).data
                 data += derivedPrivateKey
             } else {
-                data += Secp256k1Encrypter.createPublicKey(privateKey: derivedPrivateKey)
+                data += try Secp256k1Encrypter.createPublicKey(privateKey: derivedPrivateKey)
             }
 
             let derivingIndex = CFSwapInt32BigToHost(hardened ? (edge | index) : index)

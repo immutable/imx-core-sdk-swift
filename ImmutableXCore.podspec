@@ -22,7 +22,7 @@ Pod::Spec.new do |spec|
 
     spec.dependency 'AnyCodable-FlightSchool', '~> 0.6'
     spec.dependency 'BigInt', '~> 5.2.0'
-    spec.dependency 'secp256k1.swift', '~> 0.1'
+    spec.dependency 'secp256k1Swift', '~> 0.7.4'
 
     spec.resources = ['Sources/ImmutableXCore/version']
   end
