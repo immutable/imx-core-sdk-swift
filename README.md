@@ -158,12 +158,6 @@ for any bug fixes.
 ...
 ```
 
-The `Sources/version` file will hold the value of the previous release
-
-```yaml
-0.2.2
-```
-
 ## Contributing
 
 If you would like to contribute by reporting bugs, suggest enchacements or pull requests, please read our [contributing guide](https://github.com/immutable/imx-core-sdk-swift/blob/main/CONTRIBUTING.md).

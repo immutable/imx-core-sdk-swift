@@ -26,16 +26,8 @@ public struct ImmutableXCore {
     /// - Note: Logs are only available in debug mode.
     public var logLevel: ImmutableXHTTPLoggingLevel
 
-    /// Returns the version of the sdk reading from the `version` file, e.g. `"1.0.0"`
-    internal var sdkVersion: String {
-        #if SWIFT_PACKAGE
-            let file = Bundle.module.path(forResource: "version", ofType: "")!
-        #else
-            let file = Bundle(for: BuyWorkflow.self).path(forResource: "version", ofType: "")!
-        #endif
-        // swiftlint:disable:next force_try
-        return try! String(contentsOfFile: file).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-    }
+    /// Returns the version of the sdk
+    internal var sdkVersion: String = "0.2.2"
 
     private let buyWorkflow: BuyWorkflow.Type
     private let sellWorkflow: SellWorkflow.Type

@@ -27,9 +27,6 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "AnyCodable", package: "AnyCodable"),
                 .product(name: "secp256k1Swift", package: "secp256k1.swift"),
-            ],
-            resources: [
-                .copy("version"),
             ]
         ),
         .testTarget(
