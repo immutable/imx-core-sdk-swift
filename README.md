@@ -33,7 +33,7 @@ In your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/immutable/imx-core-sdk-swift.git", from: "0.2.2")
+    .package(url: "https://github.com/immutable/imx-core-sdk-swift.git", from: "0.3.0")
 ]
 ```
 
