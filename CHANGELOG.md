@@ -37,6 +37,7 @@ for any bug fixes.
 
 - Make PrivateKey, PublicKey, KeyPair and CurvePoint conform to Codable in order to make data persistence easier.
 - secp256k dependency, since the previous one was deprecated on Cocoapods
+- Swift 5.7 as minimum support
 
 ## [0.2.2] - 2022-08-17
 

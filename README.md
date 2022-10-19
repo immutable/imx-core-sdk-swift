@@ -25,7 +25,7 @@ See the [API reference documentation](https://docs.x.immutable.com/reference) fo
 ### Prerequisites
 
 - iOS 13.0 or macOS 10.15
-- Swift 5.5
+- Swift 5.7
 
 ### Swift Package Manager
 
