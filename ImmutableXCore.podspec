@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
     spec.source                = { :git => 'https://github.com/immutable/imx-core-sdk-swift.git', :tag => "v#{spec.version}" }
     spec.source_files          = 'Sources/**/*.swift'
 
-    spec.swift_version         = '5.5'
+    spec.swift_version         = '5.7'
 
     spec.ios.deployment_target = '13'
     spec.osx.deployment_target = '10.15'
