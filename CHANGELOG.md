@@ -27,7 +27,7 @@ for now removed features.
 
 for any bug fixes.
 
-## [0.3.0] - 2022-10-19
+## [0.3.1] - 2022-10-19
 
 ### Removed
 

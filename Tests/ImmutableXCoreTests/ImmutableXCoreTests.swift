@@ -47,7 +47,7 @@ final class ImmutableXCoreTests: XCTestCase {
     }
 
     func testSdkVersion() {
-        XCTAssertEqual(ImmutableXCore.shared.sdkVersion, "0.3.0")
+        XCTAssertEqual(ImmutableXCore.shared.sdkVersion, "0.3.1")
     }
 
     func testInitialize() {
