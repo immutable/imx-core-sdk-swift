@@ -7,14 +7,10 @@ on:
 
 jobs:
   SwiftLint:
-    runs-on: ubuntu-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
-      - uses: sinoru/actions-setup-swift@v2
-        with:
-          swift-version: '5.7'
-      - name: GitHub Actions for SwiftLint with --strict
-        uses: sinoru/actions-swiftlint@v6
-        with:
-          swiftlint-args: --strict --config ../.swiftlint.yml
-          working-directory: Sources
+      - name: Deploy to Cocoapods
+        run: |
+          set -eo pipefail
+          swiftlint --config .swiftlint.yml
