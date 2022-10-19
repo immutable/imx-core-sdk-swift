@@ -9,7 +9,7 @@ struct CryptoUtil {
         let bin = hex.hexaToBinary
         var bits: String
 
-        if let to = to {
+        if let to {
             let start = bin.count - from
             let end = bin.count - to
             bits = bin[start ..< end]

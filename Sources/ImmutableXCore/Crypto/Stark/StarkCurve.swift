@@ -74,8 +74,8 @@ extension StarkCurve {
     /// Adds given points ``p1`` and ``p2`` if different, otherwise doubles them
     /// https://crypto.stanford.edu/pbc/notes/elliptic/explicit.html
     static func addition(_ p1: CurvePoint?, _ p2: CurvePoint?) -> CurvePoint? {
-        guard let p1 = p1 else { return p2 }
-        guard let p2 = p2 else { return p1 }
+        guard let p1 else { return p2 }
+        guard let p2 else { return p1 }
 
         if p1.x == p2.x, p1.y != p2.y {
             return nil

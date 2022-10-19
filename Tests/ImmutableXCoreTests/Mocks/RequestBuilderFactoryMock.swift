@@ -4,7 +4,7 @@ import Foundation
 class RequestBuilderFactoryMock: RequestBuilderFactory {
     static var returnValue: Result<Response<Any>, ErrorResponse>!
 
-    func mock<T>(_ result: Result<Response<T>, ErrorResponse>) {
+    func mock(_ result: Result<Response<some Any>, ErrorResponse>) {
         switch result {
         case let .success(response):
             RequestBuilderFactoryMock.returnValue = .success(Response(response: HTTPURLResponse(), body: response.body))
