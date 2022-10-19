@@ -13,7 +13,7 @@ for added features.
 
 ### Changed
 
-- Make PrivateKey, PublicKey, KeyPair and CurvePoint conform to Codable in order to make data persistence easier.
+for changed features.
 
 ### Deprecated
 
@@ -26,6 +26,17 @@ for now removed features.
 ### Fixed
 
 for any bug fixes.
+
+## [0.3.0] - 2022-10-19
+
+### Removed
+
+- version file
+
+### Changed
+
+- Make PrivateKey, PublicKey, KeyPair and CurvePoint conform to Codable in order to make data persistence easier.
+- secp256k dependency, since the previous one was deprecated on Cocoapods
 
 ## [0.2.2] - 2022-08-17
 
