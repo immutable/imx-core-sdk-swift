@@ -7,7 +7,7 @@ class RegisterWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: true if user has been registered or false if user had already been registered
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     class func registerOffchain(signer: Signer, starkSigner: StarkSigner, usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> Bool {
         let address = try await signer.getAddress()
         let starkAddress = try await starkSigner.getAddress()

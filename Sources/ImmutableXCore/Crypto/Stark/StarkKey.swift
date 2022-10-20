@@ -14,7 +14,7 @@ public extension StarkKey {
     /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signer: the signer that the key pair will be derived from
     /// - Returns: Stark key pair as ``KeyPair``
-    /// - Throws: ``ImmutableXCoreError``
+    /// - Throws: ``ImmutableXError``
     static func generateKeyPair(from signer: Signer) async throws -> KeyPair {
         let address = try await signer.getAddress()
         let signature = try await signer.signMessage(Constants.starkMessage)
@@ -23,17 +23,17 @@ public extension StarkKey {
 
     /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signer: the signer that the key pair will be derived from
-    /// - Returns: a Stark key pair as ``KeyPair`` if successful or an ``ImmutableXCoreError``
+    /// - Returns: a Stark key pair as ``KeyPair`` if successful or an ``ImmutableXError``
     ///  error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    static func generateKeyPair(from signer: Signer, onCompletion: @escaping (Result<KeyPair, ImmutableXCoreError>) -> Void) {
+    static func generateKeyPair(from signer: Signer, onCompletion: @escaping (Result<KeyPair, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let pair = try await generateKeyPair(from: signer)
                 onCompletion(.success(pair))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -42,7 +42,7 @@ public extension StarkKey {
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address
     /// - Returns: Stark key pair as ``KeyPair``
-    /// - Throws: ``ImmutableXCoreError``
+    /// - Throws: ``ImmutableXError``
     static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> KeyPair {
         // https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
         let seed = signature.dropHexPrefix[64 ..< 128]

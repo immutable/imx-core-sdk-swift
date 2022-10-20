@@ -9,17 +9,17 @@ public struct PrivateKey: Equatable, Codable {
         number.as256bitLongData()
     }
 
-    /// - Throws: ``ImmutableXCoreError/invalidKeyData`` if given `number` is not within curve range
+    /// - Throws: ``ImmutableXError/invalidKeyData`` if given `number` is not within curve range
     public init(number: BigInt) throws {
         // Private Key must be in the curve range
-        guard case 1 ..< StarkCurve.N = number else { throw ImmutableXCoreError.invalidKeyData }
+        guard case 1 ..< StarkCurve.N = number else { throw ImmutableXError.invalidKeyData }
         self.number = number
     }
 
-    /// - Throws: ``ImmutableXCoreError/invalidKeyData`` if given `hex` is not valid or within curve range
+    /// - Throws: ``ImmutableXError/invalidKeyData`` if given `hex` is not valid or within curve range
     public init(hex: String) throws {
         guard let number = BigInt(hexString: hex) else {
-            throw ImmutableXCoreError.invalidKeyData
+            throw ImmutableXError.invalidKeyData
         }
         try self.init(number: number)
     }

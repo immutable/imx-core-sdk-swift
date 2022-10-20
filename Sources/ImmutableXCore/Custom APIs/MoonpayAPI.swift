@@ -7,7 +7,7 @@ struct GetBuyCryptoURLRequest: Codable {
     let walletAddress: String
     let currencies: [String: String]
 
-    init(apiKey: String = ImmutableXCore.shared.base.moonpayApiKey, colorCodeHex: String, externalTransaction: Int, walletAddress: String, currencies: [String: String]) {
+    init(apiKey: String = ImmutableX.shared.base.moonpayApiKey, colorCodeHex: String, externalTransaction: Int, walletAddress: String, currencies: [String: String]) {
         self.apiKey = apiKey
         self.colorCodeHex = colorCodeHex
         self.externalTransaction = externalTransaction
@@ -44,9 +44,9 @@ struct GetSignedMoonpayResponse: Codable {
 class MoonpayAPI {
     static let encodedEqualSign = "%3D"
     let requestBuilderFactory: RequestBuilderFactory
-    let core: ImmutableXCore
+    let core: ImmutableX
 
-    init(requestBuilderFactory: RequestBuilderFactory = OpenAPIClientAPI.requestBuilderFactory, core: ImmutableXCore = ImmutableXCore.shared) {
+    init(requestBuilderFactory: RequestBuilderFactory = OpenAPIClientAPI.requestBuilderFactory, core: ImmutableX = ImmutableX.shared) {
         self.requestBuilderFactory = requestBuilderFactory
         self.core = core
     }

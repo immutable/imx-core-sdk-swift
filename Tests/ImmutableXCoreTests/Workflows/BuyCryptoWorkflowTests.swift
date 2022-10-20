@@ -9,7 +9,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        ImmutableXCore.shared = coreStub1
+        ImmutableX.shared = coreStub1
 
         usersAPI.resetMock()
         exchangesAPI.resetMock()

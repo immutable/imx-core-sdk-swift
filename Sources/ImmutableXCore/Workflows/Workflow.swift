@@ -13,16 +13,16 @@ struct WorkflowSignatures {
 }
 
 enum Workflow {
-    /// A helper that parses any non-``ImmutableXCoreError`` into ``ImmutableXCoreError.apiFailure(caller:error:)``
+    /// A helper that parses any non-``ImmutableXError`` into ``ImmutableXError.apiFailure(caller:error:)``
     static func mapAPIErrors<T>(caller: String, apiCall: () async throws -> T) async throws -> T {
         do {
             return try await apiCall()
         } catch {
-            if error is ImmutableXCoreError {
+            if error is ImmutableXError {
                 throw error
             }
 
-            throw ImmutableXCoreError.apiFailure(caller: caller, error: error)
+            throw ImmutableXError.apiFailure(caller: caller, error: error)
         }
     }
 }

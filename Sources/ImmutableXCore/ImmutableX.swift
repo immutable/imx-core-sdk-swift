@@ -1,18 +1,18 @@
 import Foundation
 
 // swiftlint:disable function_parameter_count
-public struct ImmutableXCore {
-    /// A shared instance of ``ImmutableXCore`` that holds configuration for ``base``, ``logLevel`` and
+public struct ImmutableX {
+    /// A shared instance of ``ImmutableX`` that holds configuration for ``base``, ``logLevel`` and
     /// a set o utility methods for the most common workflows for the core SDK.
     ///
     /// - Note: ``initialize(base:logLevel:)`` must be called before this instance
     /// is accessed.
-    public internal(set) static var shared: ImmutableXCore!
+    public internal(set) static var shared: ImmutableX!
 
     /// The environment the SDK will communicate with. Defaults to `.ropsten`.
     public let base: ImmutableXBase
 
-    /// Defines the level of logging for ImmutableXCore network calls. Defaults to `.none`.
+    /// Defines the level of logging for ImmutableX network calls. Defaults to `.none`.
     ///
     ///  Setting `logLevel` to `.calls(including: [])` will log all requests and responses with HTTP Method and URL.
     ///  For richer logging include extra details of the calls to be logged, e.g.
@@ -48,9 +48,9 @@ public struct ImmutableXCore {
         self.buyCryptoWorkflow = buyCryptoWorkflow
     }
 
-    /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableXCore.shared`.
+    /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableX.shared`.
     public static func initialize(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none) {
-        ImmutableXCore.shared = ImmutableXCore(base: base, logLevel: logLevel)
+        ImmutableX.shared = ImmutableX(base: base, logLevel: logLevel)
     }
 
     /// This is a utility function that will chain the necessary calls to buy an existing order.
@@ -61,7 +61,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner) async throws -> CreateTradeResponse {
         try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
     }
@@ -74,16 +74,16 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` tthat will provide the Trade id if successful
-    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
+    ///  or an ``ImmutableXError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, ImmutableXCoreError>) -> Void) {
+    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTradeResponse, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -97,7 +97,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner) async throws -> CreateOrderResponse {
         try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
     }
@@ -111,16 +111,16 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateOrderResponse`` that will provide the Order id if successful
-    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
+    ///  or an ``ImmutableXError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, ImmutableXCoreError>) -> Void) {
+    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateOrderResponse, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -132,7 +132,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner) async throws -> CancelOrderResponse {
         try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
     }
@@ -144,16 +144,16 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CancelOrderResponse`` that will provide the cancelled Order id if successful
-    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
+    ///  or an ``ImmutableXError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, ImmutableXCoreError>) -> Void) {
+    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CancelOrderResponse, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -166,7 +166,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner) async throws -> CreateTransferResponse {
         try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
     }
@@ -179,16 +179,16 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTransferResponse`` that will provide the transfer id if successful
-    ///  or an ``ImmutableXCoreError`` error through the `onCompletion` callback
+    ///  or an ``ImmutableXError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, ImmutableXCoreError>) -> Void) {
+    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<CreateTransferResponse, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -199,7 +199,7 @@ public struct ImmutableXCore {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: `Void` if user is registered
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func registerOffchain(signer: Signer, starkSigner: StarkSigner) async throws {
         _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
     }
@@ -209,17 +209,17 @@ public struct ImmutableXCore {
     /// - Parameters:
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
-    /// - Returns: `Void` if user is registered or an ``ImmutableXCoreError`` error through
+    /// - Returns: `Void` if user is registered or an ``ImmutableXError`` error through
     /// the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func registerOffchain(signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<Void, ImmutableXCoreError>) -> Void) {
+    public func registerOffchain(signer: Signer, starkSigner: StarkSigner, onCompletion: @escaping (Result<Void, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
                 onCompletion(.success(()))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }
@@ -231,7 +231,7 @@ public struct ImmutableXCore {
     ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
     ///     - signer: represents the users L1 wallet to get the address
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer) async throws -> String {
         try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
     }
@@ -243,16 +243,16 @@ public struct ImmutableXCore {
     ///     It is used for buttons, links and highlighted text. Defaults to `#00818e`
     ///     - signer: represents the users L1 wallet to get the address
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto if successful
-    /// or an ``ImmutableXCoreError`` error through the `onCompletion` callback
+    /// or an ``ImmutableXError`` error through the `onCompletion` callback
     ///
     /// - Note: `onCompletion` is executed on the Main Thread
-    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, ImmutableXCoreError>) -> Void) {
+    public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, onCompletion: @escaping (Result<String, ImmutableXError>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
                 onCompletion(.success(response))
             } catch {
-                onCompletion(.failure(error.asImmutableXCoreError))
+                onCompletion(.failure(error.asImmutableXError))
             }
         }
     }

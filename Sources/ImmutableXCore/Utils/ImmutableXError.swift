@@ -1,6 +1,6 @@
 import Foundation
 
-public enum ImmutableXCoreError: Error {
+public enum ImmutableXError: Error {
     /// Error related to deriving or parsing ``PrivateKey`` and ``PublicKey``
     case invalidKeyData
 
@@ -18,9 +18,9 @@ public enum ImmutableXCoreError: Error {
 }
 
 internal extension Error {
-    /// Returns error as ``ImmutableXCoreError/invalidRequest(reason:)`` with `localizedDescription`
-    /// if it's not an ``ImmutableXCoreError``
-    var asImmutableXCoreError: ImmutableXCoreError {
-        self as? ImmutableXCoreError ?? ImmutableXCoreError.invalidRequest(reason: localizedDescription)
+    /// Returns error as ``ImmutableXError/invalidRequest(reason:)`` with `localizedDescription`
+    /// if it's not an ``ImmutableXError``
+    var asImmutableXError: ImmutableXError {
+        self as? ImmutableXError ?? ImmutableXError.invalidRequest(reason: localizedDescription)
     }
 }
