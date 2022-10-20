@@ -59,7 +59,7 @@ The Core SDK must be initialised before any of its classes are used. Upon initia
 For example, you initialise the SDK and retrieve a URL to buy crypto through Moonpay:
 
 ```swift
-ImmutableX.initialize(base: .ropsten)
+ImmutableX.initialize(base: .sandbox)
 
 let url = try await ImmutableX.shared.buyCryptoURL(signer: signer)
 ```

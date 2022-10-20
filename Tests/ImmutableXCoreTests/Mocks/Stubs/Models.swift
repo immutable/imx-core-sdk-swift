@@ -1,7 +1,7 @@
 import Foundation
 @testable import ImmutableXCore
 
-let coreStub1 = ImmutableX(base: .ropsten, buyWorkflow: BuyWorkflowMock.self, sellWorkflow: SellWorkflowMock.self, cancelOrderWorkflow: CancelOrderWorkflowMock.self, transferWorkflow: TransferWorkflowMock.self, registerWorkflow: RegisterWorkflowMock.self)
+let coreStub1 = ImmutableX(base: .sandbox, buyWorkflow: BuyWorkflowMock.self, sellWorkflow: SellWorkflowMock.self, cancelOrderWorkflow: CancelOrderWorkflowMock.self, transferWorkflow: TransferWorkflowMock.self, registerWorkflow: RegisterWorkflowMock.self)
 
 let tokenETHStub1 = Token(
     data: TokenData(

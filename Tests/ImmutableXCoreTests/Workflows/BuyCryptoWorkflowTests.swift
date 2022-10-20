@@ -36,7 +36,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
         let response = try await BuyCryptoWorkflow.buyCryptoURL(
             colorCodeHex: "#000000",
             signer: SignerMock(),
-            base: .ropsten,
+            base: .sandbox,
             moonpayAPI: moonpayAPI,
             exchangesAPI: exchangesAPI,
             usersAPI: usersAPI
@@ -54,7 +54,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
-                base: .ropsten,
+                base: .sandbox,
                 moonpayAPI: self.moonpayAPI,
                 exchangesAPI: self.exchangesAPI,
                 usersAPI: self.usersAPI
@@ -71,7 +71,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
-                base: .ropsten,
+                base: .sandbox,
                 moonpayAPI: self.moonpayAPI,
                 exchangesAPI: self.exchangesAPI,
                 usersAPI: self.usersAPI
@@ -88,7 +88,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
-                base: .ropsten,
+                base: .sandbox,
                 moonpayAPI: self.moonpayAPI,
                 exchangesAPI: self.exchangesAPI,
                 usersAPI: self.usersAPI
@@ -105,7 +105,7 @@ final class BuyCryptoWorkflowTests: XCTestCase {
             _ = try await BuyCryptoWorkflow.buyCryptoURL(
                 colorCodeHex: "#000000",
                 signer: SignerMock(),
-                base: .ropsten,
+                base: .sandbox,
                 moonpayAPI: self.moonpayAPI,
                 exchangesAPI: self.exchangesAPI,
                 usersAPI: self.usersAPI

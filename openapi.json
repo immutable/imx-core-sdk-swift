@@ -11,7 +11,7 @@
     },
     "version": "0.1"
   },
-  "host": "api.ropsten.x.immutable.com",
+  "host": "api.sandbox.x.immutable.com",
   "basePath": "/",
   "paths": {
     "/v1/assets": {
