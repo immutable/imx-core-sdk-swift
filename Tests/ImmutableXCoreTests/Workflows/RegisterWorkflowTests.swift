@@ -55,7 +55,7 @@ final class RegisterWorkflowTests: XCTestCase {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 
-        XCTAssertTrue(error is ImmutableXCoreError)
+        XCTAssertTrue(error is ImmutableXError)
         XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 0)
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
@@ -70,7 +70,7 @@ final class RegisterWorkflowTests: XCTestCase {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 
-        XCTAssertTrue(error is ImmutableXCoreError)
+        XCTAssertTrue(error is ImmutableXError)
         XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 0)
@@ -85,7 +85,7 @@ final class RegisterWorkflowTests: XCTestCase {
             _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
         }
 
-        XCTAssertTrue(error is ImmutableXCoreError)
+        XCTAssertTrue(error is ImmutableXError)
         XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.registerCompanion?.callsCount, 1)

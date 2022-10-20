@@ -7,7 +7,7 @@ final class ExchangesAPITests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        ImmutableXCore.shared = coreStub1
+        ImmutableX.shared = coreStub1
     }
 
     func testGetTransactionIdSuccessful() async throws {

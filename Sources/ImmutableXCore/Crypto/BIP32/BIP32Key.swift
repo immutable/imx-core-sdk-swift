@@ -7,7 +7,7 @@ struct BIP32Key {
     ///     - seed: seed data for derivation, e.g. personal signature
     ///     - path: hashed values in the expected format as per Starkware docs `m/purpose'/layer'/application'/ethAddress1'/ethAddress2'/index`
     /// - Returns: derived private key hex
-    /// - Throws: ``ImmutableXCoreError/invalidKeyData`` if data is not valid
+    /// - Throws: ``ImmutableXError/invalidKeyData`` if data is not valid
     ///
     /// https://docs.starkware.co/starkex-v4/crypto/key-derivation
     /// https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
@@ -23,7 +23,7 @@ struct BIP32Key {
             let hardened = path.hasSuffix("'")
             let sanitizedPath = path.replacingOccurrences(of: "'", with: "")
 
-            guard let index = UInt32(sanitizedPath), edge & index == 0 else { throw ImmutableXCoreError.invalidKeyData }
+            guard let index = UInt32(sanitizedPath), edge & index == 0 else { throw ImmutableXError.invalidKeyData }
 
             var data = Data()
 

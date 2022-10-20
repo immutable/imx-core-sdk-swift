@@ -9,7 +9,7 @@ class BuyWorkflow {
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTradeResponse`` that will provide the Trade id if successful.
-    /// - Throws: A variation of ``ImmutableXCoreError``
+    /// - Throws: A variation of ``ImmutableXError``
     class func buy(orderId: String, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self, tradesAPI: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
         let address = try await signer.getAddress()
         let order = try await getOrderDetails(orderId: orderId, fees: fees, api: ordersAPI)
@@ -39,8 +39,8 @@ class BuyWorkflow {
     }
 
     private static func getSignableTrade(order: Order, address: String, fees: [FeeEntry], api: TradesAPI.Type) async throws -> GetSignableTradeResponse {
-        guard order.user != address else { throw ImmutableXCoreError.invalidRequest(reason: "Cannot purchase own order") }
-        guard order.status == OrderStatus.active.rawValue else { throw ImmutableXCoreError.invalidRequest(reason: "Order not available for purchase") }
+        guard order.user != address else { throw ImmutableXError.invalidRequest(reason: "Cannot purchase own order") }
+        guard order.status == OrderStatus.active.rawValue else { throw ImmutableXError.invalidRequest(reason: "Order not available for purchase") }
         return try await Workflow.mapAPIErrors(caller: "Signable trade") {
             try await api.getSignableTrade(
                 getSignableTradeRequest: GetSignableTradeRequest(

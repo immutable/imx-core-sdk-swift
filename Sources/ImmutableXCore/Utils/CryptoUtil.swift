@@ -57,9 +57,9 @@ struct CryptoUtil {
     /// This function does the opposite operation so that
     /// `truncateToN(fix(message: message)) == message`
     ///
-    ///  - Throws: ``ImmutableXCoreError/invalidSignatureMessageLength`` if message is larger than 63 characters
+    ///  - Throws: ``ImmutableXError/invalidSignatureMessageLength`` if message is larger than 63 characters
     static func fix(message: String) throws -> String {
-        guard message.count < 64 else { throw ImmutableXCoreError.invalidSignatureMessageLength }
+        guard message.count < 64 else { throw ImmutableXError.invalidSignatureMessageLength }
 
         if message.count <= 62 {
             // In this case, msg should not be transformed, as the byteLength() is at most 31,

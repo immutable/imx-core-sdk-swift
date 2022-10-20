@@ -18,7 +18,7 @@ class BuyCryptoWorkflowMock: BuyCryptoWorkflow {
         companion = nil
     }
 
-    override class func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, base: ImmutableXBase = ImmutableXCore.shared.base, moonpayAPI: MoonpayAPI = MoonpayAPI(), exchangesAPI: ExchangesAPI = ExchangesAPI(), usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> String {
+    override class func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer, base: ImmutableXBase = ImmutableX.shared.base, moonpayAPI: MoonpayAPI = MoonpayAPI(), exchangesAPI: ExchangesAPI = ExchangesAPI(), usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> String {
         let companion = companion!
         companion.callsCount += 1
 

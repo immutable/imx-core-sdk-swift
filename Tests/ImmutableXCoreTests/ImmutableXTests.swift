@@ -1,7 +1,7 @@
 @testable import ImmutableXCore
 import XCTest
 
-final class ImmutableXCoreTests: XCTestCase {
+final class ImmutableXTests: XCTestCase {
     let buyWorkflow = BuyWorkflowMock.self
     let sellWorkflow = SellWorkflowMock.self
     let cancelOrderWorkflow = CancelOrderWorkflowMock.self
@@ -9,7 +9,7 @@ final class ImmutableXCoreTests: XCTestCase {
     let registerWorkflowMock = RegisterWorkflowMock.self
     let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
 
-    lazy var core = ImmutableXCore(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock, buyCryptoWorkflow: buyCryptoWorkflowMock)
+    lazy var core = ImmutableX(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock, buyCryptoWorkflow: buyCryptoWorkflowMock)
 
     override func setUp() {
         super.setUp()
@@ -19,7 +19,7 @@ final class ImmutableXCoreTests: XCTestCase {
         transferWorkflowMock.resetMock()
         registerWorkflowMock.resetMock()
         buyCryptoWorkflowMock.resetMock()
-        ImmutableXCore.initialize()
+        ImmutableX.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
         buyCompanion.returnValue = createTradeResponseStub1
@@ -47,14 +47,14 @@ final class ImmutableXCoreTests: XCTestCase {
     }
 
     func testSdkVersion() {
-        XCTAssertEqual(ImmutableXCore.shared.sdkVersion, "0.3.1")
+        XCTAssertEqual(ImmutableX.shared.sdkVersion, "0.3.1")
     }
 
     func testInitialize() {
-        ImmutableXCore.initialize(base: .ropsten, logLevel: .calls(including: [.requestBody]))
-        XCTAssertEqual(ImmutableXCore.shared.base, .ropsten)
+        ImmutableX.initialize(base: .ropsten, logLevel: .calls(including: [.requestBody]))
+        XCTAssertEqual(ImmutableX.shared.base, .ropsten)
 
-        if case .calls(including: [.requestBody]) = ImmutableXCore.shared.logLevel {
+        if case .calls(including: [.requestBody]) = ImmutableX.shared.logLevel {
             // success
         } else {
             XCTFail("Log level should have matched the initialize's method")

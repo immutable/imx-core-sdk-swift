@@ -641,7 +641,7 @@ private struct Logger {
 
     static func log(_ request: URLRequest, parameters: [String: Any]?) {
 #if DEBUG
-        guard case let .calls(including: areas) = ImmutableXCore.shared.logLevel else { return }
+        guard case let .calls(including: areas) = ImmutableX.shared.logLevel else { return }
 
         var privateLog = ""
 
@@ -681,7 +681,7 @@ private struct Logger {
 
     static func log(_ request: URLRequest, data: Data?, response: URLResponse?, error: Error?) {
 #if DEBUG
-        guard case let .calls(including: areas) = ImmutableXCore.shared.logLevel else { return }
+        guard case let .calls(including: areas) = ImmutableX.shared.logLevel else { return }
 
         let response = response as? HTTPURLResponse
         var privateLog = ""

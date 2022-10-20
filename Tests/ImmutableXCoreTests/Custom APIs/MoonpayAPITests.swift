@@ -17,7 +17,7 @@ final class MoonpayAPITests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        ImmutableXCore.shared = coreStub1
+        ImmutableX.shared = coreStub1
         builderMock.mock(.success(Response(response: HTTPURLResponse(), body: signedMoonpayResponseStub1)))
     }
 

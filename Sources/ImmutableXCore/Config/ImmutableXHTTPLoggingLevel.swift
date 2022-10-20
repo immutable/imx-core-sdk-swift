@@ -1,4 +1,4 @@
-/// Defines the level of logging for ImmutableXCore network calls.
+/// Defines the level of logging for ImmutableX network calls.
 ///
 /// - Note: Logs are only available in debug mode.
 public enum ImmutableXHTTPLoggingLevel {

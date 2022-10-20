@@ -5,10 +5,10 @@ public struct StarkSignature: Equatable {
     public let r: BigInt
     public let s: BigInt
 
-    /// - Throws: ``ImmutableXCoreError/invalidStarkSignature`` if given `r` or `s` are not within curve range
+    /// - Throws: ``ImmutableXError/invalidStarkSignature`` if given `r` or `s` are not within curve range
     public init(r: BigInt, s: BigInt) throws {
         guard r < StarkCurve.P, r > BigInt.zero, s < StarkCurve.N, s > BigInt.zero else {
-            throw ImmutableXCoreError.invalidStarkSignature
+            throw ImmutableXError.invalidStarkSignature
         }
 
         self.r = r

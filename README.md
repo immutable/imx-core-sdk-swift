@@ -59,14 +59,14 @@ The Core SDK must be initialised before any of its classes are used. Upon initia
 For example, you initialise the SDK and retrieve a URL to buy crypto through Moonpay:
 
 ```swift
-ImmutableXCore.initialize(base: .ropsten)
+ImmutableX.initialize(base: .ropsten)
 
-let url = try await ImmutableXCore.shared.buyCryptoURL(signer: signer)
+let url = try await ImmutableX.shared.buyCryptoURL(signer: signer)
 ```
 
 ### Workflow Functions
 
-Utility functions accessed via `ImmutableXCore.shared` that will chain necessary API calls to complete a process or perform a transaction.
+Utility functions accessed via `ImmutableX.shared` that will chain necessary API calls to complete a process or perform a transaction.
 
 - Register a user with Immutable X
 - Buy cryptocurrency via Moonpay
