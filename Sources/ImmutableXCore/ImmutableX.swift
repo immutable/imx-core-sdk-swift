@@ -27,7 +27,7 @@ public struct ImmutableX {
     public var logLevel: ImmutableXHTTPLoggingLevel
 
     /// Returns the version of the sdk
-    internal var sdkVersion: String = "0.3.1"
+    internal var sdkVersion: String = "0.4.0"
 
     private let buyWorkflow: BuyWorkflow.Type
     private let sellWorkflow: SellWorkflow.Type

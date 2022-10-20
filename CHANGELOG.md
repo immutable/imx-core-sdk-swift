@@ -27,6 +27,21 @@ for now removed features.
 
 for any bug fixes.
 
+## [0.4.0] - 2022-10-21
+
+### Changed
+
+- (Breaking): rename ImmutableXCore to ImmutableX
+This follows the new spec for the core SDKs that will come to swift shortly.
+
+- (Breaking): replace ropsten environment for sandbox
+Ropsten has been deprecated and won't work anymore. Sandbox is the preferred testing environment.
+
+### Fixed
+
+- re-include macos as a Cocoapods target
+The Core SDK is generic enough that it should work on macOS. It had accidentally been removed on 0.3.1.
+
 ## [0.3.1] - 2022-10-19
 
 ### Removed
