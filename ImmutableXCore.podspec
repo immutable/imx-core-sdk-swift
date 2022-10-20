@@ -18,6 +18,7 @@ Pod::Spec.new do |spec|
     spec.swift_version         = '5.7'
 
     spec.ios.deployment_target = '13'
+    spec.osx.deployment_target = '10.15'
 
     spec.dependency 'AnyCodable-FlightSchool', '~> 0.6'
     spec.dependency 'BigInt', '~> 5.2.0'
