@@ -9,7 +9,7 @@ public struct ImmutableX {
     /// is accessed.
     public internal(set) static var shared: ImmutableX!
 
-    /// The environment the SDK will communicate with. Defaults to `.ropsten`.
+    /// The environment the SDK will communicate with. Defaults to `.sandbox`.
     public let base: ImmutableXBase
 
     /// Defines the level of logging for ImmutableX network calls. Defaults to `.none`.
@@ -37,7 +37,7 @@ public struct ImmutableX {
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self, buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self) {
+    internal init(base: ImmutableXBase = .sandbox, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self, buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
@@ -49,7 +49,7 @@ public struct ImmutableX {
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableX.shared`.
-    public static func initialize(base: ImmutableXBase = .ropsten, logLevel: ImmutableXHTTPLoggingLevel = .none) {
+    public static func initialize(base: ImmutableXBase = .sandbox, logLevel: ImmutableXHTTPLoggingLevel = .none) {
         ImmutableX.shared = ImmutableX(base: base, logLevel: logLevel)
     }
 

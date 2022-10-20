@@ -1,14 +1,17 @@
 /// An enum for defining the environment the SDK will communicate with
 public enum ImmutableXBase {
+    /// Ethereum network
     case production
-    case ropsten
+
+    /// The default test network (currently Goerli)
+    case sandbox
 
     internal var publicApiUrl: String {
         switch self {
         case .production:
             return "https://api.x.immutable.com"
-        case .ropsten:
-            return "https://api.ropsten.x.immutable.com"
+        case .sandbox:
+            return "https://api.sandbox.x.immutable.com"
         }
     }
 
@@ -16,7 +19,7 @@ public enum ImmutableXBase {
         switch self {
         case .production:
             return "pk_live_lgGxv3WyWjnWff44ch4gmolN0953"
-        case .ropsten:
+        case .sandbox:
             return "pk_test_nGdsu1IBkjiFzmEvN8ddf4gM9GNy5Sgz"
         }
     }
@@ -25,7 +28,7 @@ public enum ImmutableXBase {
         switch self {
         case .production:
             return "https://buy.moonpay.io"
-        case .ropsten:
+        case .sandbox:
             return "https://buy-staging.moonpay.io"
         }
     }

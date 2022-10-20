@@ -51,8 +51,8 @@ final class ImmutableXTests: XCTestCase {
     }
 
     func testInitialize() {
-        ImmutableX.initialize(base: .ropsten, logLevel: .calls(including: [.requestBody]))
-        XCTAssertEqual(ImmutableX.shared.base, .ropsten)
+        ImmutableX.initialize(base: .sandbox, logLevel: .calls(including: [.requestBody]))
+        XCTAssertEqual(ImmutableX.shared.base, .sandbox)
 
         if case .calls(including: [.requestBody]) = ImmutableX.shared.logLevel {
             // success
