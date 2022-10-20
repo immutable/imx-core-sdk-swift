@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                  = 'ImmutableXCore'
-    spec.version               = '0.3.1'
+    spec.version               = '0.4.0'
     spec.summary               = 'The Immutable X Core SDK Swift for applications written on the Immutable X platform.'
 
     spec.description           = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |spec|
     spec.license               = { :type => 'Apache License 2.0', :file => 'LICENSE' }
     spec.author                = { 'Immutable' => 'opensource@immutable.com'}
 
-    spec.source                = { :git => 'https://github.com/immutable/imx-core-sdk-swift.git', :tag => "v0.3.1" }
+    spec.source                = { :git => 'https://github.com/immutable/imx-core-sdk-swift.git', :tag => "v0.4.0" }
     spec.source_files          = 'Sources/**/*.swift'
 
     spec.swift_version         = '5.7'
