@@ -6,8 +6,8 @@
 
 import Foundation
 
-public struct APIHelper {
-    public static func rejectNil(_ source: [String: Any?]) -> [String: Any]? {
+internal struct APIHelper {
+    internal static func rejectNil(_ source: [String: Any?]) -> [String: Any]? {
         let destination = source.reduce(into: [String: Any]()) { result, item in
             if let value = item.value {
                 result[item.key] = value
@@ -20,7 +20,7 @@ public struct APIHelper {
         return destination
     }
 
-    public static func rejectNilHeaders(_ source: [String: Any?]) -> [String: String] {
+    internal static func rejectNilHeaders(_ source: [String: Any?]) -> [String: String] {
         return source.reduce(into: [String: String]()) { result, item in
             if let collection = item.value as? [Any?] {
                 result[item.key] = collection
@@ -35,7 +35,7 @@ public struct APIHelper {
         }
     }
 
-    public static func convertBoolToString(_ source: [String: Any]?) -> [String: Any]? {
+    internal static func convertBoolToString(_ source: [String: Any]?) -> [String: Any]? {
         guard let source = source else {
             return nil
         }
@@ -50,7 +50,7 @@ public struct APIHelper {
         }
     }
 
-    public static func mapValueToPathItem(_ source: Any) -> Any {
+    internal static func mapValueToPathItem(_ source: Any) -> Any {
         if let collection = source as? [Any?] {
             return collection
                 .compactMap { value in
@@ -62,7 +62,7 @@ public struct APIHelper {
         return source
     }
 
-    public static func mapValuesToQueryItems(_ source: [String: Any?]) -> [URLQueryItem]? {
+    internal static func mapValuesToQueryItems(_ source: [String: Any?]) -> [URLQueryItem]? {
         let destination = source.filter { $0.value != nil }.reduce(into: [URLQueryItem]()) { result, item in
             if let collection = item.value as? [Any?] {
                 collection

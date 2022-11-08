@@ -21,7 +21,7 @@ for soon-to-be removed features.
 
 ### Removed
 
-for now removed features.
+- (Breaking): all clients have been removed in favour of direct methods in the ImmutableX instance.
 
 ### Fixed
 

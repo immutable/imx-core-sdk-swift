@@ -8,7 +8,7 @@
 import Foundation
 
 // https://stackoverflow.com/a/50281094/976628
-public class OpenISO8601DateFormatter: DateFormatter {
+internal class OpenISO8601DateFormatter: DateFormatter {
     static let withoutSeconds: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
@@ -35,7 +35,7 @@ public class OpenISO8601DateFormatter: DateFormatter {
         setup()
     }
 
-    override public func date(from string: String) -> Date? {
+    override internal func date(from string: String) -> Date? {
         if let result = super.date(from: string) {
             return result
         }

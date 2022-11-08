@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class TransfersAPI {
+internal class TransfersAPI {
 
     /**
      Creates a transfer of multiple tokens between two parties
@@ -21,7 +21,7 @@ open class TransfersAPI {
      - returns: CreateTransferResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
+    internal class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -54,7 +54,7 @@ open class TransfersAPI {
      - parameter createTransferRequestV2: (body) Create transfer 
      - returns: RequestBuilder<CreateTransferResponse> 
      */
-    open class func createTransferWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) -> RequestBuilder<CreateTransferResponse> {
+    internal class func createTransferWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) -> RequestBuilder<CreateTransferResponse> {
         let localVariablePath = "/v2/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTransferRequestV2)
@@ -82,7 +82,7 @@ open class TransfersAPI {
      - returns: CreateTransferResponseV1
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createTransferV1(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) async throws -> CreateTransferResponseV1 {
+    internal class func createTransferV1(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) async throws -> CreateTransferResponseV1 {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -115,7 +115,7 @@ open class TransfersAPI {
      - parameter createTransferRequest: (body) Create transfer 
      - returns: RequestBuilder<CreateTransferResponseV1> 
      */
-    open class func createTransferV1WithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) -> RequestBuilder<CreateTransferResponseV1> {
+    internal class func createTransferV1WithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) -> RequestBuilder<CreateTransferResponseV1> {
         let localVariablePath = "/v1/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTransferRequest)
@@ -141,7 +141,7 @@ open class TransfersAPI {
      - returns: GetSignableTransferResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableTransfer(getSignableTransferRequestV2: GetSignableTransferRequest) async throws -> GetSignableTransferResponse {
+    internal class func getSignableTransfer(getSignableTransferRequestV2: GetSignableTransferRequest) async throws -> GetSignableTransferResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -172,7 +172,7 @@ open class TransfersAPI {
      - parameter getSignableTransferRequestV2: (body) get details of signable transfer 
      - returns: RequestBuilder<GetSignableTransferResponse> 
      */
-    open class func getSignableTransferWithRequestBuilder(getSignableTransferRequestV2: GetSignableTransferRequest) -> RequestBuilder<GetSignableTransferResponse> {
+    internal class func getSignableTransferWithRequestBuilder(getSignableTransferRequestV2: GetSignableTransferRequest) -> RequestBuilder<GetSignableTransferResponse> {
         let localVariablePath = "/v2/signable-transfer-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableTransferRequestV2)
@@ -197,7 +197,7 @@ open class TransfersAPI {
      - returns: GetSignableTransferResponseV1
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableTransferV1(getSignableTransferRequest: GetSignableTransferRequestV1) async throws -> GetSignableTransferResponseV1 {
+    internal class func getSignableTransferV1(getSignableTransferRequest: GetSignableTransferRequestV1) async throws -> GetSignableTransferResponseV1 {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -228,7 +228,7 @@ open class TransfersAPI {
      - parameter getSignableTransferRequest: (body) get details of signable transfer 
      - returns: RequestBuilder<GetSignableTransferResponseV1> 
      */
-    open class func getSignableTransferV1WithRequestBuilder(getSignableTransferRequest: GetSignableTransferRequestV1) -> RequestBuilder<GetSignableTransferResponseV1> {
+    internal class func getSignableTransferV1WithRequestBuilder(getSignableTransferRequest: GetSignableTransferRequestV1) -> RequestBuilder<GetSignableTransferResponseV1> {
         let localVariablePath = "/v1/signable-transfer-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableTransferRequest)
@@ -253,7 +253,7 @@ open class TransfersAPI {
      - returns: Transfer
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getTransfer(id: String) async throws -> Transfer {
+    internal class func getTransfer(id: String) async throws -> Transfer {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -284,7 +284,7 @@ open class TransfersAPI {
      - parameter id: (path) Transfer ID 
      - returns: RequestBuilder<Transfer> 
      */
-    open class func getTransferWithRequestBuilder(id: String) -> RequestBuilder<Transfer> {
+    internal class func getTransferWithRequestBuilder(id: String) -> RequestBuilder<Transfer> {
         var localVariablePath = "/v1/transfers/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -308,7 +308,7 @@ open class TransfersAPI {
     /**
      * enum for parameter orderBy
      */
-    public enum OrderBy_listTransfers: String, CaseIterable {
+    internal enum OrderBy_listTransfers: String, CaseIterable {
         case transactionId = "transaction_id"
         case updatedAt = "updated_at"
         case createdAt = "created_at"
@@ -319,7 +319,7 @@ open class TransfersAPI {
     /**
      * enum for parameter status
      */
-    public enum Status_listTransfers: String, CaseIterable {
+    internal enum Status_listTransfers: String, CaseIterable {
         case success = "success"
         case failure = "failure"
     }
@@ -347,7 +347,7 @@ open class TransfersAPI {
      - returns: ListTransfersResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listTransfers(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListTransfersResponse {
+    internal class func listTransfers(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListTransfersResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -394,7 +394,7 @@ open class TransfersAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the transferred asset (optional)
      - returns: RequestBuilder<ListTransfersResponse> 
      */
-    open class func listTransfersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListTransfersResponse> {
+    internal class func listTransfersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListTransfersResponse> {
         let localVariablePath = "/v1/transfers"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

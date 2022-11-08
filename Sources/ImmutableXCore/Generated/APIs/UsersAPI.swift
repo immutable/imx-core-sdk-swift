@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class UsersAPI {
+internal class UsersAPI {
 
     /**
      Get operator signature to allow clients to register the user
@@ -19,7 +19,7 @@ open class UsersAPI {
      - returns: GetSignableRegistrationResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableRegistration(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationResponse {
+    internal class func getSignableRegistration(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -50,7 +50,7 @@ open class UsersAPI {
      - parameter getSignableRegistrationRequest: (body) Register User 
      - returns: RequestBuilder<GetSignableRegistrationResponse> 
      */
-    open class func getSignableRegistrationWithRequestBuilder(getSignableRegistrationRequest: GetSignableRegistrationRequest) -> RequestBuilder<GetSignableRegistrationResponse> {
+    internal class func getSignableRegistrationWithRequestBuilder(getSignableRegistrationRequest: GetSignableRegistrationRequest) -> RequestBuilder<GetSignableRegistrationResponse> {
         let localVariablePath = "/v1/signable-registration"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableRegistrationRequest)
@@ -75,7 +75,7 @@ open class UsersAPI {
      - returns: GetSignableRegistrationOffchainResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableRegistrationOffchain(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationOffchainResponse {
+    internal class func getSignableRegistrationOffchain(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationOffchainResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -106,7 +106,7 @@ open class UsersAPI {
      - parameter getSignableRegistrationRequest: (body) Register User Offchain 
      - returns: RequestBuilder<GetSignableRegistrationOffchainResponse> 
      */
-    open class func getSignableRegistrationOffchainWithRequestBuilder(getSignableRegistrationRequest: GetSignableRegistrationRequest) -> RequestBuilder<GetSignableRegistrationOffchainResponse> {
+    internal class func getSignableRegistrationOffchainWithRequestBuilder(getSignableRegistrationRequest: GetSignableRegistrationRequest) -> RequestBuilder<GetSignableRegistrationOffchainResponse> {
         let localVariablePath = "/v1/signable-registration-offchain"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableRegistrationRequest)
@@ -131,7 +131,7 @@ open class UsersAPI {
      - returns: GetUsersApiResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getUsers(user: String) async throws -> GetUsersApiResponse {
+    internal class func getUsers(user: String) async throws -> GetUsersApiResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -162,7 +162,7 @@ open class UsersAPI {
      - parameter user: (path) User 
      - returns: RequestBuilder<GetUsersApiResponse> 
      */
-    open class func getUsersWithRequestBuilder(user: String) -> RequestBuilder<GetUsersApiResponse> {
+    internal class func getUsersWithRequestBuilder(user: String) -> RequestBuilder<GetUsersApiResponse> {
         var localVariablePath = "/v1/users/{user}"
         let userPreEscape = "\(APIHelper.mapValueToPathItem(user))"
         let userPostEscape = userPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -190,7 +190,7 @@ open class UsersAPI {
      - returns: RegisterUserResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func registerUser(registerUserRequest: RegisterUserRequest) async throws -> RegisterUserResponse {
+    internal class func registerUser(registerUserRequest: RegisterUserRequest) async throws -> RegisterUserResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -221,7 +221,7 @@ open class UsersAPI {
      - parameter registerUserRequest: (body) Register User 
      - returns: RequestBuilder<RegisterUserResponse> 
      */
-    open class func registerUserWithRequestBuilder(registerUserRequest: RegisterUserRequest) -> RequestBuilder<RegisterUserResponse> {
+    internal class func registerUserWithRequestBuilder(registerUserRequest: RegisterUserRequest) -> RequestBuilder<RegisterUserResponse> {
         let localVariablePath = "/v1/users"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: registerUserRequest)
