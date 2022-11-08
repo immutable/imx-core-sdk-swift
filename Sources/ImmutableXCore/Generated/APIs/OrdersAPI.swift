@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class OrdersAPI {
+internal class OrdersAPI {
 
     /**
      Cancel an order
@@ -22,7 +22,7 @@ open class OrdersAPI {
      - returns: CancelOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func cancelOrder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) async throws -> CancelOrderResponse {
+    internal class func cancelOrder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) async throws -> CancelOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -56,7 +56,7 @@ open class OrdersAPI {
      - parameter cancelOrderRequest: (body) cancel an order 
      - returns: RequestBuilder<CancelOrderResponse> 
      */
-    open class func cancelOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) -> RequestBuilder<CancelOrderResponse> {
+    internal class func cancelOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) -> RequestBuilder<CancelOrderResponse> {
         var localVariablePath = "/v1/orders/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -87,7 +87,7 @@ open class OrdersAPI {
      - returns: CreateOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createOrder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) async throws -> CreateOrderResponse {
+    internal class func createOrder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) async throws -> CreateOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -120,7 +120,7 @@ open class OrdersAPI {
      - parameter createOrderRequest: (body) create an order 
      - returns: RequestBuilder<CreateOrderResponse> 
      */
-    open class func createOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) -> RequestBuilder<CreateOrderResponse> {
+    internal class func createOrderWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) -> RequestBuilder<CreateOrderResponse> {
         let localVariablePath = "/v1/orders"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createOrderRequest)
@@ -149,7 +149,7 @@ open class OrdersAPI {
      - returns: Order
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getOrder(id: String, includeFees: Bool? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> Order {
+    internal class func getOrder(id: String, includeFees: Bool? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> Order {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -183,7 +183,7 @@ open class OrdersAPI {
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
      - returns: RequestBuilder<Order> 
      */
-    open class func getOrderWithRequestBuilder(id: String, includeFees: Bool? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) -> RequestBuilder<Order> {
+    internal class func getOrderWithRequestBuilder(id: String, includeFees: Bool? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) -> RequestBuilder<Order> {
         var localVariablePath = "/v1/orders/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -216,7 +216,7 @@ open class OrdersAPI {
      - returns: GetSignableCancelOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableCancelOrder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) async throws -> GetSignableCancelOrderResponse {
+    internal class func getSignableCancelOrder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) async throws -> GetSignableCancelOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -247,7 +247,7 @@ open class OrdersAPI {
      - parameter getSignableCancelOrderRequest: (body) get a signable cancel order 
      - returns: RequestBuilder<GetSignableCancelOrderResponse> 
      */
-    open class func getSignableCancelOrderWithRequestBuilder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) -> RequestBuilder<GetSignableCancelOrderResponse> {
+    internal class func getSignableCancelOrderWithRequestBuilder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) -> RequestBuilder<GetSignableCancelOrderResponse> {
         let localVariablePath = "/v1/signable-cancel-order-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableCancelOrderRequest)
@@ -272,7 +272,7 @@ open class OrdersAPI {
      - returns: GetSignableOrderResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableOrder(getSignableOrderRequestV3: GetSignableOrderRequest) async throws -> GetSignableOrderResponse {
+    internal class func getSignableOrder(getSignableOrderRequestV3: GetSignableOrderRequest) async throws -> GetSignableOrderResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -303,7 +303,7 @@ open class OrdersAPI {
      - parameter getSignableOrderRequestV3: (body) get a signable order 
      - returns: RequestBuilder<GetSignableOrderResponse> 
      */
-    open class func getSignableOrderWithRequestBuilder(getSignableOrderRequestV3: GetSignableOrderRequest) -> RequestBuilder<GetSignableOrderResponse> {
+    internal class func getSignableOrderWithRequestBuilder(getSignableOrderRequestV3: GetSignableOrderRequest) -> RequestBuilder<GetSignableOrderResponse> {
         let localVariablePath = "/v3/signable-order-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableOrderRequestV3)
@@ -324,7 +324,7 @@ open class OrdersAPI {
     /**
      * enum for parameter orderBy
      */
-    public enum OrderBy_listOrders: String, CaseIterable {
+    internal enum OrderBy_listOrders: String, CaseIterable {
         case createdAt = "created_at"
         case expiredAt = "expired_at"
         case sellQuantity = "sell_quantity"
@@ -336,7 +336,7 @@ open class OrdersAPI {
     /**
      * enum for parameter status
      */
-    public enum Status_listOrders: String, CaseIterable {
+    internal enum Status_listOrders: String, CaseIterable {
         case active = "active"
         case filled = "filled"
         case cancelled = "cancelled"
@@ -379,7 +379,7 @@ open class OrdersAPI {
      - returns: ListOrdersResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listOrders(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) async throws -> ListOrdersResponse {
+    internal class func listOrders(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) async throws -> ListOrdersResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -438,7 +438,7 @@ open class OrdersAPI {
      - parameter includeFees: (query) Set flag to true to include fee object for orders (optional)
      - returns: RequestBuilder<ListOrdersResponse> 
      */
-    open class func listOrdersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) -> RequestBuilder<ListOrdersResponse> {
+    internal class func listOrdersWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) -> RequestBuilder<ListOrdersResponse> {
         let localVariablePath = "/v1/orders"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class DepositsAPI {
+internal class DepositsAPI {
 
     /**
      Get details of a deposit with the given ID
@@ -19,7 +19,7 @@ open class DepositsAPI {
      - returns: Deposit
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getDeposit(id: String) async throws -> Deposit {
+    internal class func getDeposit(id: String) async throws -> Deposit {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -50,7 +50,7 @@ open class DepositsAPI {
      - parameter id: (path) Deposit ID 
      - returns: RequestBuilder<Deposit> 
      */
-    open class func getDepositWithRequestBuilder(id: String) -> RequestBuilder<Deposit> {
+    internal class func getDepositWithRequestBuilder(id: String) -> RequestBuilder<Deposit> {
         var localVariablePath = "/v1/deposits/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -78,7 +78,7 @@ open class DepositsAPI {
      - returns: GetSignableDepositResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getSignableDeposit(getSignableDepositRequest: GetSignableDepositRequest) async throws -> GetSignableDepositResponse {
+    internal class func getSignableDeposit(getSignableDepositRequest: GetSignableDepositRequest) async throws -> GetSignableDepositResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -109,7 +109,7 @@ open class DepositsAPI {
      - parameter getSignableDepositRequest: (body) Get details of signable deposit 
      - returns: RequestBuilder<GetSignableDepositResponse> 
      */
-    open class func getSignableDepositWithRequestBuilder(getSignableDepositRequest: GetSignableDepositRequest) -> RequestBuilder<GetSignableDepositResponse> {
+    internal class func getSignableDepositWithRequestBuilder(getSignableDepositRequest: GetSignableDepositRequest) -> RequestBuilder<GetSignableDepositResponse> {
         let localVariablePath = "/v1/signable-deposit-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableDepositRequest)
@@ -149,7 +149,7 @@ open class DepositsAPI {
      - returns: ListDepositsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listDeposits(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListDepositsResponse {
+    internal class func listDeposits(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListDepositsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -195,7 +195,7 @@ open class DepositsAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the deposited asset (optional)
      - returns: RequestBuilder<ListDepositsResponse> 
      */
-    open class func listDepositsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListDepositsResponse> {
+    internal class func listDepositsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListDepositsResponse> {
         let localVariablePath = "/v1/deposits"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

@@ -82,7 +82,7 @@ public enum DecodableRequestBuilderError: Error {
     case generalError(Error)
 }
 
-open class Response<T> {
+internal class Response<T> {
     public let statusCode: Int
     public let header: [String: String]
     public let body: T
@@ -105,14 +105,19 @@ open class Response<T> {
     }
 }
 
-public final class RequestTask {
+public final class RequestTask: @unchecked Sendable {
+    private var lock = NSRecursiveLock()
     private var task: URLSessionTask?
 
     internal func set(task: URLSessionTask) {
+        lock.lock()
+        defer { lock.unlock() }
         self.task = task
     }
 
     public func cancel() {
+        lock.lock()
+        defer { lock.unlock() }
         task?.cancel()
         task = nil
     }

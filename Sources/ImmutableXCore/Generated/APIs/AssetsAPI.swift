@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class AssetsAPI {
+internal class AssetsAPI {
 
     /**
      Get details of an asset
@@ -21,7 +21,7 @@ open class AssetsAPI {
      - returns: Asset
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getAsset(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) async throws -> Asset {
+    internal class func getAsset(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) async throws -> Asset {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -54,7 +54,7 @@ open class AssetsAPI {
      - parameter includeFees: (query) Set flag to include fees associated with the asset (optional)
      - returns: RequestBuilder<Asset> 
      */
-    open class func getAssetWithRequestBuilder(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) -> RequestBuilder<Asset> {
+    internal class func getAssetWithRequestBuilder(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) -> RequestBuilder<Asset> {
         var localVariablePath = "/v1/assets/{token_address}/{token_id}"
         let tokenAddressPreEscape = "\(APIHelper.mapValueToPathItem(tokenAddress))"
         let tokenAddressPostEscape = tokenAddressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -84,7 +84,7 @@ open class AssetsAPI {
     /**
      * enum for parameter orderBy
      */
-    public enum OrderBy_listAssets: String, CaseIterable {
+    internal enum OrderBy_listAssets: String, CaseIterable {
         case updatedAt = "updated_at"
         case name = "name"
     }
@@ -111,7 +111,7 @@ open class AssetsAPI {
      - returns: ListAssetsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listAssets(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listAssets? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, name: String? = nil, metadata: String? = nil, sellOrders: Bool? = nil, buyOrders: Bool? = nil, includeFees: Bool? = nil, collection: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> ListAssetsResponse {
+    internal class func listAssets(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listAssets? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, name: String? = nil, metadata: String? = nil, sellOrders: Bool? = nil, buyOrders: Bool? = nil, includeFees: Bool? = nil, collection: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> ListAssetsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -157,7 +157,7 @@ open class AssetsAPI {
      - parameter auxiliaryFeeRecipients: (query) Comma separated string of fee recipients that are to be paired with auxiliary_fee_percentages (optional)
      - returns: RequestBuilder<ListAssetsResponse> 
      */
-    open class func listAssetsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listAssets? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, name: String? = nil, metadata: String? = nil, sellOrders: Bool? = nil, buyOrders: Bool? = nil, includeFees: Bool? = nil, collection: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) -> RequestBuilder<ListAssetsResponse> {
+    internal class func listAssetsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listAssets? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, name: String? = nil, metadata: String? = nil, sellOrders: Bool? = nil, buyOrders: Bool? = nil, includeFees: Bool? = nil, collection: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) -> RequestBuilder<ListAssetsResponse> {
         let localVariablePath = "/v1/assets"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

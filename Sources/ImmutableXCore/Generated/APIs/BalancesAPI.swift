@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class BalancesAPI {
+internal class BalancesAPI {
 
     /**
      Fetches the token balances of the user
@@ -20,7 +20,7 @@ open class BalancesAPI {
      - returns: Balance
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getBalance(owner: String, address: String) async throws -> Balance {
+    internal class func getBalance(owner: String, address: String) async throws -> Balance {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -52,7 +52,7 @@ open class BalancesAPI {
      - parameter address: (path) Token address 
      - returns: RequestBuilder<Balance> 
      */
-    open class func getBalanceWithRequestBuilder(owner: String, address: String) -> RequestBuilder<Balance> {
+    internal class func getBalanceWithRequestBuilder(owner: String, address: String) -> RequestBuilder<Balance> {
         var localVariablePath = "/v2/balances/{owner}/{address}"
         let ownerPreEscape = "\(APIHelper.mapValueToPathItem(owner))"
         let ownerPostEscape = ownerPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -83,7 +83,7 @@ open class BalancesAPI {
      - returns: ListBalancesResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listBalances(owner: String) async throws -> ListBalancesResponse {
+    internal class func listBalances(owner: String) async throws -> ListBalancesResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -114,7 +114,7 @@ open class BalancesAPI {
      - parameter owner: (path) Ethereum wallet address for user 
      - returns: RequestBuilder<ListBalancesResponse> 
      */
-    open class func listBalancesWithRequestBuilder(owner: String) -> RequestBuilder<ListBalancesResponse> {
+    internal class func listBalancesWithRequestBuilder(owner: String) -> RequestBuilder<ListBalancesResponse> {
         var localVariablePath = "/v2/balances/{owner}"
         let ownerPreEscape = "\(APIHelper.mapValueToPathItem(owner))"
         let ownerPostEscape = ownerPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""

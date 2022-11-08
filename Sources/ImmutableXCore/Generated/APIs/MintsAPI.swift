@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class MintsAPI {
+internal class MintsAPI {
 
     /**
      Get details of a mint with the given ID
@@ -19,7 +19,7 @@ open class MintsAPI {
      - returns: Mint
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getMint(id: String) async throws -> Mint {
+    internal class func getMint(id: String) async throws -> Mint {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -50,7 +50,7 @@ open class MintsAPI {
      - parameter id: (path) Mint ID. This is the transaction_id returned from listMints 
      - returns: RequestBuilder<Mint> 
      */
-    open class func getMintWithRequestBuilder(id: String) -> RequestBuilder<Mint> {
+    internal class func getMintWithRequestBuilder(id: String) -> RequestBuilder<Mint> {
         var localVariablePath = "/v1/mints/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -79,7 +79,7 @@ open class MintsAPI {
      - returns: MintableTokenDetails
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getMintableTokenDetailsByClientTokenId(tokenAddress: String, tokenId: String) async throws -> MintableTokenDetails {
+    internal class func getMintableTokenDetailsByClientTokenId(tokenAddress: String, tokenId: String) async throws -> MintableTokenDetails {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -111,7 +111,7 @@ open class MintsAPI {
      - parameter tokenId: (path) ERC721 token ID 
      - returns: RequestBuilder<MintableTokenDetails> 
      */
-    open class func getMintableTokenDetailsByClientTokenIdWithRequestBuilder(tokenAddress: String, tokenId: String) -> RequestBuilder<MintableTokenDetails> {
+    internal class func getMintableTokenDetailsByClientTokenIdWithRequestBuilder(tokenAddress: String, tokenId: String) -> RequestBuilder<MintableTokenDetails> {
         var localVariablePath = "/v1/mintable-token/{token_address}/{token_id}"
         let tokenAddressPreEscape = "\(APIHelper.mapValueToPathItem(tokenAddress))"
         let tokenAddressPostEscape = tokenAddressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -157,7 +157,7 @@ open class MintsAPI {
      - returns: ListMintsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listMints(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenName: String? = nil, tokenAddress: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListMintsResponse {
+    internal class func listMints(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenName: String? = nil, tokenAddress: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListMintsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -203,7 +203,7 @@ open class MintsAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the minted asset (optional)
      - returns: RequestBuilder<ListMintsResponse> 
      */
-    open class func listMintsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenName: String? = nil, tokenAddress: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListMintsResponse> {
+    internal class func listMintsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenName: String? = nil, tokenAddress: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListMintsResponse> {
         let localVariablePath = "/v1/mints"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
@@ -246,7 +246,7 @@ open class MintsAPI {
      - returns: MintTokensResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func mintTokens(mintTokensRequestV2: [MintRequest]) async throws -> MintTokensResponse {
+    internal class func mintTokens(mintTokensRequestV2: [MintRequest]) async throws -> MintTokensResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -278,7 +278,7 @@ open class MintsAPI {
      - parameter mintTokensRequestV2: (body) details of tokens to mint 
      - returns: RequestBuilder<MintTokensResponse> 
      */
-    open class func mintTokensWithRequestBuilder(mintTokensRequestV2: [MintRequest]) -> RequestBuilder<MintTokensResponse> {
+    internal class func mintTokensWithRequestBuilder(mintTokensRequestV2: [MintRequest]) -> RequestBuilder<MintTokensResponse> {
         let localVariablePath = "/v2/mints"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: mintTokensRequestV2)

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class MetadataAPI {
+internal class MetadataAPI {
 
     /**
      Add metadata schema to collection
@@ -22,7 +22,7 @@ open class MetadataAPI {
      - returns: SuccessResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func addMetadataSchemaToCollection(address: String, iMXSignature: String, iMXTimestamp: String, addMetadataSchemaToCollectionRequest: AddMetadataSchemaToCollectionRequest) async throws -> SuccessResponse {
+    internal class func addMetadataSchemaToCollection(address: String, iMXSignature: String, iMXTimestamp: String, addMetadataSchemaToCollectionRequest: AddMetadataSchemaToCollectionRequest) async throws -> SuccessResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -56,7 +56,7 @@ open class MetadataAPI {
      - parameter addMetadataSchemaToCollectionRequest: (body) add metadata schema to a collection 
      - returns: RequestBuilder<SuccessResponse> 
      */
-    open class func addMetadataSchemaToCollectionWithRequestBuilder(address: String, iMXSignature: String, iMXTimestamp: String, addMetadataSchemaToCollectionRequest: AddMetadataSchemaToCollectionRequest) -> RequestBuilder<SuccessResponse> {
+    internal class func addMetadataSchemaToCollectionWithRequestBuilder(address: String, iMXSignature: String, iMXTimestamp: String, addMetadataSchemaToCollectionRequest: AddMetadataSchemaToCollectionRequest) -> RequestBuilder<SuccessResponse> {
         var localVariablePath = "/v1/collections/{address}/metadata-schema"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -85,7 +85,7 @@ open class MetadataAPI {
      - returns: [MetadataSchemaProperty]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getMetadataSchema(address: String) async throws -> [MetadataSchemaProperty] {
+    internal class func getMetadataSchema(address: String) async throws -> [MetadataSchemaProperty] {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -116,7 +116,7 @@ open class MetadataAPI {
      - parameter address: (path) Collection contract address 
      - returns: RequestBuilder<[MetadataSchemaProperty]> 
      */
-    open class func getMetadataSchemaWithRequestBuilder(address: String) -> RequestBuilder<[MetadataSchemaProperty]> {
+    internal class func getMetadataSchemaWithRequestBuilder(address: String) -> RequestBuilder<[MetadataSchemaProperty]> {
         var localVariablePath = "/v1/collections/{address}/metadata-schema"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -148,7 +148,7 @@ open class MetadataAPI {
      - returns: SuccessResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func updateMetadataSchemaByName(address: String, name: String, iMXSignature: String, iMXTimestamp: String, metadataSchemaRequest: MetadataSchemaRequest) async throws -> SuccessResponse {
+    internal class func updateMetadataSchemaByName(address: String, name: String, iMXSignature: String, iMXTimestamp: String, metadataSchemaRequest: MetadataSchemaRequest) async throws -> SuccessResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -183,7 +183,7 @@ open class MetadataAPI {
      - parameter metadataSchemaRequest: (body) update metadata schema 
      - returns: RequestBuilder<SuccessResponse> 
      */
-    open class func updateMetadataSchemaByNameWithRequestBuilder(address: String, name: String, iMXSignature: String, iMXTimestamp: String, metadataSchemaRequest: MetadataSchemaRequest) -> RequestBuilder<SuccessResponse> {
+    internal class func updateMetadataSchemaByNameWithRequestBuilder(address: String, name: String, iMXSignature: String, iMXTimestamp: String, metadataSchemaRequest: MetadataSchemaRequest) -> RequestBuilder<SuccessResponse> {
         var localVariablePath = "/v1/collections/{address}/metadata-schema/{name}"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""

@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class ProjectsAPI {
+internal class ProjectsAPI {
 
     /**
      Create a project
@@ -21,7 +21,7 @@ open class ProjectsAPI {
      - returns: CreateProjectResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createProject(iMXSignature: String, iMXTimestamp: String, createProjectRequest: CreateProjectRequest) async throws -> CreateProjectResponse {
+    internal class func createProject(iMXSignature: String, iMXTimestamp: String, createProjectRequest: CreateProjectRequest) async throws -> CreateProjectResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -54,7 +54,7 @@ open class ProjectsAPI {
      - parameter createProjectRequest: (body) create a project 
      - returns: RequestBuilder<CreateProjectResponse> 
      */
-    open class func createProjectWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, createProjectRequest: CreateProjectRequest) -> RequestBuilder<CreateProjectResponse> {
+    internal class func createProjectWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, createProjectRequest: CreateProjectRequest) -> RequestBuilder<CreateProjectResponse> {
         let localVariablePath = "/v1/projects"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createProjectRequest)
@@ -82,7 +82,7 @@ open class ProjectsAPI {
      - returns: Project
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getProject(id: String, iMXSignature: String, iMXTimestamp: String) async throws -> Project {
+    internal class func getProject(id: String, iMXSignature: String, iMXTimestamp: String) async throws -> Project {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -115,7 +115,7 @@ open class ProjectsAPI {
      - parameter iMXTimestamp: (header) Unix Epoc timestamp 
      - returns: RequestBuilder<Project> 
      */
-    open class func getProjectWithRequestBuilder(id: String, iMXSignature: String, iMXTimestamp: String) -> RequestBuilder<Project> {
+    internal class func getProjectWithRequestBuilder(id: String, iMXSignature: String, iMXTimestamp: String) -> RequestBuilder<Project> {
         var localVariablePath = "/v1/projects/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -149,7 +149,7 @@ open class ProjectsAPI {
      - returns: GetProjectsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getProjects(iMXSignature: String, iMXTimestamp: String, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil) async throws -> GetProjectsResponse {
+    internal class func getProjects(iMXSignature: String, iMXTimestamp: String, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil) async throws -> GetProjectsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -185,7 +185,7 @@ open class ProjectsAPI {
      - parameter direction: (query) Direction to sort (asc/desc) (optional)
      - returns: RequestBuilder<GetProjectsResponse> 
      */
-    open class func getProjectsWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil) -> RequestBuilder<GetProjectsResponse> {
+    internal class func getProjectsWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil) -> RequestBuilder<GetProjectsResponse> {
         let localVariablePath = "/v1/projects"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

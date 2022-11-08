@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class EncodingAPI {
+internal class EncodingAPI {
 
     /**
      Retrieves the Starkex Encoded format for a given asset
@@ -20,7 +20,7 @@ open class EncodingAPI {
      - returns: EncodeAssetResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func encodeAsset(assetType: String, encodeAssetRequest: EncodeAssetRequest) async throws -> EncodeAssetResponse {
+    internal class func encodeAsset(assetType: String, encodeAssetRequest: EncodeAssetRequest) async throws -> EncodeAssetResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -52,7 +52,7 @@ open class EncodingAPI {
      - parameter encodeAssetRequest: (body) Encode Asset 
      - returns: RequestBuilder<EncodeAssetResponse> 
      */
-    open class func encodeAssetWithRequestBuilder(assetType: String, encodeAssetRequest: EncodeAssetRequest) -> RequestBuilder<EncodeAssetResponse> {
+    internal class func encodeAssetWithRequestBuilder(assetType: String, encodeAssetRequest: EncodeAssetRequest) -> RequestBuilder<EncodeAssetResponse> {
         var localVariablePath = "/v1/encode/{assetType}"
         let assetTypePreEscape = "\(APIHelper.mapValueToPathItem(assetType))"
         let assetTypePostEscape = assetTypePreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""

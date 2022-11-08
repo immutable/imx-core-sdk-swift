@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-open class CollectionsAPI {
+internal class CollectionsAPI {
 
     /**
      Create collection
@@ -21,7 +21,7 @@ open class CollectionsAPI {
      - returns: Collection
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createCollection(iMXSignature: String, iMXTimestamp: String, createCollectionRequest: CreateCollectionRequest) async throws -> Collection {
+    internal class func createCollection(iMXSignature: String, iMXTimestamp: String, createCollectionRequest: CreateCollectionRequest) async throws -> Collection {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -55,7 +55,7 @@ open class CollectionsAPI {
      - parameter createCollectionRequest: (body) create a collection 
      - returns: RequestBuilder<Collection> 
      */
-    open class func createCollectionWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, createCollectionRequest: CreateCollectionRequest) -> RequestBuilder<Collection> {
+    internal class func createCollectionWithRequestBuilder(iMXSignature: String, iMXTimestamp: String, createCollectionRequest: CreateCollectionRequest) -> RequestBuilder<Collection> {
         let localVariablePath = "/v1/collections"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCollectionRequest)
@@ -81,7 +81,7 @@ open class CollectionsAPI {
      - returns: Collection
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getCollection(address: String) async throws -> Collection {
+    internal class func getCollection(address: String) async throws -> Collection {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -112,7 +112,7 @@ open class CollectionsAPI {
      - parameter address: (path) Collection contract address 
      - returns: RequestBuilder<Collection> 
      */
-    open class func getCollectionWithRequestBuilder(address: String) -> RequestBuilder<Collection> {
+    internal class func getCollectionWithRequestBuilder(address: String) -> RequestBuilder<Collection> {
         var localVariablePath = "/v1/collections/{address}"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -142,7 +142,7 @@ open class CollectionsAPI {
      - returns: CollectionFilter
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listCollectionFilters(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) async throws -> CollectionFilter {
+    internal class func listCollectionFilters(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) async throws -> CollectionFilter {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -175,7 +175,7 @@ open class CollectionsAPI {
      - parameter nextPageToken: (query) Next page token (optional)
      - returns: RequestBuilder<CollectionFilter> 
      */
-    open class func listCollectionFiltersWithRequestBuilder(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) -> RequestBuilder<CollectionFilter> {
+    internal class func listCollectionFiltersWithRequestBuilder(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) -> RequestBuilder<CollectionFilter> {
         var localVariablePath = "/v1/collections/{address}/filters"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -203,7 +203,7 @@ open class CollectionsAPI {
     /**
      * enum for parameter orderBy
      */
-    public enum OrderBy_listCollections: String, CaseIterable {
+    internal enum OrderBy_listCollections: String, CaseIterable {
         case name = "name"
         case address = "address"
         case projectId = "project_id"
@@ -224,7 +224,7 @@ open class CollectionsAPI {
      - returns: ListCollectionsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
+    internal class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -261,7 +261,7 @@ open class CollectionsAPI {
      - parameter keyword: (query) Keyword to search in collection name and description (optional)
      - returns: RequestBuilder<ListCollectionsResponse> 
      */
-    open class func listCollectionsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) -> RequestBuilder<ListCollectionsResponse> {
+    internal class func listCollectionsWithRequestBuilder(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) -> RequestBuilder<ListCollectionsResponse> {
         let localVariablePath = "/v1/collections"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
@@ -298,7 +298,7 @@ open class CollectionsAPI {
      - returns: Collection
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func updateCollection(address: String, iMXSignature: String, iMXTimestamp: String, updateCollectionRequest: UpdateCollectionRequest) async throws -> Collection {
+    internal class func updateCollection(address: String, iMXSignature: String, iMXTimestamp: String, updateCollectionRequest: UpdateCollectionRequest) async throws -> Collection {
         var requestTask: RequestTask?
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
@@ -332,7 +332,7 @@ open class CollectionsAPI {
      - parameter updateCollectionRequest: (body) update a collection 
      - returns: RequestBuilder<Collection> 
      */
-    open class func updateCollectionWithRequestBuilder(address: String, iMXSignature: String, iMXTimestamp: String, updateCollectionRequest: UpdateCollectionRequest) -> RequestBuilder<Collection> {
+    internal class func updateCollectionWithRequestBuilder(address: String, iMXSignature: String, iMXTimestamp: String, updateCollectionRequest: UpdateCollectionRequest) -> RequestBuilder<Collection> {
         var localVariablePath = "/v1/collections/{address}"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
