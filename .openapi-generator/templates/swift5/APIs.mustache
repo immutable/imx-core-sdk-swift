@@ -21,7 +21,7 @@ import Vapor
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: HTTPHeaders = [:]
     {{/useVapor}}
     {{^useVapor}}
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: [String: String] = ["x-sdk-version": "imx-core-sdk-swift-\(ImmutableXCore.shared.sdkVersion)"]
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var customHeaders: [String: String] = ["x-sdk-version": "imx-core-sdk-swift-\(ImmutableX.shared.sdkVersion)"]
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var credential: URLCredential?{{#useAlamofire}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
@@ -29,7 +29,7 @@ import Vapor
     {{/useVapor}}
 
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var basePath: String {
-        return ImmutableXCore.shared.base.publicApiUrl
+        return ImmutableX.shared.base.publicApiUrl
     }
 }{{^useVapor}}
 
