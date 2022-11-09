@@ -11,16 +11,39 @@ class SellWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self) async throws -> CreateOrderResponse {
+    class func sell(
+        asset: AssetModel,
+        sellToken: AssetModel,
+        fees: [FeeEntry],
+        signer: Signer,
+        starkSigner: StarkSigner,
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self
+    ) async throws -> CreateOrderResponse {
         let address = try await signer.getAddress()
-        let orderResponse = try await getSignableOrder(asset: asset, sellToken: sellToken, address: address, fees: fees, api: ordersAPI)
+        let orderResponse = try await getSignableOrder(
+            asset: asset,
+            sellToken: sellToken,
+            address: address,
+            fees: fees,
+            api: ordersAPI
+        )
         let starkSignature = try await starkSigner.signMessage(orderResponse.payloadHash)
         let ethSignature = try await signer.signMessage(orderResponse.signableMessage)
-        let signatures = WorkflowSignatures(ethAddress: address, ethSignature: ethSignature, starkSignature: starkSignature)
+        let signatures = WorkflowSignatures(
+            ethAddress: address,
+            ethSignature: ethSignature,
+            starkSignature: starkSignature
+        )
         return try await createOrder(response: orderResponse, signatures: signatures, fees: fees, api: ordersAPI)
     }
 
-    private static func getSignableOrder(asset: AssetModel, sellToken: AssetModel, address: String, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> GetSignableOrderResponse {
+    private static func getSignableOrder(
+        asset: AssetModel,
+        sellToken: AssetModel,
+        address: String,
+        fees: [FeeEntry],
+        api: OrdersAPI.Type
+    ) async throws -> GetSignableOrderResponse {
         try await Workflow.mapAPIErrors(caller: "Signable order") {
             try await api.getSignableOrder(
                 getSignableOrderRequestV3: GetSignableOrderRequest(
@@ -35,7 +58,12 @@ class SellWorkflow {
         }
     }
 
-    private static func createOrder(response: GetSignableOrderResponse, signatures: WorkflowSignatures, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> CreateOrderResponse {
+    private static func createOrder(
+        response: GetSignableOrderResponse,
+        signatures: WorkflowSignatures,
+        fees: [FeeEntry],
+        api: OrdersAPI.Type
+    ) async throws -> CreateOrderResponse {
         try await Workflow.mapAPIErrors(caller: "Create order") {
             try await api.createOrder(
                 xImxEthAddress: signatures.ethAddress,

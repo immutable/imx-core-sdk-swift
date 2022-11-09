@@ -39,41 +39,6 @@ final class StarkKeyTests: XCTestCase {
         )
     }
 
-    func testGenerateFromSignerClosure() {
-        let signer = SignerMock()
-        signer.getAddressReturnValue = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
-        signer.signMessageReturnValue = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1b"
-
-        let expectation = XCTestExpectation(description: "testGenerateFromSignerClosure")
-
-        StarkKey.generateKeyPair(from: signer) { result in
-            XCTAssertEqual(try? result.get().publicKey.asStarkPublicKey, "0x02a4c7332c55d6c1c510d24272d1db82878f2302f05b53bcc38695ed5f78fffd")
-            expectation.fulfill()
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 20), .completed)
-    }
-
-    func testGenerateFromSignerClosureFailure() {
-        let signer = SignerMock()
-        signer.getAddressReturnValue = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"
-        signer.signMessageThrowableError = ImmutableXError.invalidKeyData
-
-        let expectation = XCTestExpectation(description: "testGenerateFromSignerClosure")
-
-        StarkKey.generateKeyPair(from: signer) { result in
-            switch result {
-            case .failure:
-                break
-            case .success:
-                XCTFail("Shouldnt have been successful")
-            }
-            expectation.fulfill()
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 20), .completed)
-    }
-
     func testGenerateFromSignerAsync() async throws {
         let signer = SignerMock()
         signer.getAddressReturnValue = "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"

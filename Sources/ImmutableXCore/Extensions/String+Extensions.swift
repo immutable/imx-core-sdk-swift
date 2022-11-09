@@ -34,9 +34,10 @@ extension String {
     /// Pads the string to the specified length at the beginning with the specified character or space.
     /// - Parameters:
     ///     - length: the desired string length.
-    ///     - padding: the character to pad string with, if it has length less than the length specified. "0" is used by default.
-    /// - Returns: Returns a string of length at least ``length`` consisting of this string prepended  with ``padding`` as
-    /// many times as are necessary to reach that length.
+    ///     - padding: the character to pad string with, if it has length less than the length specified. "0" is used by
+    ///     default.
+    /// - Returns: Returns a string of length at least ``length`` consisting of this string prepended  with ``padding``
+    ///     as many times as are necessary to reach that length.
     func padLeft(length: Int, padding: String = "0") -> String {
         padString(length: length, left: true, padding: padding)
     }
@@ -45,9 +46,10 @@ extension String {
     /// - Parameters:
     ///     - length: the desired string length.
     ///     - left: defines whether the padding should be applied to the left of the string
-    ///     - padding: the character to pad string with, if it has length less than the length specified. "0" is used by default.
-    /// - Returns: Returns a string of length at least ``length`` consisting of this string prepended (when ``left`` is true,
-    /// otherwise appended) with ``padding`` as many times as are necessary to reach that length.
+    ///     - padding: the character to pad string with, if it has length less than the length specified. "0" is used by
+    ///     default.
+    /// - Returns: Returns a string of length at least ``length`` consisting of this string prepended (when ``left`` is
+    /// true, otherwise appended) with ``padding`` as many times as are necessary to reach that length.
     func padString(length: Int, left: Bool, padding: String = "0") -> String {
         let diff = length - count
         var result = self
