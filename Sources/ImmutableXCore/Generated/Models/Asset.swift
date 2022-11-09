@@ -19,7 +19,7 @@ public struct Asset: Codable, Hashable {
     public private(set) var description: String?
     /** Royalties to pay on this asset operations */
     public private(set) var fees: [Fee]?
-    /** [DEPRECATED] Internal Immutable X Token ID */
+    /** [DEPRECATED] Internal ImmutableX Token ID */
     public private(set) var id: String?
     /** URL of the image which should be used for this asset */
     public private(set) var imageUrl: String?
@@ -36,7 +36,7 @@ public struct Asset: Codable, Hashable {
     public private(set) var tokenId: String
     /** Timestamp of when the asset was updated */
     public private(set) var updatedAt: String?
-    /** URI to access this asset externally to Immutable X */
+    /** URI to access this asset externally to ImmutableX */
     public private(set) var uri: String?
     /** Ethereum address of the user who owns this asset */
     public private(set) var user: String

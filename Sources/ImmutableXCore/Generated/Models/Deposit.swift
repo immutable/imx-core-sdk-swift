@@ -12,12 +12,12 @@ import AnyCodable
 
 public struct Deposit: Codable, Hashable {
 
-    /** Status of this deposit in Immutable X */
+    /** Status of this deposit in ImmutableX */
     public private(set) var status: String
     /** Timestamp of the deposit */
     public private(set) var timestamp: String
     public private(set) var token: Token
-    /** Sequential ID of this transaction within Immutable X */
+    /** Sequential ID of this transaction within ImmutableX */
     public private(set) var transactionId: Int
     /** Ethereum address of the user making this deposit */
     public private(set) var user: String

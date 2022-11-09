@@ -4,7 +4,7 @@
   ],
   "swagger": "2.0",
   "info": {
-    "title": "Immutable X API",
+    "title": "ImmutableX API",
     "contact": {
       "name": "Immutable API Support",
       "email": "support@immutable.com"
@@ -2758,7 +2758,7 @@
           }
         },
         "id": {
-          "description": "[DEPRECATED] Internal Immutable X Token ID",
+          "description": "[DEPRECATED] Internal ImmutableX Token ID",
           "type": "string"
         },
         "image_url": {
@@ -2798,7 +2798,7 @@
           "x-nullable": true
         },
         "uri": {
-          "description": "URI to access this asset externally to Immutable X",
+          "description": "URI to access this asset externally to ImmutableX",
           "type": "string",
           "x-nullable": true
         },
@@ -2864,7 +2864,7 @@
           }
         },
         "id": {
-          "description": "[DEPRECATED] Internal Immutable X Token ID",
+          "description": "[DEPRECATED] Internal ImmutableX Token ID",
           "type": "string"
         },
         "image_url": {
@@ -2904,7 +2904,7 @@
           "x-nullable": true
         },
         "uri": {
-          "description": "URI to access this asset externally to Immutable X",
+          "description": "URI to access this asset externally to ImmutableX",
           "type": "string",
           "x-nullable": true
         },
@@ -3333,7 +3333,7 @@
           "type": "string"
         },
         "trade_id": {
-          "description": "ID of trade within Immutable X",
+          "description": "ID of trade within ImmutableX",
           "type": "integer"
         }
       }
@@ -3522,7 +3522,7 @@
       ],
       "properties": {
         "status": {
-          "description": "Status of this deposit in Immutable X",
+          "description": "Status of this deposit in ImmutableX",
           "type": "string"
         },
         "timestamp": {
@@ -3534,7 +3534,7 @@
           "$ref": "#/definitions/Token"
         },
         "transaction_id": {
-          "description": "Sequential ID of this transaction within Immutable X",
+          "description": "Sequential ID of this transaction within ImmutableX",
           "type": "integer"
         },
         "user": {
@@ -4571,7 +4571,7 @@
           "$ref": "#/definitions/Token"
         },
         "transaction_id": {
-          "description": "Sequential ID of transaction in Immutable X",
+          "description": "Sequential ID of transaction in ImmutableX",
           "type": "integer"
         },
         "user": {
@@ -5072,7 +5072,7 @@
           "type": "integer"
         },
         "id": {
-          "description": "[DEPRECATED] Internal Immutable X Token ID",
+          "description": "[DEPRECATED] Internal ImmutableX Token ID",
           "type": "string"
         },
         "properties": {
@@ -5162,7 +5162,7 @@
           "x-nullable": true
         },
         "transaction_id": {
-          "description": "Sequential ID of this trade within Immutable X",
+          "description": "Sequential ID of this trade within ImmutableX",
           "type": "integer"
         }
       }

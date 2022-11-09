@@ -1,10 +1,10 @@
 Pod::Spec.new do |spec|
     spec.name                  = 'ImmutableXCore'
     spec.version               = '0.4.0'
-    spec.summary               = 'The Immutable X Core SDK Swift for applications written on the Immutable X platform.'
+    spec.summary               = 'The ImmutableX Core SDK Swift for applications written on the ImmutableX platform.'
 
     spec.description           = <<-DESC
-    The Immutable Core SDK Swift provides convenient access to the Immutable API's for applications written on the Immutable X platform.
+    The Immutable Core SDK Swift provides convenient access to the Immutable API's for applications written on the ImmutableX platform.
                      DESC
 
     spec.homepage              = 'https://github.com/immutable/imx-core-sdk-swift'
