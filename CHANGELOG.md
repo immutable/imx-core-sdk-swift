@@ -22,6 +22,7 @@ for soon-to-be removed features.
 ### Removed
 
 - (Breaking): all clients have been removed in favour of direct methods in the ImmutableX instance.
+- (Breaking): removed closure based APIs from ImmutableX instance.
 
 ### Fixed
 

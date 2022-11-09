@@ -78,41 +78,6 @@ final class ImmutableXTests: XCTestCase {
         }
     }
 
-    func testBuyFlowSuccessClosure() {
-        let expectation = expectation(description: "testBuyFlowSuccessClosure")
-
-        core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case let .success(response):
-                XCTAssertEqual(response, createTradeResponseStub1)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testBuyFlowFailureClosure() {
-        let buyCompanion = BuyWorkflowCompanion()
-        buyCompanion.throwableError = DummyError.something
-        buyWorkflow.mock(buyCompanion, id: "1")
-
-        let expectation = expectation(description: "testBuyFlowFailureClosure")
-        core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
     // MARK: - Sell
 
     func testSellFlowSuccessAsync() async throws {
@@ -128,41 +93,6 @@ final class ImmutableXTests: XCTestCase {
         await XCTAssertThrowsErrorAsync {
             _ = try await self.core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock())
         }
-    }
-
-    func testSellFlowSuccessClosure() {
-        let expectation = expectation(description: "testSellFlowSuccessClosure")
-
-        core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case let .success(response):
-                XCTAssertEqual(response, createOrderResponseStub1)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testSellFlowFailureClosure() {
-        let sellCompanion = SellWorkflowCompanion()
-        sellCompanion.throwableError = DummyError.something
-        sellWorkflow.mock(sellCompanion)
-
-        let expectation = expectation(description: "testSellFlowFailureClosure")
-        core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
     }
 
     // MARK: - Cancel
@@ -182,41 +112,6 @@ final class ImmutableXTests: XCTestCase {
         }
     }
 
-    func testCancelOrderFlowSuccessClosure() {
-        let expectation = expectation(description: "testCancelOrderFlowSuccessClosure")
-
-        core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case let .success(response):
-                XCTAssertEqual(response, cancelOrderResponseStub1)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testCancelOrderFlowFailureClosure() {
-        let cancelOrderCompanion = CancelOrderWorkflowCompanion()
-        cancelOrderCompanion.throwableError = DummyError.something
-        cancelOrderWorkflow.mock(cancelOrderCompanion, id: "1")
-
-        let expectation = expectation(description: "testCancelOrderFlowFailureClosure")
-        core.cancelOrder(orderId: "1", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
     // MARK: - Transfer
 
     func testTransferFlowSuccessAsync() async throws {
@@ -232,42 +127,6 @@ final class ImmutableXTests: XCTestCase {
         await XCTAssertThrowsErrorAsync {
             _ = try await self.core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
         }
-    }
-
-    func testTransferFlowSuccessClosure() {
-        let expectation = expectation(description: "testTransferFlowSuccessClosure")
-
-        core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case let .success(response):
-                XCTAssertEqual(response, createTransferResponseStub1)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testTransferFlowFailureClosure() {
-        let transferCompanion = TransferWorkflowCompanion()
-        transferCompanion.throwableError = DummyError.something
-        transferWorkflowMock.mock(transferCompanion)
-
-        let expectation = expectation(description: "testTransferFlowFailureClosure")
-
-        core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
     }
 
     // MARK: - Register
@@ -287,42 +146,6 @@ final class ImmutableXTests: XCTestCase {
         }
     }
 
-    func testRegisterFlowSuccessClosure() {
-        let expectation = expectation(description: "testRegisterFlowSuccessClosure")
-
-        core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock()) { [weak self] result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTAssertEqual(self?.registerWorkflowMock.companion.callsCount, 1)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testRegisterFlowFailureClosure() {
-        let registerCompanion = RegisterWorkflowCompanion()
-        registerCompanion.throwableError = DummyError.something
-        registerWorkflowMock.mock(registerCompanion)
-
-        let expectation = expectation(description: "testRegisterFlowFailureClosure")
-
-        core.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
     // MARK: - Buy Crypto
 
     func testBuyCryptoFlowSuccessAsync() async throws {
@@ -338,41 +161,5 @@ final class ImmutableXTests: XCTestCase {
         await XCTAssertThrowsErrorAsync {
             _ = try await self.core.buyCryptoURL(signer: SignerMock())
         }
-    }
-
-    func testBuyCryptoFlowSuccessClosure() {
-        let expectation = expectation(description: "testBuyCryptoFlowSuccessClosure")
-
-        core.buyCryptoURL(signer: SignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case let .success(url):
-                XCTAssertEqual(url, "expected url")
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
-    }
-
-    func testBuyCryptoFlowFailureClosure() {
-        let buyCryptoCompanion = BuyCryptoWorkflowCompanion()
-        buyCryptoCompanion.throwableError = DummyError.something
-        buyCryptoWorkflowMock.mock(buyCryptoCompanion)
-
-        let expectation = expectation(description: "testBuyCryptoFlowFailureClosure")
-
-        core.buyCryptoURL(signer: SignerMock()) { result in
-            expectation.fulfill()
-            switch result {
-            case .success:
-                XCTFail("Should not have succeeded")
-            case .failure:
-                break
-            }
-        }
-
-        XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 30), .completed)
     }
 }
