@@ -91,8 +91,6 @@ let collections = try await CollectionsAPI.listCollections(
 
 View the [OpenAPI spec](openapi.json) for a full list of API requests available in the Core SDK.
 
-NOTE: Closure based APIs are also available.
-
 ### Wallet Connection
 
 In order to use any workflow functions, you will need to pass in the connected wallet provider. This means you will need to implement your own Wallet L1 [Signer](https://github.com/immutable/imx-core-sdk-swift/blob/main/Sources/ImmutableXCore/Signer.swift) and L2 [StarkSigner](https://github.com/immutable/imx-core-sdk-swift/blob/main/Sources/ImmutableXCore/Signer.swift).
