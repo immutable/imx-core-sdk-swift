@@ -41,7 +41,7 @@ class BuyCryptoWorkflow {
     }
 
     private static func getTransactionId(address: String, api: ExchangesAPI) async throws -> GetTransactionIdResponse {
-        try await Workflow.mapAPIErrors(caller: "Fetch transaction id") {
+        try await APIErrorMapper.map(caller: "Fetch transaction id") {
             try await api.getTransactionId(
                 GetTransactionIdRequest(walletAddress: address, provider: .moonpay)
             )
@@ -52,13 +52,13 @@ class BuyCryptoWorkflow {
         address: String,
         api: ExchangesAPI
     ) async throws -> GetCurrenciesResponse {
-        try await Workflow.mapAPIErrors(caller: "Fetch supported currencies") {
+        try await APIErrorMapper.map(caller: "Fetch supported currencies") {
             try await api.getCurrencies(address: address)
         }
     }
 
     private static func getBuyCryptoURL(request: GetBuyCryptoURLRequest, api: MoonpayAPI) async throws -> String {
-        try await Workflow.mapAPIErrors(caller: "Fetch crypto url") {
+        try await APIErrorMapper.map(caller: "Fetch crypto url") {
             try await api.getBuyCryptoURL(request)
         }
     }

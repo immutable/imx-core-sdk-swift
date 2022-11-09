@@ -49,7 +49,7 @@ class TransferWorkflow {
         recipientAddress: String,
         api: TransfersAPI.Type
     ) async throws -> GetSignableTransferResponse {
-        try await Workflow.mapAPIErrors(caller: "Signable transfer") {
+        try await APIErrorMapper.map(caller: "Signable transfer") {
             try await api.getSignableTransfer(
                 getSignableTransferRequestV2: GetSignableTransferRequest(
                     senderEtherKey: address,
@@ -71,7 +71,7 @@ class TransferWorkflow {
         signatures: WorkflowSignatures,
         api: TransfersAPI.Type
     ) async throws -> CreateTransferResponse {
-        try await Workflow.mapAPIErrors(caller: "Create transfer") {
+        try await APIErrorMapper.map(caller: "Create transfer") {
             try await api.createTransfer(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,

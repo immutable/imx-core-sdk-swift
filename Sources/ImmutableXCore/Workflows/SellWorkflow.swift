@@ -44,7 +44,7 @@ class SellWorkflow {
         fees: [FeeEntry],
         api: OrdersAPI.Type
     ) async throws -> GetSignableOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Signable order") {
+        try await APIErrorMapper.map(caller: "Signable order") {
             try await api.getSignableOrder(
                 getSignableOrderRequestV3: GetSignableOrderRequest(
                     amountBuy: sellToken.formatQuantity(),
@@ -64,7 +64,7 @@ class SellWorkflow {
         fees: [FeeEntry],
         api: OrdersAPI.Type
     ) async throws -> CreateOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Create order") {
+        try await APIErrorMapper.map(caller: "Create order") {
             try await api.createOrder(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,

@@ -31,7 +31,7 @@ class CancelOrderWorkflow {
         orderId: String,
         api: OrdersAPI.Type
     ) async throws -> GetSignableCancelOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Signable cancel order") {
+        try await APIErrorMapper.map(caller: "Signable cancel order") {
             try await api.getSignableCancelOrder(
                 getSignableCancelOrderRequest: GetSignableCancelOrderRequest(
                     orderId: Int(orderId)!
@@ -45,7 +45,7 @@ class CancelOrderWorkflow {
         signatures: WorkflowSignatures,
         api: OrdersAPI.Type
     ) async throws -> CancelOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Cancel order") {
+        try await APIErrorMapper.map(caller: "Cancel order") {
             try await api.cancelOrder(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,
