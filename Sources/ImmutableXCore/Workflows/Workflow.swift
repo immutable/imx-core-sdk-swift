@@ -11,18 +11,3 @@ struct WorkflowSignatures {
         CryptoUtil.serializeEthSignature(ethSignature)
     }
 }
-
-enum Workflow {
-    /// A helper that parses any non-``ImmutableXError`` into ``ImmutableXError.apiFailure(caller:error:)``
-    static func mapAPIErrors<T>(caller: String, apiCall: () async throws -> T) async throws -> T {
-        do {
-            return try await apiCall()
-        } catch {
-            if error is ImmutableXError {
-                throw error
-            }
-
-            throw ImmutableXError.apiFailure(caller: caller, error: error)
-        }
-    }
-}

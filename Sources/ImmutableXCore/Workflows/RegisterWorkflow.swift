@@ -40,7 +40,7 @@ class RegisterWorkflow {
     }
 
     internal static func isUserRegistered(address: String, api: UsersAPI.Type) async throws -> Bool {
-        try await Workflow.mapAPIErrors(caller: "Get user") {
+        try await APIErrorMapper.map(caller: "Get user") {
             do {
                 let response = try await api.getUsers(user: address)
                 return !response.accounts.isEmpty
@@ -60,7 +60,7 @@ class RegisterWorkflow {
         starkAddress: String,
         api: UsersAPI.Type
     ) async throws -> GetSignableRegistrationOffchainResponse {
-        try await Workflow.mapAPIErrors(caller: "Signable registration") {
+        try await APIErrorMapper.map(caller: "Signable registration") {
             try await api.getSignableRegistrationOffchain(
                 getSignableRegistrationRequest: GetSignableRegistrationRequest(
                     etherKey: address,
@@ -76,7 +76,7 @@ class RegisterWorkflow {
         signatures: WorkflowSignatures,
         api: UsersAPI.Type
     ) async throws -> Bool {
-        try await Workflow.mapAPIErrors(caller: "Register user") {
+        try await APIErrorMapper.map(caller: "Register user") {
             let response = try await api.registerUser(
                 registerUserRequest: RegisterUserRequest(
                     ethSignature: signatures.serializedEthSignature,

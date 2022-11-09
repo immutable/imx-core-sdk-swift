@@ -24,3 +24,18 @@ internal extension Error {
         self as? ImmutableXError ?? ImmutableXError.invalidRequest(reason: localizedDescription)
     }
 }
+
+internal enum APIErrorMapper {
+    /// A helper that parses any non-``ImmutableXError`` into ``ImmutableXError.apiFailure(caller:error:)``
+    static func map<T>(caller: String, apiCall: () async throws -> T) async throws -> T {
+        do {
+            return try await apiCall()
+        } catch {
+            if error is ImmutableXError {
+                throw error
+            }
+
+            throw ImmutableXError.apiFailure(caller: caller, error: error)
+        }
+    }
+}

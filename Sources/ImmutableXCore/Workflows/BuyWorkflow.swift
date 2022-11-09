@@ -47,7 +47,7 @@ class BuyWorkflow {
         let feeRecipients = try fees.map { try $0.address.orThrow(.invalidRequest(reason: "Invalid fee address")) }
             .joined(separator: ",")
 
-        return try await Workflow.mapAPIErrors(caller: "Order details") {
+        return try await APIErrorMapper.map(caller: "Order details") {
             try await api.getOrder(
                 id: orderId,
                 includeFees: true,
@@ -67,7 +67,7 @@ class BuyWorkflow {
         guard order.status == OrderStatus.active.rawValue else {
             throw ImmutableXError.invalidRequest(reason: "Order not available for purchase")
         }
-        return try await Workflow.mapAPIErrors(caller: "Signable trade") {
+        return try await APIErrorMapper.map(caller: "Signable trade") {
             try await api.getSignableTrade(
                 getSignableTradeRequest: GetSignableTradeRequest(
                     fees: fees,
@@ -85,7 +85,7 @@ class BuyWorkflow {
         signatures: WorkflowSignatures,
         api: TradesAPI.Type
     ) async throws -> CreateTradeResponse {
-        try await Workflow.mapAPIErrors(caller: "Create trade") {
+        try await APIErrorMapper.map(caller: "Create trade") {
             try await api.createTrade(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,
