@@ -8,8 +8,17 @@ final class ImmutableXTests: XCTestCase {
     let transferWorkflowMock = TransferWorkflowMock.self
     let registerWorkflowMock = RegisterWorkflowMock.self
     let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
+    let usersAPIMock = UsersAPIMock.self
 
-    lazy var core = ImmutableX(buyWorkflow: buyWorkflow, sellWorkflow: sellWorkflow, cancelOrderWorkflow: cancelOrderWorkflow, transferWorkflow: transferWorkflowMock, registerWorkflow: registerWorkflowMock, buyCryptoWorkflow: buyCryptoWorkflowMock)
+    lazy var core = ImmutableX(
+        buyWorkflow: buyWorkflow,
+        sellWorkflow: sellWorkflow,
+        cancelOrderWorkflow: cancelOrderWorkflow,
+        transferWorkflow: transferWorkflowMock,
+        registerWorkflow: registerWorkflowMock,
+        buyCryptoWorkflow: buyCryptoWorkflowMock,
+        usersAPI: usersAPIMock
+    )
 
     override func setUp() {
         super.setUp()
@@ -19,6 +28,7 @@ final class ImmutableXTests: XCTestCase {
         transferWorkflowMock.resetMock()
         registerWorkflowMock.resetMock()
         buyCryptoWorkflowMock.resetMock()
+        usersAPIMock.resetMock()
         ImmutableX.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -44,6 +54,10 @@ final class ImmutableXTests: XCTestCase {
         let buyCryptoCompanion = BuyCryptoWorkflowCompanion()
         buyCryptoCompanion.returnValue = "expected url"
         buyCryptoWorkflowMock.mock(buyCryptoCompanion)
+
+        let usersCompanion = UsersAPIMockGetUsersCompanion()
+        usersCompanion.returnValue = GetUsersApiResponse(accounts: ["some key"])
+        usersAPIMock.mock(usersCompanion)
     }
 
     func testSdkVersion() {
@@ -160,6 +174,23 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await self.core.buyCryptoURL(signer: SignerMock())
+        }
+    }
+
+    // MARK: - Get User
+
+    func testGetUserSuccess() async throws {
+        let response = try await core.getUser(ethAddress: "address")
+        XCTAssertEqual(response, GetUsersApiResponse(accounts: ["some key"]))
+    }
+
+    func testGetUserFailure() async {
+        let usersCompanion = UsersAPIMockGetUsersCompanion()
+        usersCompanion.throwableError = DummyError.something
+        usersAPIMock.mock(usersCompanion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getUser(ethAddress: "address")
         }
     }
 }

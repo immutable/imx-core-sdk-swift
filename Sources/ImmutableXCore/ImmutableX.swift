@@ -34,6 +34,7 @@ public struct ImmutableX {
     private let transferWorkflow: TransferWorkflow.Type
     private let registerWorkflow: RegisterWorkflow.Type
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
+    private let usersAPI: UsersAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -45,7 +46,8 @@ public struct ImmutableX {
         cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self,
         transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self,
         registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
-        buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self
+        buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self,
+        usersAPI: UsersAPI.Type = UsersAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -55,6 +57,7 @@ public struct ImmutableX {
         self.transferWorkflow = transferWorkflow
         self.registerWorkflow = registerWorkflow
         self.buyCryptoWorkflow = buyCryptoWorkflow
+        self.usersAPI = usersAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -155,6 +158,17 @@ public struct ImmutableX {
     /// - Throws: A variation of ``ImmutableXError``
     public func registerOffchain(signer: Signer, starkSigner: StarkSigner) async throws {
         _ = try await registerWorkflow.registerOffchain(signer: signer, starkSigner: starkSigner)
+    }
+
+    /// Get stark keys for a registered user
+    ///
+    /// - Parameter ethAddress: User ETH address
+    /// - Returns: ``GetUsersApiResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getUser(ethAddress: String) async throws -> GetUsersApiResponse {
+        try await APIErrorMapper.map(caller: "Get Users") {
+            try await self.usersAPI.getUsers(user: ethAddress)
+        }
     }
 
     /// Gets a URL to MoonPay that provides a service for buying crypto directly on Immutable in exchange for fiat.
