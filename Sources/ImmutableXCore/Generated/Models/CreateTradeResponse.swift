@@ -16,7 +16,7 @@ public struct CreateTradeResponse: Codable, Hashable {
     public private(set) var requestId: String?
     /** Current status of trade */
     public private(set) var status: String
-    /** ID of trade within Immutable X */
+    /** ID of trade within ImmutableX */
     public private(set) var tradeId: Int
 
     public init(requestId: String? = nil, status: String, tradeId: Int) {

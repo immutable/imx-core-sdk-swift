@@ -8,15 +8,15 @@
 
 ---
 
-# Immutable X Core SDK Swift
+# ImmutableX Core SDK Swift
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/maintainability)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/test_coverage)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/test_coverage)
 
-The Immutable X Core SDK Swift provides convenient access to the Immutable API's for applications written on the Immutable X platform.
+The ImmutableX Core SDK Swift provides convenient access to the Immutable API's for applications written on the ImmutableX platform.
 
 ## Documentation
 
-See the [developer guides](https://docs.x.immutable.com) for information on building on Immutable X.
+See the [developer guides](https://docs.x.immutable.com) for information on building on ImmutableX.
 
 See the [API reference documentation](https://docs.x.immutable.com/reference) for more information on our API's.
 
@@ -68,7 +68,7 @@ let url = try await ImmutableX.shared.buyCryptoURL(signer: signer)
 
 Utility functions accessed via `ImmutableX.shared` that will chain necessary API calls to complete a process or perform a transaction.
 
-- Register a user with Immutable X
+- Register a user with ImmutableX
 - Buy cryptocurrency via Moonpay
 - Buy ERC721
 - Sell ERC721
@@ -77,7 +77,7 @@ Utility functions accessed via `ImmutableX.shared` that will chain necessary API
 
 ### Standard API Requests
 
-The Core SDK includes classes that interact with the Immutable X APIs.
+The Core SDK includes classes that interact with the ImmutableX APIs.
 
 e.g. Get a list of collections ordered by name in ascending order
 
@@ -162,7 +162,7 @@ If you would like to contribute by reporting bugs, suggest enchacements or pull 
 
 ## Getting Help
 
-Immutable X is open to all to build on, with no approvals required. If you want to talk to us to learn more, or apply for developer grants, click below:
+ImmutableX is open to all to build on, with no approvals required. If you want to talk to us to learn more, or apply for developer grants, click below:
 
 [Contact us](https://www.immutable.com/contact)
 
@@ -172,16 +172,16 @@ To get help from other developers, discuss ideas, and stay up-to-date on what's 
 
 [Join us on Discord](https://discord.gg/TkVumkJ9D6)
 
-You can also join the conversation, connect with other projects, and ask questions in our Immutable X Discourse forum.
+You can also join the conversation, connect with other projects, and ask questions in our ImmutableX Discourse forum.
 
 [Visit the forum](https://forum.immutable.com/)
 
 #### Still need help?
 
-You can also apply for marketing support for your project. Or, if you need help with an issue related to what you're building with Immutable X, click below to submit an issue. Select _I have a question_ or _issue related to building on Immutable X_ as your issue type.
+You can also apply for marketing support for your project. Or, if you need help with an issue related to what you're building with ImmutableX, click below to submit an issue. Select _I have a question_ or _issue related to building on ImmutableX_ as your issue type.
 
 [Contact support](https://support.immutable.com/hc/en-us/requests/new)
 
 ## License
 
-Immutable X Core SDK Swift repository is distributed under the terms of the [Apache License (Version 2.0)](LICENSE).
+ImmutableX Core SDK Swift repository is distributed under the terms of the [Apache License (Version 2.0)](LICENSE).

@@ -105,7 +105,7 @@ public struct ImmutableX {
         try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
     }
 
-    /// This is a utility function that will register a user to Immutable X if they aren't already
+    /// This is a utility function that will register a user to ImmutableX if they aren't already
     ///
     /// - Parameters:
     ///     - signer: represents the users L1 wallet to get the address

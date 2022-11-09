@@ -19,7 +19,7 @@ public struct Mint: Codable, Hashable {
     /** Timestamp this mint was initiated */
     public private(set) var timestamp: String
     public private(set) var token: Token
-    /** Sequential ID of transaction in Immutable X */
+    /** Sequential ID of transaction in ImmutableX */
     public private(set) var transactionId: Int
     /** Ethereum address of the user to whom the asset has been minted */
     public private(set) var user: String
