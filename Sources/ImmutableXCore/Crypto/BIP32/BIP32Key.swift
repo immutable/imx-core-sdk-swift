@@ -5,7 +5,8 @@ import Foundation
 struct BIP32Key {
     /// - Parameters:
     ///     - seed: seed data for derivation, e.g. personal signature
-    ///     - path: hashed values in the expected format as per Starkware docs `m/purpose'/layer'/application'/ethAddress1'/ethAddress2'/index`
+    ///     - path: hashed values in the expected format as per Starkware docs
+    /// `m/purpose'/layer'/application'/ethAddress1'/ethAddress2'/index`
     /// - Returns: derived private key hex
     /// - Throws: ``ImmutableXError/invalidKeyData`` if data is not valid
     ///
@@ -40,7 +41,9 @@ struct BIP32Key {
             let digest = Data(HMAC<SHA512>.authenticationCode(for: data, using: SymmetricKey(data: derivedChainCode)))
             let factor = BigInt(data: digest[0 ..< 32])
 
-            derivedPrivateKey = (BigInt(data: derivedPrivateKey) + factor).modulus(Constants.secpOrder).as256bitLongData()
+            derivedPrivateKey = (BigInt(data: derivedPrivateKey) + factor)
+                .modulus(Constants.secpOrder)
+                .as256bitLongData()
             derivedChainCode = digest[32 ..< 64]
         }
 

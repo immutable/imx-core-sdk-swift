@@ -10,17 +10,45 @@ class TransferWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, transfersAPI: TransfersAPI.Type = TransfersAPI.self) async throws -> CreateTransferResponse {
+    class func transfer(
+        token: AssetModel,
+        recipientAddress: String,
+        signer: Signer,
+        starkSigner: StarkSigner,
+        transfersAPI: TransfersAPI.Type = TransfersAPI.self
+    ) async throws -> CreateTransferResponse {
         let address = try await signer.getAddress()
-        let response = try await getSignableTransfer(address: address, token: token, recipientAddress: recipientAddress, api: transfersAPI)
-        let signableResponse = try response.signableResponses.first.orThrow(.invalidRequest(reason: "Invalid signable response"))
+        let response = try await getSignableTransfer(
+            address: address,
+            token: token,
+            recipientAddress: recipientAddress,
+            api: transfersAPI
+        )
+        let signableResponse = try response
+            .signableResponses
+            .first
+            .orThrow(.invalidRequest(reason: "Invalid signable response"))
         let starkSignature = try await starkSigner.signMessage(signableResponse.payloadHash)
         let ethSignature = try await signer.signMessage(response.signableMessage)
-        let signatures = WorkflowSignatures(ethAddress: address, ethSignature: ethSignature, starkSignature: starkSignature)
-        return try await createTransfer(response: response, signableResponse: signableResponse, signatures: signatures, api: transfersAPI)
+        let signatures = WorkflowSignatures(
+            ethAddress: address,
+            ethSignature: ethSignature,
+            starkSignature: starkSignature
+        )
+        return try await createTransfer(
+            response: response,
+            signableResponse: signableResponse,
+            signatures: signatures,
+            api: transfersAPI
+        )
     }
 
-    private static func getSignableTransfer(address: String, token: AssetModel, recipientAddress: String, api: TransfersAPI.Type) async throws -> GetSignableTransferResponse {
+    private static func getSignableTransfer(
+        address: String,
+        token: AssetModel,
+        recipientAddress: String,
+        api: TransfersAPI.Type
+    ) async throws -> GetSignableTransferResponse {
         try await Workflow.mapAPIErrors(caller: "Signable transfer") {
             try await api.getSignableTransfer(
                 getSignableTransferRequestV2: GetSignableTransferRequest(
@@ -37,7 +65,12 @@ class TransferWorkflow {
         }
     }
 
-    private static func createTransfer(response: GetSignableTransferResponse, signableResponse: SignableTransferResponseDetails, signatures: WorkflowSignatures, api: TransfersAPI.Type) async throws -> CreateTransferResponse {
+    private static func createTransfer(
+        response: GetSignableTransferResponse,
+        signableResponse: SignableTransferResponseDetails,
+        signatures: WorkflowSignatures,
+        api: TransfersAPI.Type
+    ) async throws -> CreateTransferResponse {
         try await Workflow.mapAPIErrors(caller: "Create transfer") {
             try await api.createTransfer(
                 xImxEthAddress: signatures.ethAddress,

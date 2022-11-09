@@ -1,6 +1,5 @@
 import Foundation
 
-// swiftlint:disable function_parameter_count
 public struct ImmutableX {
     /// A shared instance of ``ImmutableX`` that holds configuration for ``base``, ``logLevel`` and
     /// a set o utility methods for the most common workflows for the core SDK.
@@ -36,8 +35,18 @@ public struct ImmutableX {
     private let registerWorkflow: RegisterWorkflow.Type
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
 
-    /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)`` instead.
-    internal init(base: ImmutableXBase = .sandbox, logLevel: ImmutableXHTTPLoggingLevel = .none, buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self, sellWorkflow: SellWorkflow.Type = SellWorkflow.self, cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self, transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self, registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self, buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self) {
+    /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
+    /// instead.
+    internal init(
+        base: ImmutableXBase = .sandbox,
+        logLevel: ImmutableXHTTPLoggingLevel = .none,
+        buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self,
+        sellWorkflow: SellWorkflow.Type = SellWorkflow.self,
+        cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self,
+        transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self,
+        registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
+        buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self
+    ) {
         self.base = base
         self.logLevel = logLevel
         self.buyWorkflow = buyWorkflow
@@ -48,7 +57,8 @@ public struct ImmutableX {
         self.buyCryptoWorkflow = buyCryptoWorkflow
     }
 
-    /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via `ImmutableX.shared`.
+    /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
+    /// `ImmutableX.shared`.
     public static func initialize(base: ImmutableXBase = .sandbox, logLevel: ImmutableXHTTPLoggingLevel = .none) {
         ImmutableX.shared = ImmutableX(base: base, logLevel: logLevel)
     }
@@ -62,7 +72,12 @@ public struct ImmutableX {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    public func buy(orderId: String, fees: [FeeEntry] = [], signer: Signer, starkSigner: StarkSigner) async throws -> CreateTradeResponse {
+    public func buy(
+        orderId: String,
+        fees: [FeeEntry] = [],
+        signer: Signer,
+        starkSigner: StarkSigner
+    ) async throws -> CreateTradeResponse {
         try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
     }
 
@@ -76,8 +91,20 @@ public struct ImmutableX {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    public func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner) async throws -> CreateOrderResponse {
-        try await sellWorkflow.sell(asset: asset, sellToken: sellToken, fees: fees, signer: signer, starkSigner: starkSigner)
+    public func sell(
+        asset: AssetModel,
+        sellToken: AssetModel,
+        fees: [FeeEntry],
+        signer: Signer,
+        starkSigner: StarkSigner
+    ) async throws -> CreateOrderResponse {
+        try await sellWorkflow.sell(
+            asset: asset,
+            sellToken: sellToken,
+            fees: fees,
+            signer: signer,
+            starkSigner: starkSigner
+        )
     }
 
     /// This is a utility function that will chain the necessary calls to cancel an existing order.
@@ -88,7 +115,11 @@ public struct ImmutableX {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    public func cancelOrder(orderId: String, signer: Signer, starkSigner: StarkSigner) async throws -> CancelOrderResponse {
+    public func cancelOrder(
+        orderId: String,
+        signer: Signer,
+        starkSigner: StarkSigner
+    ) async throws -> CancelOrderResponse {
         try await cancelOrderWorkflow.cancel(orderId: orderId, signer: signer, starkSigner: starkSigner)
     }
 
@@ -101,8 +132,18 @@ public struct ImmutableX {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    public func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner) async throws -> CreateTransferResponse {
-        try await transferWorkflow.transfer(token: token, recipientAddress: recipientAddress, signer: signer, starkSigner: starkSigner)
+    public func transfer(
+        token: AssetModel,
+        recipientAddress: String,
+        signer: Signer,
+        starkSigner: StarkSigner
+    ) async throws -> CreateTransferResponse {
+        try await transferWorkflow.transfer(
+            token: token,
+            recipientAddress: recipientAddress,
+            signer: signer,
+            starkSigner: starkSigner
+        )
     }
 
     /// This is a utility function that will register a user to ImmutableX if they aren't already
