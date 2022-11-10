@@ -78,7 +78,8 @@ class MoonpayAPI {
         let requestBuilder = requestBuilderType.init(
             method: "POST",
             URLString: URLString,
-            parameters: parameters
+            parameters: parameters,
+            requiresAuthentication: false
         )
 
         let response = try await requestBuilder.execute()

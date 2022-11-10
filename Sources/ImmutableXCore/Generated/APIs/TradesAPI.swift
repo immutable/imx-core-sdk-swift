@@ -22,7 +22,8 @@ internal class TradesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = createTradeWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTradeRequest: createTradeRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class TradesAPI {
                   return
                 }
 
-                requestTask = createTradeWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTradeRequest: createTradeRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class TradesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -70,7 +71,7 @@ internal class TradesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateTradeResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -81,7 +82,8 @@ internal class TradesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableTrade(getSignableTradeRequest: GetSignableTradeRequest) async throws -> GetSignableTradeResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableTradeWithRequestBuilder(getSignableTradeRequest: getSignableTradeRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -90,7 +92,7 @@ internal class TradesAPI {
                   return
                 }
 
-                requestTask = getSignableTradeWithRequestBuilder(getSignableTradeRequest: getSignableTradeRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -99,8 +101,8 @@ internal class TradesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -126,7 +128,7 @@ internal class TradesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableTradeResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -137,7 +139,8 @@ internal class TradesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getTrade(id: String) async throws -> Trade {
-        var requestTask: RequestTask?
+        let requestBuilder = getTradeWithRequestBuilder(id: id)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -146,7 +149,7 @@ internal class TradesAPI {
                   return
                 }
 
-                requestTask = getTradeWithRequestBuilder(id: id).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -155,8 +158,8 @@ internal class TradesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -185,7 +188,7 @@ internal class TradesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Trade>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -208,7 +211,8 @@ internal class TradesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listTrades(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) async throws -> ListTradesResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listTradesWithRequestBuilder(partyAOrderId: partyAOrderId, partyATokenType: partyATokenType, partyATokenAddress: partyATokenAddress, partyBOrderId: partyBOrderId, partyBTokenType: partyBTokenType, partyBTokenAddress: partyBTokenAddress, partyBTokenId: partyBTokenId, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -217,7 +221,7 @@ internal class TradesAPI {
                   return
                 }
 
-                requestTask = listTradesWithRequestBuilder(partyAOrderId: partyAOrderId, partyATokenType: partyATokenType, partyATokenAddress: partyATokenAddress, partyBOrderId: partyBOrderId, partyBTokenType: partyBTokenType, partyBTokenAddress: partyBTokenAddress, partyBTokenId: partyBTokenId, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -226,8 +230,8 @@ internal class TradesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -257,19 +261,19 @@ internal class TradesAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "party_a_order_id": partyAOrderId?.encodeToJSON(),
-            "party_a_token_type": partyATokenType?.encodeToJSON(),
-            "party_a_token_address": partyATokenAddress?.encodeToJSON(),
-            "party_b_order_id": partyBOrderId?.encodeToJSON(),
-            "party_b_token_type": partyBTokenType?.encodeToJSON(),
-            "party_b_token_address": partyBTokenAddress?.encodeToJSON(),
-            "party_b_token_id": partyBTokenId?.encodeToJSON(),
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
+            "party_a_order_id": (wrappedValue: partyAOrderId?.encodeToJSON(), isExplode: false),
+            "party_a_token_type": (wrappedValue: partyATokenType?.encodeToJSON(), isExplode: false),
+            "party_a_token_address": (wrappedValue: partyATokenAddress?.encodeToJSON(), isExplode: false),
+            "party_b_order_id": (wrappedValue: partyBOrderId?.encodeToJSON(), isExplode: false),
+            "party_b_token_type": (wrappedValue: partyBTokenType?.encodeToJSON(), isExplode: false),
+            "party_b_token_address": (wrappedValue: partyBTokenAddress?.encodeToJSON(), isExplode: false),
+            "party_b_token_id": (wrappedValue: partyBTokenId?.encodeToJSON(), isExplode: false),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "min_timestamp": (wrappedValue: minTimestamp?.encodeToJSON(), isExplode: false),
+            "max_timestamp": (wrappedValue: maxTimestamp?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -280,6 +284,6 @@ internal class TradesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListTradesResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

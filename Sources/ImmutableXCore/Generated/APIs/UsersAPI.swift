@@ -20,7 +20,8 @@ internal class UsersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableRegistration(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableRegistrationWithRequestBuilder(getSignableRegistrationRequest: getSignableRegistrationRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -29,7 +30,7 @@ internal class UsersAPI {
                   return
                 }
 
-                requestTask = getSignableRegistrationWithRequestBuilder(getSignableRegistrationRequest: getSignableRegistrationRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -38,8 +39,8 @@ internal class UsersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -65,7 +66,7 @@ internal class UsersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableRegistrationResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -76,7 +77,8 @@ internal class UsersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableRegistrationOffchain(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationOffchainResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableRegistrationOffchainWithRequestBuilder(getSignableRegistrationRequest: getSignableRegistrationRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -85,7 +87,7 @@ internal class UsersAPI {
                   return
                 }
 
-                requestTask = getSignableRegistrationOffchainWithRequestBuilder(getSignableRegistrationRequest: getSignableRegistrationRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -94,8 +96,8 @@ internal class UsersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -121,7 +123,7 @@ internal class UsersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableRegistrationOffchainResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -132,7 +134,8 @@ internal class UsersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getUsers(user: String) async throws -> GetUsersApiResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getUsersWithRequestBuilder(user: user)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -141,7 +144,7 @@ internal class UsersAPI {
                   return
                 }
 
-                requestTask = getUsersWithRequestBuilder(user: user).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -150,8 +153,8 @@ internal class UsersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -180,7 +183,7 @@ internal class UsersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetUsersApiResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -191,7 +194,8 @@ internal class UsersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func registerUser(registerUserRequest: RegisterUserRequest) async throws -> RegisterUserResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = registerUserWithRequestBuilder(registerUserRequest: registerUserRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -200,7 +204,7 @@ internal class UsersAPI {
                   return
                 }
 
-                requestTask = registerUserWithRequestBuilder(registerUserRequest: registerUserRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -209,8 +213,8 @@ internal class UsersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -236,6 +240,6 @@ internal class UsersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<RegisterUserResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

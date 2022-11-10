@@ -22,7 +22,8 @@ internal class AssetsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getAsset(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) async throws -> Asset {
-        var requestTask: RequestTask?
+        let requestBuilder = getAssetWithRequestBuilder(tokenAddress: tokenAddress, tokenId: tokenId, includeFees: includeFees)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class AssetsAPI {
                   return
                 }
 
-                requestTask = getAssetWithRequestBuilder(tokenAddress: tokenAddress, tokenId: tokenId, includeFees: includeFees).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class AssetsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -67,7 +68,7 @@ internal class AssetsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "include_fees": includeFees?.encodeToJSON(),
+            "include_fees": (wrappedValue: includeFees?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -78,7 +79,7 @@ internal class AssetsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Asset>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -112,7 +113,8 @@ internal class AssetsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listAssets(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listAssets? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, name: String? = nil, metadata: String? = nil, sellOrders: Bool? = nil, buyOrders: Bool? = nil, includeFees: Bool? = nil, collection: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> ListAssetsResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listAssetsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, name: name, metadata: metadata, sellOrders: sellOrders, buyOrders: buyOrders, includeFees: includeFees, collection: collection, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -121,7 +123,7 @@ internal class AssetsAPI {
                   return
                 }
 
-                requestTask = listAssetsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, name: name, metadata: metadata, sellOrders: sellOrders, buyOrders: buyOrders, includeFees: includeFees, collection: collection, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -130,8 +132,8 @@ internal class AssetsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -164,22 +166,22 @@ internal class AssetsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "user": user?.encodeToJSON(),
-            "status": status?.encodeToJSON(),
-            "name": name?.encodeToJSON(),
-            "metadata": metadata?.encodeToJSON(),
-            "sell_orders": sellOrders?.encodeToJSON(),
-            "buy_orders": buyOrders?.encodeToJSON(),
-            "include_fees": includeFees?.encodeToJSON(),
-            "collection": collection?.encodeToJSON(),
-            "updated_min_timestamp": updatedMinTimestamp?.encodeToJSON(),
-            "updated_max_timestamp": updatedMaxTimestamp?.encodeToJSON(),
-            "auxiliary_fee_percentages": auxiliaryFeePercentages?.encodeToJSON(),
-            "auxiliary_fee_recipients": auxiliaryFeeRecipients?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "user": (wrappedValue: user?.encodeToJSON(), isExplode: false),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: false),
+            "name": (wrappedValue: name?.encodeToJSON(), isExplode: false),
+            "metadata": (wrappedValue: metadata?.encodeToJSON(), isExplode: false),
+            "sell_orders": (wrappedValue: sellOrders?.encodeToJSON(), isExplode: false),
+            "buy_orders": (wrappedValue: buyOrders?.encodeToJSON(), isExplode: false),
+            "include_fees": (wrappedValue: includeFees?.encodeToJSON(), isExplode: false),
+            "collection": (wrappedValue: collection?.encodeToJSON(), isExplode: false),
+            "updated_min_timestamp": (wrappedValue: updatedMinTimestamp?.encodeToJSON(), isExplode: false),
+            "updated_max_timestamp": (wrappedValue: updatedMaxTimestamp?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_percentages": (wrappedValue: auxiliaryFeePercentages?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_recipients": (wrappedValue: auxiliaryFeeRecipients?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -190,6 +192,6 @@ internal class AssetsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListAssetsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

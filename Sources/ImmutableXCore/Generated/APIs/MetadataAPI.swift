@@ -23,7 +23,8 @@ internal class MetadataAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func addMetadataSchemaToCollection(address: String, iMXSignature: String, iMXTimestamp: String, addMetadataSchemaToCollectionRequest: AddMetadataSchemaToCollectionRequest) async throws -> SuccessResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = addMetadataSchemaToCollectionWithRequestBuilder(address: address, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, addMetadataSchemaToCollectionRequest: addMetadataSchemaToCollectionRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -32,7 +33,7 @@ internal class MetadataAPI {
                   return
                 }
 
-                requestTask = addMetadataSchemaToCollectionWithRequestBuilder(address: address, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, addMetadataSchemaToCollectionRequest: addMetadataSchemaToCollectionRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -41,8 +42,8 @@ internal class MetadataAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -75,7 +76,7 @@ internal class MetadataAPI {
 
         let localVariableRequestBuilder: RequestBuilder<SuccessResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -86,7 +87,8 @@ internal class MetadataAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getMetadataSchema(address: String) async throws -> [MetadataSchemaProperty] {
-        var requestTask: RequestTask?
+        let requestBuilder = getMetadataSchemaWithRequestBuilder(address: address)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -95,7 +97,7 @@ internal class MetadataAPI {
                   return
                 }
 
-                requestTask = getMetadataSchemaWithRequestBuilder(address: address).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -104,8 +106,8 @@ internal class MetadataAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -134,7 +136,7 @@ internal class MetadataAPI {
 
         let localVariableRequestBuilder: RequestBuilder<[MetadataSchemaProperty]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -149,7 +151,8 @@ internal class MetadataAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func updateMetadataSchemaByName(address: String, name: String, iMXSignature: String, iMXTimestamp: String, metadataSchemaRequest: MetadataSchemaRequest) async throws -> SuccessResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = updateMetadataSchemaByNameWithRequestBuilder(address: address, name: name, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, metadataSchemaRequest: metadataSchemaRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -158,7 +161,7 @@ internal class MetadataAPI {
                   return
                 }
 
-                requestTask = updateMetadataSchemaByNameWithRequestBuilder(address: address, name: name, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, metadataSchemaRequest: metadataSchemaRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -167,8 +170,8 @@ internal class MetadataAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -205,6 +208,6 @@ internal class MetadataAPI {
 
         let localVariableRequestBuilder: RequestBuilder<SuccessResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

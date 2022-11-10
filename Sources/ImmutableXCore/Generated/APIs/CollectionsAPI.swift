@@ -22,7 +22,8 @@ internal class CollectionsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createCollection(iMXSignature: String, iMXTimestamp: String, createCollectionRequest: CreateCollectionRequest) async throws -> Collection {
-        var requestTask: RequestTask?
+        let requestBuilder = createCollectionWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, createCollectionRequest: createCollectionRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class CollectionsAPI {
                   return
                 }
 
-                requestTask = createCollectionWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, createCollectionRequest: createCollectionRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class CollectionsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -71,7 +72,7 @@ internal class CollectionsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Collection>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -82,7 +83,8 @@ internal class CollectionsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getCollection(address: String) async throws -> Collection {
-        var requestTask: RequestTask?
+        let requestBuilder = getCollectionWithRequestBuilder(address: address)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -91,7 +93,7 @@ internal class CollectionsAPI {
                   return
                 }
 
-                requestTask = getCollectionWithRequestBuilder(address: address).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -100,8 +102,8 @@ internal class CollectionsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -130,7 +132,7 @@ internal class CollectionsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Collection>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -143,7 +145,8 @@ internal class CollectionsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listCollectionFilters(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) async throws -> CollectionFilter {
-        var requestTask: RequestTask?
+        let requestBuilder = listCollectionFiltersWithRequestBuilder(address: address, pageSize: pageSize, nextPageToken: nextPageToken)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -152,7 +155,7 @@ internal class CollectionsAPI {
                   return
                 }
 
-                requestTask = listCollectionFiltersWithRequestBuilder(address: address, pageSize: pageSize, nextPageToken: nextPageToken).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -161,8 +164,8 @@ internal class CollectionsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -185,8 +188,8 @@ internal class CollectionsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "next_page_token": nextPageToken?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "next_page_token": (wrappedValue: nextPageToken?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -197,7 +200,7 @@ internal class CollectionsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CollectionFilter>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -225,7 +228,8 @@ internal class CollectionsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listCollectionsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, blacklist: blacklist, whitelist: whitelist, keyword: keyword)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -234,7 +238,7 @@ internal class CollectionsAPI {
                   return
                 }
 
-                requestTask = listCollectionsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, blacklist: blacklist, whitelist: whitelist, keyword: keyword).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -243,8 +247,8 @@ internal class CollectionsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -268,13 +272,13 @@ internal class CollectionsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "blacklist": blacklist?.encodeToJSON(),
-            "whitelist": whitelist?.encodeToJSON(),
-            "keyword": keyword?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "blacklist": (wrappedValue: blacklist?.encodeToJSON(), isExplode: false),
+            "whitelist": (wrappedValue: whitelist?.encodeToJSON(), isExplode: false),
+            "keyword": (wrappedValue: keyword?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -285,7 +289,7 @@ internal class CollectionsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListCollectionsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -299,7 +303,8 @@ internal class CollectionsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func updateCollection(address: String, iMXSignature: String, iMXTimestamp: String, updateCollectionRequest: UpdateCollectionRequest) async throws -> Collection {
-        var requestTask: RequestTask?
+        let requestBuilder = updateCollectionWithRequestBuilder(address: address, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, updateCollectionRequest: updateCollectionRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -308,7 +313,7 @@ internal class CollectionsAPI {
                   return
                 }
 
-                requestTask = updateCollectionWithRequestBuilder(address: address, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, updateCollectionRequest: updateCollectionRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -317,8 +322,8 @@ internal class CollectionsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -351,6 +356,6 @@ internal class CollectionsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Collection>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }
