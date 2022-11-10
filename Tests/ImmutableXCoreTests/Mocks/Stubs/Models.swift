@@ -164,3 +164,17 @@ let transactionIdResponseStub1 = GetTransactionIdResponse(id: 123, walletAddress
 let currenciesReponseStub1 = GetCurrenciesResponse(
     currencyCodes: ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"]
 )
+
+let depositStub1 = Deposit(
+    status: "status",
+    timestamp: "timestamp",
+    token: tokenETHStub1,
+    transactionId: 1,
+    user: "user"
+)
+
+let listDepositResponsesStub1 = ListDepositsResponse(
+    cursor: "cursor",
+    remaining: 1,
+    result: [depositStub1]
+)

@@ -35,6 +35,7 @@ public struct ImmutableX {
     private let registerWorkflow: RegisterWorkflow.Type
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
     private let usersAPI: UsersAPI.Type
+    private let depositAPI: DepositsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -47,7 +48,8 @@ public struct ImmutableX {
         transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self,
         registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
         buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self,
-        usersAPI: UsersAPI.Type = UsersAPI.self
+        usersAPI: UsersAPI.Type = UsersAPI.self,
+        depositAPI: DepositsAPI.Type = DepositsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -58,6 +60,7 @@ public struct ImmutableX {
         self.registerWorkflow = registerWorkflow
         self.buyCryptoWorkflow = buyCryptoWorkflow
         self.usersAPI = usersAPI
+        self.depositAPI = depositAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -181,5 +184,79 @@ public struct ImmutableX {
     /// - Throws: A variation of ``ImmutableXError``
     public func buyCryptoURL(colorCodeHex: String = "#00818e", signer: Signer) async throws -> String {
         try await buyCryptoWorkflow.buyCryptoURL(colorCodeHex: colorCodeHex, signer: signer)
+    }
+
+    /// Get details of a deposit with the given ID
+    ///
+    /// - Parameter id: Deposit ID
+    /// - Returns: ``Deposit``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getDeposit(id: String) async throws -> Deposit {
+        try await APIErrorMapper.map(caller: "Get Deposit") {
+            try await self.depositAPI.getDeposit(id: id)
+        }
+    }
+
+    /// Get a list of deposits
+    ///
+    /// - Parameters:
+    ///   - pageSize: Page size of the result (optional)
+    ///   - cursor: Cursor (optional)
+    ///   - orderBy: Property to sort by (optional)
+    ///   - direction: Direction to sort (asc/desc) (optional)
+    ///   - user: Ethereum address of the user who submitted this deposit (optional)
+    ///   - status: Status of this deposit (optional)
+    ///   - updatedMinTimestamp: Minimum timestamp for this deposit, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///   - updatedMaxTimestamp: Maximum timestamp for this deposit, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///   - tokenType: Token type of the deposited asset (optional)
+    ///   - tokenId: ERC721 Token ID of the minted asset (optional)
+    ///   - assetId: Internal IMX ID of the minted asset (optional)
+    ///   - tokenAddress: Token address of the deposited asset (optional)
+    ///   - tokenName: Token name of the deposited asset (optional)
+    ///   - minQuantity: Min quantity for the deposited asset (optional)
+    ///   - maxQuantity: Max quantity for the deposited asset (optional)
+    ///   - metadata: (JSON-encoded metadata filters for the deposited asset (optional)
+    /// - Returns: ``ListDepositsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listDeposits(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: String? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        status: String? = nil,
+        updatedMinTimestamp: String? = nil,
+        updatedMaxTimestamp: String? = nil,
+        tokenType: String? = nil,
+        tokenId: String? = nil,
+        assetId: String? = nil,
+        tokenAddress: String? = nil,
+        tokenName: String? = nil,
+        minQuantity: String? = nil,
+        maxQuantity: String? = nil,
+        metadata: String? = nil
+    ) async throws -> ListDepositsResponse {
+        try await APIErrorMapper.map(caller: "Get Deposit") {
+            try await self.depositAPI.listDeposits(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy,
+                direction: direction,
+                user: user,
+                status: status,
+                updatedMinTimestamp: updatedMinTimestamp,
+                updatedMaxTimestamp: updatedMaxTimestamp,
+                tokenType: tokenType,
+                tokenId: tokenId,
+                assetId: assetId,
+                tokenAddress: tokenAddress,
+                tokenName: tokenName,
+                minQuantity: minQuantity,
+                maxQuantity: maxQuantity,
+                metadata: metadata
+            )
+        }
     }
 }
