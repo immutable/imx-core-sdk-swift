@@ -10,6 +10,7 @@ final class ImmutableXTests: XCTestCase {
     let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
     let usersAPIMock = UsersAPIMock.self
     let depositAPIMock = DepositAPIMock.self
+    let assetsAPIMock = AssetsAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -19,7 +20,8 @@ final class ImmutableXTests: XCTestCase {
         registerWorkflow: registerWorkflowMock,
         buyCryptoWorkflow: buyCryptoWorkflowMock,
         usersAPI: usersAPIMock,
-        depositAPI: depositAPIMock
+        depositAPI: depositAPIMock,
+        assetsAPI: assetsAPIMock
     )
 
     override func setUp() {
@@ -32,6 +34,7 @@ final class ImmutableXTests: XCTestCase {
         buyCryptoWorkflowMock.resetMock()
         usersAPIMock.resetMock()
         depositAPIMock.resetMock()
+        assetsAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -70,6 +73,14 @@ final class ImmutableXTests: XCTestCase {
         let listDepositsCompanion = DepositAPIMock.ListDepositsCompanion()
         listDepositsCompanion.returnValue = listDepositResponsesStub1
         depositAPIMock.mock(listDepositsCompanion)
+
+        let assetCompanion = AssetsAPIMock.GetAssetCompanion()
+        assetCompanion.returnValue = assetStub1
+        assetsAPIMock.mock(assetCompanion)
+
+        let listAssetsCompanion = AssetsAPIMock.ListAssetsCompanion()
+        listAssetsCompanion.returnValue = listAssetsResponseStub1
+        assetsAPIMock.mock(listAssetsCompanion)
     }
 
     func testSdkVersion() {
@@ -235,6 +246,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listDeposits()
+        }
+    }
+
+    // MARK: - Asset
+
+    func testGetAssetSuccess() async throws {
+        let response = try await core.getAsset(tokenAddress: "address", tokenId: "id")
+        XCTAssertEqual(response, assetStub1)
+    }
+
+    func testGetAssetFailure() async {
+        let companion = AssetsAPIMock.GetAssetCompanion()
+        companion.throwableError = DummyError.something
+        assetsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getAsset(tokenAddress: "address", tokenId: "id")
+        }
+    }
+
+    func testListAssetsSuccess() async throws {
+        let response = try await core.listAssets()
+        XCTAssertEqual(response, listAssetsResponseStub1)
+    }
+
+    func testListAssetsFailure() async {
+        let companion = AssetsAPIMock.ListAssetsCompanion()
+        companion.throwableError = DummyError.something
+        assetsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listAssets()
         }
     }
 }
