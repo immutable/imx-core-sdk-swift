@@ -36,6 +36,7 @@ public struct ImmutableX {
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
     private let usersAPI: UsersAPI.Type
     private let depositAPI: DepositsAPI.Type
+    private let assetsAPI: AssetsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -49,7 +50,8 @@ public struct ImmutableX {
         registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
         buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self,
         usersAPI: UsersAPI.Type = UsersAPI.self,
-        depositAPI: DepositsAPI.Type = DepositsAPI.self
+        depositAPI: DepositsAPI.Type = DepositsAPI.self,
+        assetsAPI: AssetsAPI.Type = AssetsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -61,6 +63,7 @@ public struct ImmutableX {
         self.buyCryptoWorkflow = buyCryptoWorkflow
         self.usersAPI = usersAPI
         self.depositAPI = depositAPI
+        self.assetsAPI = assetsAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -256,6 +259,88 @@ public struct ImmutableX {
                 minQuantity: minQuantity,
                 maxQuantity: maxQuantity,
                 metadata: metadata
+            )
+        }
+    }
+
+    /// Get details of an asset
+    ///
+    /// - Parameters:
+    ///     - tokenAddress: Address of the ERC721 contract
+    ///     - tokenId: Either ERC721 token ID or internal IMX ID
+    ///     - includeFees: Set flag to include fees associated with the asset (optional)
+    /// - Returns: ``Asset``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getAsset(tokenAddress: String, tokenId: String, includeFees: Bool? = nil) async throws -> Asset {
+        try await APIErrorMapper.map(caller: "Get Asset") {
+            try await self.assetsAPI.getAsset(tokenAddress: tokenAddress, tokenId: tokenId, includeFees: includeFees)
+        }
+    }
+
+    /// Get a list of assets
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - user: Ethereum address of the user who owns these assets (optional)
+    ///     - status: Status of these assets (optional)
+    ///     - name: Name of the asset to search (optional)
+    ///     - metadata: JSON-encoded metadata filters for these asset.
+    ///     Example: {&#39;proto&#39;:[&#39;1147&#39;],&#39;quality&#39;:[&#39;Meteorite&#39;]} (optional)
+    ///     - sellOrders: Set flag to true to fetch an array of sell order details with accepted status associated with
+    ///     the asset (optional)
+    ///     - buyOrders: Set flag to true to fetch an array of buy order details  with accepted status associated with
+    ///     the asset (optional)
+    ///     - includeFees: Set flag to include fees associated with the asset (optional)
+    ///     - collection: Collection contract address (optional)
+    ///     - updatedMinTimestamp: Minimum timestamp for when these assets were last updated, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - updatedMaxTimestamp: Maximum timestamp for when these assets were last updated, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - auxiliaryFeePercentages: Comma separated string of fee percentages that are to be paired with
+    ///     auxiliary_fee_recipients (optional)
+    ///     - auxiliaryFeeRecipients: Comma separated string of fee recipients that are to be paired with
+    ///     auxiliary_fee_percentages (optional)
+    /// - Returns: ``ListAssetsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listAssets(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: ListAssetsOrderBy? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        status: String? = nil,
+        name: String? = nil,
+        metadata: String? = nil,
+        sellOrders: Bool? = nil,
+        buyOrders: Bool? = nil,
+        includeFees: Bool? = nil,
+        collection: String? = nil,
+        updatedMinTimestamp: String? = nil,
+        updatedMaxTimestamp: String? = nil,
+        auxiliaryFeePercentages: String? = nil,
+        auxiliaryFeeRecipients: String? = nil
+    ) async throws -> ListAssetsResponse {
+        try await APIErrorMapper.map(caller: "List Assets") {
+            try await self.assetsAPI.listAssets(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy?.asApiArgument,
+                direction: direction,
+                user: user,
+                status: status,
+                name: name,
+                metadata: metadata,
+                sellOrders: sellOrders,
+                buyOrders: buyOrders,
+                includeFees: includeFees,
+                collection: collection,
+                updatedMinTimestamp: updatedMinTimestamp,
+                updatedMaxTimestamp: updatedMaxTimestamp,
+                auxiliaryFeePercentages: auxiliaryFeePercentages,
+                auxiliaryFeeRecipients: auxiliaryFeeRecipients
             )
         }
     }

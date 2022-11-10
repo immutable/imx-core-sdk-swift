@@ -178,3 +178,39 @@ let listDepositResponsesStub1 = ListDepositsResponse(
     remaining: 1,
     result: [depositStub1]
 )
+
+let assetStub1 = Asset(
+    collection: .init(iconUrl: nil, name: ""),
+    createdAt: nil,
+    description: nil,
+    imageUrl: nil,
+    metadata: nil,
+    name: nil,
+    status: "status",
+    tokenAddress: "address",
+    tokenId: "1",
+    updatedAt: nil,
+    uri: nil,
+    user: "user"
+)
+
+let assetWithOrdersStub1 = AssetWithOrders(
+    collection: .init(iconUrl: nil, name: ""),
+    createdAt: nil,
+    description: nil,
+    imageUrl: nil,
+    metadata: nil,
+    name: nil,
+    status: "status",
+    tokenAddress: "address",
+    tokenId: "1",
+    updatedAt: nil,
+    uri: nil,
+    user: "user"
+)
+
+let listAssetsResponseStub1 = ListAssetsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [assetWithOrdersStub1]
+)
