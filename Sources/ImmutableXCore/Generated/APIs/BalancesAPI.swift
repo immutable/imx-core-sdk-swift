@@ -21,7 +21,8 @@ internal class BalancesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getBalance(owner: String, address: String) async throws -> Balance {
-        var requestTask: RequestTask?
+        let requestBuilder = getBalanceWithRequestBuilder(owner: owner, address: address)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -30,7 +31,7 @@ internal class BalancesAPI {
                   return
                 }
 
-                requestTask = getBalanceWithRequestBuilder(owner: owner, address: address).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -39,8 +40,8 @@ internal class BalancesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -73,7 +74,7 @@ internal class BalancesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Balance>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -84,7 +85,8 @@ internal class BalancesAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listBalances(owner: String) async throws -> ListBalancesResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listBalancesWithRequestBuilder(owner: owner)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -93,7 +95,7 @@ internal class BalancesAPI {
                   return
                 }
 
-                requestTask = listBalancesWithRequestBuilder(owner: owner).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -102,8 +104,8 @@ internal class BalancesAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -132,6 +134,6 @@ internal class BalancesAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListBalancesResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }
