@@ -9,6 +9,7 @@ final class ImmutableXTests: XCTestCase {
     let registerWorkflowMock = RegisterWorkflowMock.self
     let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
     let usersAPIMock = UsersAPIMock.self
+    let depositAPIMock = DepositAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -17,7 +18,8 @@ final class ImmutableXTests: XCTestCase {
         transferWorkflow: transferWorkflowMock,
         registerWorkflow: registerWorkflowMock,
         buyCryptoWorkflow: buyCryptoWorkflowMock,
-        usersAPI: usersAPIMock
+        usersAPI: usersAPIMock,
+        depositAPI: depositAPIMock
     )
 
     override func setUp() {
@@ -29,6 +31,8 @@ final class ImmutableXTests: XCTestCase {
         registerWorkflowMock.resetMock()
         buyCryptoWorkflowMock.resetMock()
         usersAPIMock.resetMock()
+        depositAPIMock.resetMock()
+
         ImmutableX.initialize()
 
         let buyCompanion = BuyWorkflowCompanion()
@@ -58,6 +62,14 @@ final class ImmutableXTests: XCTestCase {
         let usersCompanion = UsersAPIMockGetUsersCompanion()
         usersCompanion.returnValue = GetUsersApiResponse(accounts: ["some key"])
         usersAPIMock.mock(usersCompanion)
+
+        let depositCompanion = DepositAPIMock.GetDepositCompanion()
+        depositCompanion.returnValue = depositStub1
+        depositAPIMock.mock(depositCompanion)
+
+        let listDepositsCompanion = DepositAPIMock.ListDepositsCompanion()
+        listDepositsCompanion.returnValue = listDepositResponsesStub1
+        depositAPIMock.mock(listDepositsCompanion)
     }
 
     func testSdkVersion() {
@@ -191,6 +203,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.getUser(ethAddress: "address")
+        }
+    }
+
+    // MARK: - Deposit
+
+    func testGetDepositSuccess() async throws {
+        let response = try await core.getDeposit(id: "id")
+        XCTAssertEqual(response, depositStub1)
+    }
+
+    func testGetDepositFailure() async {
+        let companion = DepositAPIMock.GetDepositCompanion()
+        companion.throwableError = DummyError.something
+        depositAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getDeposit(id: "id")
+        }
+    }
+
+    func testListDepositsSuccess() async throws {
+        let response = try await core.listDeposits()
+        XCTAssertEqual(response, listDepositResponsesStub1)
+    }
+
+    func testListDepositsFailure() async {
+        let companion = DepositAPIMock.ListDepositsCompanion()
+        companion.throwableError = DummyError.something
+        depositAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listDeposits()
         }
     }
 }
