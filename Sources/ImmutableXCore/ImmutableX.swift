@@ -1,6 +1,7 @@
 import Foundation
 
 // swiftlint:disable file_length
+// swiftlint:disable type_body_length
 public struct ImmutableX {
     /// A shared instance of ``ImmutableX`` that holds configuration for ``base``, ``logLevel`` and
     /// a set o utility methods for the most common workflows for the core SDK.
@@ -39,6 +40,7 @@ public struct ImmutableX {
     private let depositAPI: DepositsAPI.Type
     private let assetsAPI: AssetsAPI.Type
     private let collectionsAPI: CollectionsAPI.Type
+    private let projectsAPI: ProjectsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -54,7 +56,8 @@ public struct ImmutableX {
         usersAPI: UsersAPI.Type = UsersAPI.self,
         depositAPI: DepositsAPI.Type = DepositsAPI.self,
         assetsAPI: AssetsAPI.Type = AssetsAPI.self,
-        collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self
+        collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
+        projectsAPI: ProjectsAPI.Type = ProjectsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -68,6 +71,7 @@ public struct ImmutableX {
         self.depositAPI = depositAPI
         self.assetsAPI = assetsAPI
         self.collectionsAPI = collectionsAPI
+        self.projectsAPI = projectsAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -412,6 +416,50 @@ public struct ImmutableX {
                 blacklist: blacklist,
                 whitelist: whitelist,
                 keyword: keyword
+            )
+        }
+    }
+
+    /// Get a project
+    ///
+    /// - Parameters:
+    ///     - id: Project ID
+    ///     - signer: represents the users L1 wallet to get the address and sign the registration
+    /// - Returns: ``Project``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getProject(id: String, signer: Signer) async throws -> Project {
+        try await APIErrorMapper.map(caller: "Get Project") {
+            let (timestamp, signature) = try await IMXTimestamp.request(signer: signer)
+            return try await self.projectsAPI.getProject(id: id, iMXSignature: signature, iMXTimestamp: timestamp)
+        }
+    }
+
+    /// Get projects
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - signer: represents the users L1 wallet to get the address and sign the registration
+    /// - returns: ``GetProjectsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getProjects(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: String? = nil,
+        direction: String? = nil,
+        signer: Signer
+    ) async throws -> GetProjectsResponse {
+        try await APIErrorMapper.map(caller: "Get Projects") {
+            let (timestamp, signature) = try await IMXTimestamp.request(signer: signer)
+            return try await self.projectsAPI.getProjects(
+                iMXSignature: signature,
+                iMXTimestamp: timestamp,
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy,
+                direction: direction
             )
         }
     }

@@ -12,6 +12,7 @@ final class ImmutableXTests: XCTestCase {
     let depositAPIMock = DepositAPIMock.self
     let assetsAPIMock = AssetsAPIMock.self
     let collectionsAPIMock = CollectionsAPIMock.self
+    let projectsAPIMock = ProjectsAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -23,7 +24,8 @@ final class ImmutableXTests: XCTestCase {
         usersAPI: usersAPIMock,
         depositAPI: depositAPIMock,
         assetsAPI: assetsAPIMock,
-        collectionsAPI: collectionsAPIMock
+        collectionsAPI: collectionsAPIMock,
+        projectsAPI: projectsAPIMock
     )
 
     override func setUp() {
@@ -38,6 +40,7 @@ final class ImmutableXTests: XCTestCase {
         depositAPIMock.resetMock()
         assetsAPIMock.resetMock()
         collectionsAPIMock.resetMock()
+        projectsAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -96,6 +99,14 @@ final class ImmutableXTests: XCTestCase {
         let listCollectionsCompanion = CollectionsAPIMock.ListCollectionsCompanion()
         listCollectionsCompanion.returnValue = listCollectionResponseStub1
         collectionsAPIMock.mock(listCollectionsCompanion)
+
+        let getProjectCompanion = ProjectsAPIMock.GetProjectCompanion()
+        getProjectCompanion.returnValue = projectStub1
+        projectsAPIMock.mock(getProjectCompanion)
+
+        let getProjectsCompanion = ProjectsAPIMock.GetProjectsCompanion()
+        getProjectsCompanion.returnValue = getProjectResponseStub1
+        projectsAPIMock.mock(getProjectsCompanion)
     }
 
     func testSdkVersion() {
@@ -340,6 +351,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listCollections()
+        }
+    }
+
+    // MARK: - Projects
+
+    func testGetProjectSuccess() async throws {
+        let response = try await core.getProject(id: "id", signer: SignerMock())
+        XCTAssertEqual(response, projectStub1)
+    }
+
+    func testGetProjectFailure() async {
+        let companion = ProjectsAPIMock.GetProjectCompanion()
+        companion.throwableError = DummyError.something
+        projectsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getProject(id: "id", signer: SignerMock())
+        }
+    }
+
+    func testGetProjectsSuccess() async throws {
+        let response = try await core.getProjects(signer: SignerMock())
+        XCTAssertEqual(response, getProjectResponseStub1)
+    }
+
+    func testGetProjectsFailure() async {
+        let companion = ProjectsAPIMock.GetProjectsCompanion()
+        companion.throwableError = DummyError.something
+        projectsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getProjects(signer: SignerMock())
         }
     }
 }
