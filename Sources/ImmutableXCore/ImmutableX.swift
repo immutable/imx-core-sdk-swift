@@ -1,5 +1,6 @@
 import Foundation
 
+// swiftlint:disable file_length
 public struct ImmutableX {
     /// A shared instance of ``ImmutableX`` that holds configuration for ``base``, ``logLevel`` and
     /// a set o utility methods for the most common workflows for the core SDK.
@@ -37,6 +38,7 @@ public struct ImmutableX {
     private let usersAPI: UsersAPI.Type
     private let depositAPI: DepositsAPI.Type
     private let assetsAPI: AssetsAPI.Type
+    private let collectionsAPI: CollectionsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -51,7 +53,8 @@ public struct ImmutableX {
         buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self,
         usersAPI: UsersAPI.Type = UsersAPI.self,
         depositAPI: DepositsAPI.Type = DepositsAPI.self,
-        assetsAPI: AssetsAPI.Type = AssetsAPI.self
+        assetsAPI: AssetsAPI.Type = AssetsAPI.self,
+        collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -64,6 +67,7 @@ public struct ImmutableX {
         self.usersAPI = usersAPI
         self.depositAPI = depositAPI
         self.assetsAPI = assetsAPI
+        self.collectionsAPI = collectionsAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -341,6 +345,73 @@ public struct ImmutableX {
                 updatedMaxTimestamp: updatedMaxTimestamp,
                 auxiliaryFeePercentages: auxiliaryFeePercentages,
                 auxiliaryFeeRecipients: auxiliaryFeeRecipients
+            )
+        }
+    }
+
+    /// Get details of a collection at the given address
+    ///
+    /// - Parameter address: Collection contract address
+    /// - Returns: ``Collection``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getCollection(address: String) async throws -> Collection {
+        try await APIErrorMapper.map(caller: "Get Collection") {
+            try await self.collectionsAPI.getCollection(address: address)
+        }
+    }
+
+    /// Get a list of collection filters
+    ///
+    /// - Parameters:
+    ///     - address: Collection contract address
+    ///     - pageSize: Page size of the result (optional)
+    ///     - nextPageToken: Next page token (optional)
+    /// - Returns: ``CollectionFilter``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listCollectionFilters(
+        address: String,
+        pageSize: Int? = nil,
+        nextPageToken: String? = nil
+    ) async throws -> CollectionFilter {
+        try await APIErrorMapper.map(caller: "List Collection Filters") {
+            try await self.collectionsAPI.listCollectionFilters(
+                address: address,
+                pageSize: pageSize,
+                nextPageToken: nextPageToken
+            )
+        }
+    }
+
+    /// Get a list of collections
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - blacklist: List of collections not to be included, separated by commas (optional)
+    ///     - whitelist: List of collections to be included, separated by commas (optional)
+    ///     - keyword: Keyword to search in collection name and description (optional)
+    /// - Returns: ``ListCollectionsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listCollections(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: ListCollectionsOrderBy? = nil,
+        direction: String? = nil,
+        blacklist: String? = nil,
+        whitelist: String? = nil,
+        keyword: String? = nil
+    ) async throws -> ListCollectionsResponse {
+        try await APIErrorMapper.map(caller: "List Collections") {
+            try await self.collectionsAPI.listCollections(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy?.asApiArgument,
+                direction: direction,
+                blacklist: blacklist,
+                whitelist: whitelist,
+                keyword: keyword
             )
         }
     }

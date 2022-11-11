@@ -11,6 +11,7 @@ final class ImmutableXTests: XCTestCase {
     let usersAPIMock = UsersAPIMock.self
     let depositAPIMock = DepositAPIMock.self
     let assetsAPIMock = AssetsAPIMock.self
+    let collectionsAPIMock = CollectionsAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -21,7 +22,8 @@ final class ImmutableXTests: XCTestCase {
         buyCryptoWorkflow: buyCryptoWorkflowMock,
         usersAPI: usersAPIMock,
         depositAPI: depositAPIMock,
-        assetsAPI: assetsAPIMock
+        assetsAPI: assetsAPIMock,
+        collectionsAPI: collectionsAPIMock
     )
 
     override func setUp() {
@@ -35,6 +37,7 @@ final class ImmutableXTests: XCTestCase {
         usersAPIMock.resetMock()
         depositAPIMock.resetMock()
         assetsAPIMock.resetMock()
+        collectionsAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -81,6 +84,18 @@ final class ImmutableXTests: XCTestCase {
         let listAssetsCompanion = AssetsAPIMock.ListAssetsCompanion()
         listAssetsCompanion.returnValue = listAssetsResponseStub1
         assetsAPIMock.mock(listAssetsCompanion)
+
+        let collectionCompanion = CollectionsAPIMock.GetCollectionCompanion()
+        collectionCompanion.returnValue = collectionStub1
+        collectionsAPIMock.mock(collectionCompanion)
+
+        let listCollectionFiltersCompanion = CollectionsAPIMock.ListCollectionFiltersCompanion()
+        listCollectionFiltersCompanion.returnValue = collectionFilterStub1
+        collectionsAPIMock.mock(listCollectionFiltersCompanion)
+
+        let listCollectionsCompanion = CollectionsAPIMock.ListCollectionsCompanion()
+        listCollectionsCompanion.returnValue = listCollectionResponseStub1
+        collectionsAPIMock.mock(listCollectionsCompanion)
     }
 
     func testSdkVersion() {
@@ -278,6 +293,53 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listAssets()
+        }
+    }
+
+    // MARK: - Collections
+
+    func testGetCollectionSuccess() async throws {
+        let response = try await core.getCollection(address: "address")
+        XCTAssertEqual(response, collectionStub1)
+    }
+
+    func testGetCollectionFailure() async {
+        let companion = CollectionsAPIMock.GetCollectionCompanion()
+        companion.throwableError = DummyError.something
+        collectionsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getCollection(address: "address")
+        }
+    }
+
+    func testListCollectionFiltersSuccess() async throws {
+        let response = try await core.listCollectionFilters(address: "address")
+        XCTAssertEqual(response, collectionFilterStub1)
+    }
+
+    func testListCollectionFiltersFailure() async {
+        let companion = CollectionsAPIMock.ListCollectionFiltersCompanion()
+        companion.throwableError = DummyError.something
+        collectionsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listCollectionFilters(address: "address")
+        }
+    }
+
+    func testListCollectionsSuccess() async throws {
+        let response = try await core.listCollections()
+        XCTAssertEqual(response, listCollectionResponseStub1)
+    }
+
+    func testListCollectionsFailure() async {
+        let companion = CollectionsAPIMock.ListCollectionsCompanion()
+        companion.throwableError = DummyError.something
+        collectionsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listCollections()
         }
     }
 }

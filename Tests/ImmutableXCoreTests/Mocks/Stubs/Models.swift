@@ -214,3 +214,27 @@ let listAssetsResponseStub1 = ListAssetsResponse(
     remaining: 0,
     result: [assetWithOrdersStub1]
 )
+
+let collectionStub1 = Collection(
+    address: "address",
+    collectionImageUrl: nil,
+    description: nil,
+    iconUrl: nil,
+    metadataApiUrl: nil,
+    name: "name",
+    projectId: 1,
+    projectOwnerAddress: "address"
+)
+
+let collectionFilterStub1 = CollectionFilter(
+    key: "key",
+    range: nil,
+    type: nil,
+    value: nil
+)
+
+let listCollectionResponseStub1 = ListCollectionsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [collectionStub1]
+)
