@@ -238,3 +238,22 @@ let listCollectionResponseStub1 = ListCollectionsResponse(
     remaining: 0,
     result: [collectionStub1]
 )
+
+let projectStub1 = Project(
+    collectionLimitExpiresAt: "",
+    collectionMonthlyLimit: 1,
+    collectionRemaining: 1,
+    companyName: "companyName",
+    contactEmail: "email",
+    id: 1,
+    mintLimitExpiresAt: "",
+    mintMonthlyLimit: 1,
+    mintRemaining: 1,
+    name: "Proj"
+)
+
+let getProjectResponseStub1 = GetProjectsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [projectStub1]
+)
