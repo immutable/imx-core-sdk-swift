@@ -42,6 +42,7 @@ public struct ImmutableX {
     private let collectionsAPI: CollectionsAPI.Type
     private let projectsAPI: ProjectsAPI.Type
     private let balancesAPI: BalancesAPI.Type
+    private let mintsAPI: MintsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -59,7 +60,8 @@ public struct ImmutableX {
         assetsAPI: AssetsAPI.Type = AssetsAPI.self,
         collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
         projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
-        balancesAPI: BalancesAPI.Type = BalancesAPI.self
+        balancesAPI: BalancesAPI.Type = BalancesAPI.self,
+        mintsAPI: MintsAPI.Type = MintsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -75,6 +77,7 @@ public struct ImmutableX {
         self.collectionsAPI = collectionsAPI
         self.projectsAPI = projectsAPI
         self.balancesAPI = balancesAPI
+        self.mintsAPI = mintsAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -488,6 +491,80 @@ public struct ImmutableX {
     public func listBalances(owner: String) async throws -> ListBalancesResponse {
         try await APIErrorMapper.map(caller: "List Balances") {
             try await self.balancesAPI.listBalances(owner: owner)
+        }
+    }
+
+    /// Get details of a mint with the given ID
+    ///
+    /// - Parameter id: Mint ID. This is the transaction_id returned from listMints
+    /// - Returns: ``Mint``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getMint(id: String) async throws -> Mint {
+        try await APIErrorMapper.map(caller: "Get Mint") {
+            try await self.mintsAPI.getMint(id: id)
+        }
+    }
+
+    /// Get a list of mints
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - user: Ethereum address of the user who submitted this mint (optional)
+    ///     - status: Status of this mint (optional)
+    ///     - minTimestamp: Minimum timestamp for this mint, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - maxTimestamp: Maximum timestamp for this mint, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - tokenType: Token type of the minted asset (optional)
+    ///     - tokenId: ERC721 Token ID of the minted asset (optional)
+    ///     - assetId: Internal IMX ID of the minted asset (optional)
+    ///     - tokenName: Token Name of the minted asset (optional)
+    ///     - tokenAddress: Token address of the minted asset (optional)
+    ///     - minQuantity: Min quantity for the minted asset (optional)
+    ///     - maxQuantity: Max quantity for the minted asset (optional)
+    ///     - metadata: JSON-encoded metadata filters for the minted asset (optional)
+    /// - Returns: ``ListMintsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listMints(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: String? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        status: String? = nil,
+        minTimestamp: String? = nil,
+        maxTimestamp: String? = nil,
+        tokenType: String? = nil,
+        tokenId: String? = nil,
+        assetId: String? = nil,
+        tokenName: String? = nil,
+        tokenAddress: String? = nil,
+        minQuantity: String? = nil,
+        maxQuantity: String? = nil,
+        metadata: String? = nil
+    ) async throws -> ListMintsResponse {
+        try await APIErrorMapper.map(caller: "List Mints") {
+            try await self.mintsAPI.listMints(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy,
+                direction: direction,
+                user: user,
+                status: status,
+                minTimestamp: minTimestamp,
+                maxTimestamp: maxTimestamp,
+                tokenType: tokenType,
+                tokenId: tokenId,
+                assetId: assetId,
+                tokenName: tokenName,
+                tokenAddress: tokenAddress,
+                minQuantity: minQuantity,
+                maxQuantity: maxQuantity,
+                metadata: metadata
+            )
         }
     }
 }

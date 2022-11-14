@@ -14,6 +14,7 @@ final class ImmutableXTests: XCTestCase {
     let collectionsAPIMock = CollectionsAPIMock.self
     let projectsAPIMock = ProjectsAPIMock.self
     let balancesAPIMock = BalancesAPIMock.self
+    let mintsAPIMock = MintsAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -27,7 +28,8 @@ final class ImmutableXTests: XCTestCase {
         assetsAPI: assetsAPIMock,
         collectionsAPI: collectionsAPIMock,
         projectsAPI: projectsAPIMock,
-        balancesAPI: balancesAPIMock
+        balancesAPI: balancesAPIMock,
+        mintsAPI: mintsAPIMock
     )
 
     override func setUp() {
@@ -44,6 +46,7 @@ final class ImmutableXTests: XCTestCase {
         collectionsAPIMock.resetMock()
         projectsAPIMock.resetMock()
         balancesAPIMock.resetMock()
+        mintsAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -118,6 +121,14 @@ final class ImmutableXTests: XCTestCase {
         let listBalancesCompanion = BalancesAPIMock.ListBalancesCompanion()
         listBalancesCompanion.returnValue = listBalancesResponseStub1
         balancesAPIMock.mock(listBalancesCompanion)
+
+        let getMintCompanion = MintsAPIMock.GetMintCompanion()
+        getMintCompanion.returnValue = mintStub1
+        mintsAPIMock.mock(getMintCompanion)
+
+        let listMintsCompanion = MintsAPIMock.ListMintsCompanion()
+        listMintsCompanion.returnValue = listMintsResponseStub1
+        mintsAPIMock.mock(listMintsCompanion)
     }
 
     func testSdkVersion() {
@@ -426,6 +437,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listBalances(owner: "owner")
+        }
+    }
+
+    // MARK: - Mint
+
+    func testGetMintSuccess() async throws {
+        let response = try await core.getMint(id: "id")
+        XCTAssertEqual(response, mintStub1)
+    }
+
+    func testGetMintFailure() async {
+        let companion = MintsAPIMock.GetMintCompanion()
+        companion.throwableError = DummyError.something
+        mintsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getMint(id: "id")
+        }
+    }
+
+    func testListMintsSuccess() async throws {
+        let response = try await core.listMints()
+        XCTAssertEqual(response, listMintsResponseStub1)
+    }
+
+    func testListMintsFailure() async {
+        let companion = MintsAPIMock.ListMintsCompanion()
+        companion.throwableError = DummyError.something
+        mintsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listMints()
         }
     }
 }
