@@ -257,3 +257,16 @@ let getProjectResponseStub1 = GetProjectsResponse(
     remaining: 0,
     result: [projectStub1]
 )
+
+let balanceStub1 = Balance(
+    balance: "1",
+    preparingWithdrawal: "",
+    symbol: "ETH",
+    tokenAddress: "address",
+    withdrawable: ""
+)
+
+let listBalancesResponseStub1 = ListBalancesResponse(
+    cursor: "",
+    result: [balanceStub1]
+)
