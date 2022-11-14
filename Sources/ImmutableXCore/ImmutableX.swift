@@ -41,6 +41,7 @@ public struct ImmutableX {
     private let assetsAPI: AssetsAPI.Type
     private let collectionsAPI: CollectionsAPI.Type
     private let projectsAPI: ProjectsAPI.Type
+    private let balancesAPI: BalancesAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -57,7 +58,8 @@ public struct ImmutableX {
         depositAPI: DepositsAPI.Type = DepositsAPI.self,
         assetsAPI: AssetsAPI.Type = AssetsAPI.self,
         collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
-        projectsAPI: ProjectsAPI.Type = ProjectsAPI.self
+        projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
+        balancesAPI: BalancesAPI.Type = BalancesAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -72,6 +74,7 @@ public struct ImmutableX {
         self.assetsAPI = assetsAPI
         self.collectionsAPI = collectionsAPI
         self.projectsAPI = projectsAPI
+        self.balancesAPI = balancesAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -442,7 +445,7 @@ public struct ImmutableX {
     ///     - orderBy: Property to sort by (optional)
     ///     - direction: Direction to sort (asc/desc) (optional)
     ///     - signer: represents the users L1 wallet to get the address and sign the registration
-    /// - returns: ``GetProjectsResponse``
+    /// - Returns: ``GetProjectsResponse``
     /// - Throws: A variation of ``ImmutableXError``
     public func getProjects(
         pageSize: Int? = nil,
@@ -461,6 +464,30 @@ public struct ImmutableX {
                 orderBy: orderBy,
                 direction: direction
             )
+        }
+    }
+
+    /// Fetches the token balances of the user
+    ///
+    /// - Parameters:
+    ///     - owner: Address of the owner/user
+    ///     - address: Token address
+    /// - returns: ``Balance``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getBalance(owner: String, address: String) async throws -> Balance {
+        try await APIErrorMapper.map(caller: "Get Balance") {
+            try await self.balancesAPI.getBalance(owner: owner, address: address)
+        }
+    }
+
+    /// Get a list of balances for given user
+    ///
+    /// - Parameter owner: Ethereum wallet address for user
+    /// - Returns: ``ListBalancesResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listBalances(owner: String) async throws -> ListBalancesResponse {
+        try await APIErrorMapper.map(caller: "List Balances") {
+            try await self.balancesAPI.listBalances(owner: owner)
         }
     }
 }

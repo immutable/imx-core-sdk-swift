@@ -13,6 +13,7 @@ final class ImmutableXTests: XCTestCase {
     let assetsAPIMock = AssetsAPIMock.self
     let collectionsAPIMock = CollectionsAPIMock.self
     let projectsAPIMock = ProjectsAPIMock.self
+    let balancesAPIMock = BalancesAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -25,7 +26,8 @@ final class ImmutableXTests: XCTestCase {
         depositAPI: depositAPIMock,
         assetsAPI: assetsAPIMock,
         collectionsAPI: collectionsAPIMock,
-        projectsAPI: projectsAPIMock
+        projectsAPI: projectsAPIMock,
+        balancesAPI: balancesAPIMock
     )
 
     override func setUp() {
@@ -41,6 +43,7 @@ final class ImmutableXTests: XCTestCase {
         assetsAPIMock.resetMock()
         collectionsAPIMock.resetMock()
         projectsAPIMock.resetMock()
+        balancesAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -107,6 +110,14 @@ final class ImmutableXTests: XCTestCase {
         let getProjectsCompanion = ProjectsAPIMock.GetProjectsCompanion()
         getProjectsCompanion.returnValue = getProjectResponseStub1
         projectsAPIMock.mock(getProjectsCompanion)
+
+        let getBalancesCompanion = BalancesAPIMock.GetBalanceCompanion()
+        getBalancesCompanion.returnValue = balanceStub1
+        balancesAPIMock.mock(getBalancesCompanion)
+
+        let listBalancesCompanion = BalancesAPIMock.ListBalancesCompanion()
+        listBalancesCompanion.returnValue = listBalancesResponseStub1
+        balancesAPIMock.mock(listBalancesCompanion)
     }
 
     func testSdkVersion() {
@@ -383,6 +394,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.getProjects(signer: SignerMock())
+        }
+    }
+
+    // MARK: - Balances
+
+    func testGetBalanceSuccess() async throws {
+        let response = try await core.getBalance(owner: "owner", address: "address")
+        XCTAssertEqual(response, balanceStub1)
+    }
+
+    func testGetBalanceFailure() async {
+        let companion = BalancesAPIMock.GetBalanceCompanion()
+        companion.throwableError = DummyError.something
+        balancesAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getBalance(owner: "owner", address: "address")
+        }
+    }
+
+    func testListBalancesSuccess() async throws {
+        let response = try await core.listBalances(owner: "owner")
+        XCTAssertEqual(response, listBalancesResponseStub1)
+    }
+
+    func testListBalancesFailure() async {
+        let companion = BalancesAPIMock.ListBalancesCompanion()
+        companion.throwableError = DummyError.something
+        balancesAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listBalances(owner: "owner")
         }
     }
 }
