@@ -270,3 +270,17 @@ let listBalancesResponseStub1 = ListBalancesResponse(
     cursor: "",
     result: [balanceStub1]
 )
+
+let mintStub1 = Mint(
+    status: "status",
+    timestamp: "",
+    token: tokenETHStub1,
+    transactionId: 1,
+    user: "user"
+)
+
+let listMintsResponseStub1 = ListMintsResponse(
+    cursor: "",
+    remaining: 1,
+    result: [mintStub1]
+)
