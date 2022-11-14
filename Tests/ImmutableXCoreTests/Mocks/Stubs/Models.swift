@@ -284,3 +284,19 @@ let listMintsResponseStub1 = ListMintsResponse(
     remaining: 1,
     result: [mintStub1]
 )
+
+let withdrawalStub1 = Withdrawal(
+    rollupStatus: "status",
+    sender: "sender",
+    status: "status",
+    timestamp: "",
+    token: tokenETHStub1,
+    transactionId: 1,
+    withdrawnToWallet: false
+)
+
+let listWithdrawalsResponseStub1 = ListWithdrawalsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [withdrawalStub1]
+)
