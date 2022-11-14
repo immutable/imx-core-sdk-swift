@@ -15,6 +15,7 @@ final class ImmutableXTests: XCTestCase {
     let projectsAPIMock = ProjectsAPIMock.self
     let balancesAPIMock = BalancesAPIMock.self
     let mintsAPIMock = MintsAPIMock.self
+    let withdrawalsAPIMock = WithdrawalsAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -29,7 +30,8 @@ final class ImmutableXTests: XCTestCase {
         collectionsAPI: collectionsAPIMock,
         projectsAPI: projectsAPIMock,
         balancesAPI: balancesAPIMock,
-        mintsAPI: mintsAPIMock
+        mintsAPI: mintsAPIMock,
+        withdrawalAPI: withdrawalsAPIMock
     )
 
     override func setUp() {
@@ -47,6 +49,7 @@ final class ImmutableXTests: XCTestCase {
         projectsAPIMock.resetMock()
         balancesAPIMock.resetMock()
         mintsAPIMock.resetMock()
+        withdrawalsAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -129,6 +132,14 @@ final class ImmutableXTests: XCTestCase {
         let listMintsCompanion = MintsAPIMock.ListMintsCompanion()
         listMintsCompanion.returnValue = listMintsResponseStub1
         mintsAPIMock.mock(listMintsCompanion)
+
+        let getWithdrawalCompanion = WithdrawalsAPIMock.GetWithdrawalCompanion()
+        getWithdrawalCompanion.returnValue = withdrawalStub1
+        withdrawalsAPIMock.mock(getWithdrawalCompanion)
+
+        let listWithdrawalsCompanion = WithdrawalsAPIMock.ListWithdrawalsCompanion()
+        listWithdrawalsCompanion.returnValue = listWithdrawalsResponseStub1
+        withdrawalsAPIMock.mock(listWithdrawalsCompanion)
     }
 
     func testSdkVersion() {
@@ -469,6 +480,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listMints()
+        }
+    }
+
+    // MARK: - Withdrawal
+
+    func testGetWithdrawalSuccess() async throws {
+        let response = try await core.getWithdrawal(id: "id")
+        XCTAssertEqual(response, withdrawalStub1)
+    }
+
+    func testGetWithdrawalFailure() async {
+        let companion = WithdrawalsAPIMock.GetWithdrawalCompanion()
+        companion.throwableError = DummyError.something
+        withdrawalsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getWithdrawal(id: "id")
+        }
+    }
+
+    func testListWithdrawalsSuccess() async throws {
+        let response = try await core.listWithdrawals()
+        XCTAssertEqual(response, listWithdrawalsResponseStub1)
+    }
+
+    func testListWithdrawalsFailure() async {
+        let companion = WithdrawalsAPIMock.ListWithdrawalsCompanion()
+        companion.throwableError = DummyError.something
+        withdrawalsAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listWithdrawals()
         }
     }
 }

@@ -43,6 +43,7 @@ public struct ImmutableX {
     private let projectsAPI: ProjectsAPI.Type
     private let balancesAPI: BalancesAPI.Type
     private let mintsAPI: MintsAPI.Type
+    private let withdrawalAPI: WithdrawalsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -61,7 +62,8 @@ public struct ImmutableX {
         collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
         projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
         balancesAPI: BalancesAPI.Type = BalancesAPI.self,
-        mintsAPI: MintsAPI.Type = MintsAPI.self
+        mintsAPI: MintsAPI.Type = MintsAPI.self,
+        withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -78,6 +80,7 @@ public struct ImmutableX {
         self.projectsAPI = projectsAPI
         self.balancesAPI = balancesAPI
         self.mintsAPI = mintsAPI
+        self.withdrawalAPI = withdrawalAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -561,6 +564,86 @@ public struct ImmutableX {
                 assetId: assetId,
                 tokenName: tokenName,
                 tokenAddress: tokenAddress,
+                minQuantity: minQuantity,
+                maxQuantity: maxQuantity,
+                metadata: metadata
+            )
+        }
+    }
+
+    /// Gets details of withdrawal with the given ID
+    ///
+    /// - Parameter id: Withdrawal ID
+    /// - Returns: ``Withdrawal``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getWithdrawal(id: String) async throws -> Withdrawal {
+        try await APIErrorMapper.map(caller: "Get Withdrawal") {
+            try await self.withdrawalAPI.getWithdrawal(id: id)
+        }
+    }
+
+    /// Get a list of withdrawals
+    ///
+    /// - Parameters:
+    ///     - withdrawnToWallet: Withdrawal has been transferred to user&#39;s Layer 1 wallet (optional)
+    ///     - rollupStatus: Status of the on-chain batch confirmation for this withdrawal (optional)
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - user: Ethereum address of the user who submitted this withdrawal (optional)
+    ///     - status: Status of this withdrawal (optional)
+    ///     - minTimestamp: Minimum timestamp for this deposit, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - maxTimestamp: Maximum timestamp for this deposit, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - tokenType: Token type of the withdrawn asset (optional)
+    ///     - tokenId: ERC721 Token ID of the minted asset (optional)
+    ///     - assetId: Internal IMX ID of the minted asset (optional)
+    ///     - tokenAddress: Token address of the withdrawn asset (optional)
+    ///     - tokenName: Token name of the withdrawn asset (optional)
+    ///     - minQuantity: Min quantity for the withdrawn asset (optional)
+    ///     - maxQuantity: Max quantity for the withdrawn asset (optional)
+    ///     - metadata: JSON-encoded metadata filters for the withdrawn asset (optional)
+    /// - Returns: ``ListWithdrawalsResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listWithdrawals(
+        withdrawnToWallet: Bool? = nil,
+        rollupStatus: String? = nil,
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: String? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        status: String? = nil,
+        minTimestamp: String? = nil,
+        maxTimestamp: String? = nil,
+        tokenType: String? = nil,
+        tokenId: String? = nil,
+        assetId: String? = nil,
+        tokenAddress: String? = nil,
+        tokenName: String? = nil,
+        minQuantity: String? = nil,
+        maxQuantity: String? = nil,
+        metadata: String? = nil
+    ) async throws -> ListWithdrawalsResponse {
+        try await APIErrorMapper.map(caller: "List Withdrawals") {
+            try await self.withdrawalAPI.listWithdrawals(
+                withdrawnToWallet: withdrawnToWallet,
+                rollupStatus: rollupStatus,
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy,
+                direction: direction,
+                user: user,
+                status: status,
+                minTimestamp: minTimestamp,
+                maxTimestamp: maxTimestamp,
+                tokenType: tokenType,
+                tokenId: tokenId,
+                assetId: assetId,
+                tokenAddress: tokenAddress,
+                tokenName: tokenName,
                 minQuantity: minQuantity,
                 maxQuantity: maxQuantity,
                 metadata: metadata
