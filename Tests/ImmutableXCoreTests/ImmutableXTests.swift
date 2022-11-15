@@ -16,6 +16,7 @@ final class ImmutableXTests: XCTestCase {
     let balancesAPIMock = BalancesAPIMock.self
     let mintsAPIMock = MintsAPIMock.self
     let withdrawalsAPIMock = WithdrawalsAPIMock.self
+    let ordersAPIMock = OrdersAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -31,7 +32,8 @@ final class ImmutableXTests: XCTestCase {
         projectsAPI: projectsAPIMock,
         balancesAPI: balancesAPIMock,
         mintsAPI: mintsAPIMock,
-        withdrawalAPI: withdrawalsAPIMock
+        withdrawalAPI: withdrawalsAPIMock,
+        ordersAPI: ordersAPIMock
     )
 
     override func setUp() {
@@ -50,6 +52,7 @@ final class ImmutableXTests: XCTestCase {
         balancesAPIMock.resetMock()
         mintsAPIMock.resetMock()
         withdrawalsAPIMock.resetMock()
+        ordersAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -140,6 +143,14 @@ final class ImmutableXTests: XCTestCase {
         let listWithdrawalsCompanion = WithdrawalsAPIMock.ListWithdrawalsCompanion()
         listWithdrawalsCompanion.returnValue = listWithdrawalsResponseStub1
         withdrawalsAPIMock.mock(listWithdrawalsCompanion)
+
+        let getOrderCompanion = OrdersAPIMockGetCompanion()
+        getOrderCompanion.returnValue = orderActiveStub2
+        ordersAPIMock.mock(getOrderCompanion, id: "\(orderActiveStub2.orderId)")
+
+        let listOrderCompanion = OrdersAPIMockListOrdersCompanion()
+        listOrderCompanion.returnValue = listOrdersResponseStub1
+        ordersAPIMock.mock(listOrderCompanion)
     }
 
     func testSdkVersion() {
@@ -512,6 +523,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listWithdrawals()
+        }
+    }
+
+    // MARK: - Order
+
+    func testGetOrderSuccess() async throws {
+        let response = try await core.getOrder(id: "\(orderActiveStub2.orderId)")
+        XCTAssertEqual(response, orderActiveStub2)
+    }
+
+    func testGetOrderFailure() async {
+        let companion = OrdersAPIMockGetCompanion()
+        companion.throwableError = DummyError.something
+        ordersAPIMock.mock(companion, id: "\(orderActiveStub2.orderId)")
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getOrder(id: "\(orderActiveStub2.orderId)")
+        }
+    }
+
+    func testListOrdersSuccess() async throws {
+        let response = try await core.listOrders()
+        XCTAssertEqual(response, listOrdersResponseStub1)
+    }
+
+    func testListOrdersFailure() async {
+        let companion = OrdersAPIMockListOrdersCompanion()
+        companion.throwableError = DummyError.something
+        ordersAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listOrders()
         }
     }
 }
