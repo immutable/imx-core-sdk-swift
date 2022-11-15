@@ -46,6 +46,7 @@ public struct ImmutableX {
     private let withdrawalAPI: WithdrawalsAPI.Type
     private let ordersAPI: OrdersAPI.Type
     private let tradesAPI: TradesAPI.Type
+    private let tokensAPI: TokensAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -67,7 +68,8 @@ public struct ImmutableX {
         mintsAPI: MintsAPI.Type = MintsAPI.self,
         withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self,
         ordersAPI: OrdersAPI.Type = OrdersAPI.self,
-        tradesAPI: TradesAPI.Type = TradesAPI.self
+        tradesAPI: TradesAPI.Type = TradesAPI.self,
+        tokensAPI: TokensAPI.Type = TokensAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -87,6 +89,7 @@ public struct ImmutableX {
         self.withdrawalAPI = withdrawalAPI
         self.ordersAPI = ordersAPI
         self.tradesAPI = tradesAPI
+        self.tokensAPI = tokensAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -852,6 +855,33 @@ public struct ImmutableX {
                 minTimestamp: minTimestamp,
                 maxTimestamp: maxTimestamp
             )
+        }
+    }
+
+    /// Get details of a token
+    ///
+    /// - Parameter address: Token Contract Address
+    /// - Returns: ``TokenDetails``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getToken(address: String) async throws -> TokenDetails {
+        try await APIErrorMapper.map(caller: "Get Token") {
+            try await self.tokensAPI.getToken(address: address)
+        }
+    }
+
+    /// Get a list of tokens
+    ///
+    /// - Parameters:
+    ///     - address: Contract address of the token (optional)
+    ///     - symbols: Token symbols for the token, e.g. ?symbols&#x3D;IMX,ETH (optional)
+    /// - Returns: ``ListTokensResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listTokens(
+        address: String? = nil,
+        symbols: String? = nil
+    ) async throws -> ListTokensResponse {
+        try await APIErrorMapper.map(caller: "List Tokens") {
+            try await self.tokensAPI.listTokens(address: address, symbols: symbols)
         }
     }
 }
