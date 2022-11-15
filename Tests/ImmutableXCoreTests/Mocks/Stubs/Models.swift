@@ -300,3 +300,9 @@ let listWithdrawalsResponseStub1 = ListWithdrawalsResponse(
     remaining: 0,
     result: [withdrawalStub1]
 )
+
+let listOrdersResponseStub1 = ListOrdersResponse(
+    cursor: "",
+    remaining: 0,
+    result: [orderActiveStub2]
+)

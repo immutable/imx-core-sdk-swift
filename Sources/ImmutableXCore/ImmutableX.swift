@@ -44,6 +44,7 @@ public struct ImmutableX {
     private let balancesAPI: BalancesAPI.Type
     private let mintsAPI: MintsAPI.Type
     private let withdrawalAPI: WithdrawalsAPI.Type
+    private let ordersAPI: OrdersAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -63,7 +64,8 @@ public struct ImmutableX {
         projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
         balancesAPI: BalancesAPI.Type = BalancesAPI.self,
         mintsAPI: MintsAPI.Type = MintsAPI.self,
-        withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self
+        withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self,
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -81,6 +83,7 @@ public struct ImmutableX {
         self.balancesAPI = balancesAPI
         self.mintsAPI = mintsAPI
         self.withdrawalAPI = withdrawalAPI
+        self.ordersAPI = ordersAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -647,6 +650,139 @@ public struct ImmutableX {
                 minQuantity: minQuantity,
                 maxQuantity: maxQuantity,
                 metadata: metadata
+            )
+        }
+    }
+
+    /// Get details of an order with the given ID
+    ///
+    /// - Parameters:
+    ///     - id: Order ID
+    ///     - includeFees: Set flag to true to include fee body for the order (optional)
+    ///     - auxiliaryFeePercentages: Comma separated string of fee percentages that are to be paired with
+    ///     auxiliary_fee_recipients (optional)
+    ///     - auxiliaryFeeRecipients: Comma separated string of fee recipients that are to be paired with
+    ///     auxiliary_fee_percentages (optional)
+    /// - Returns: ``Order``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getOrder(
+        id: String,
+        includeFees: Bool? = nil,
+        auxiliaryFeePercentages: String? = nil,
+        auxiliaryFeeRecipients: String? = nil
+    ) async throws -> Order {
+        try await APIErrorMapper.map(caller: "Get Order") {
+            try await self.ordersAPI.getOrder(
+                id: id,
+                includeFees: includeFees,
+                auxiliaryFeePercentages: auxiliaryFeePercentages,
+                auxiliaryFeeRecipients: auxiliaryFeeRecipients
+            )
+        }
+    }
+
+    /// Get a list of orders
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - user: Ethereum address of the user who submitted this order (optional)
+    ///     - status: Status of this order (optional)
+    ///     - minTimestamp: Minimum created at timestamp for this order, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - maxTimestamp: Maximum created at timestamp for this order, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - updatedMinTimestamp: Minimum updated at timestamp for this order, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - updatedMaxTimestamp: Maximum updated at timestamp for this order, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - buyTokenType: Token type of the asset this order buys (optional)
+    ///     - buyTokenId: ERC721 Token ID of the asset this order buys (optional)
+    ///     - buyAssetId: Internal IMX ID of the asset this order buys (optional)
+    ///     - buyTokenAddress: Token address of the asset this order buys (optional)
+    ///     - buyTokenName: Token name of the asset this order buys (optional)
+    ///     - buyMinQuantity: Min quantity for the asset this order buys (optional)
+    ///     - buyMaxQuantity: Max quantity for the asset this order buys (optional)
+    ///     - buyMetadata: JSON-encoded metadata filters for the asset this order buys (optional)
+    ///     - sellTokenType: Token type of the asset this order sells (optional)
+    ///     - sellTokenId: ERC721 Token ID of the asset this order sells (optional)
+    ///     - sellAssetId: Internal IMX ID of the asset this order sells (optional)
+    ///     - sellTokenAddress: Token address of the asset this order sells (optional)
+    ///     - sellTokenName: Token name of the asset this order sells (optional)
+    ///     - sellMinQuantity: Min quantity for the asset this order sells (optional)
+    ///     - sellMaxQuantity: Max quantity for the asset this order sells (optional)
+    ///     - sellMetadata: JSON-encoded metadata filters for the asset this order sells (optional)
+    ///     - auxiliaryFeePercentages: Comma separated string of fee percentages that are to be paired with
+    ///     auxiliary_fee_recipients (optional)
+    ///     - auxiliaryFeeRecipients: Comma separated string of fee recipients that are to be paired with
+    ///     auxiliary_fee_percentages (optional)
+    ///     - includeFees: Set flag to true to include fee object for orders (optional)
+    /// - Returns: ``ListOrdersResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listOrders(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: ListOrdersOrderBy? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        status: ListOrdersStatus? = nil,
+        minTimestamp: String? = nil,
+        maxTimestamp: String? = nil,
+        updatedMinTimestamp: String? = nil,
+        updatedMaxTimestamp: String? = nil,
+        buyTokenType: String? = nil,
+        buyTokenId: String? = nil,
+        buyAssetId: String? = nil,
+        buyTokenAddress: String? = nil,
+        buyTokenName: String? = nil,
+        buyMinQuantity: String? = nil,
+        buyMaxQuantity: String? = nil,
+        buyMetadata: String? = nil,
+        sellTokenType: String? = nil,
+        sellTokenId: String? = nil,
+        sellAssetId: String? = nil,
+        sellTokenAddress: String? = nil,
+        sellTokenName: String? = nil,
+        sellMinQuantity: String? = nil,
+        sellMaxQuantity: String? = nil,
+        sellMetadata: String? = nil,
+        auxiliaryFeePercentages: String? = nil,
+        auxiliaryFeeRecipients: String? = nil,
+        includeFees: Bool? = nil
+    ) async throws -> ListOrdersResponse {
+        try await APIErrorMapper.map(caller: "List Orders") {
+            try await self.ordersAPI.listOrders(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy?.asApiArgument,
+                direction: direction,
+                user: user,
+                status: status?.asApiArgument,
+                minTimestamp: minTimestamp,
+                maxTimestamp: maxTimestamp,
+                updatedMinTimestamp: updatedMinTimestamp,
+                updatedMaxTimestamp: updatedMaxTimestamp,
+                buyTokenType: buyTokenType,
+                buyTokenId: buyTokenId,
+                buyAssetId: buyAssetId,
+                buyTokenAddress: buyTokenAddress,
+                buyTokenName: buyTokenName,
+                buyMinQuantity: buyMinQuantity,
+                buyMaxQuantity: buyMaxQuantity,
+                buyMetadata: buyMetadata,
+                sellTokenType: sellTokenType,
+                sellTokenId: sellTokenId,
+                sellAssetId: sellAssetId,
+                sellTokenAddress: sellTokenAddress,
+                sellTokenName: sellTokenName,
+                sellMinQuantity: sellMinQuantity,
+                sellMaxQuantity: sellMaxQuantity,
+                sellMetadata: sellMetadata,
+                auxiliaryFeePercentages: auxiliaryFeePercentages,
+                auxiliaryFeeRecipients: auxiliaryFeeRecipients,
+                includeFees: includeFees
             )
         }
     }
