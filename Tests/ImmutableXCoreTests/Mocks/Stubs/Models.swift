@@ -320,3 +320,17 @@ let listTradesResponseStub1 = ListTradesResponse(
     remaining: 0,
     result: []
 )
+
+let tokenDetailsStub1 = TokenDetails(
+    decimals: "decimals",
+    imageUrl: "",
+    name: "name",
+    quantum: "",
+    symbol: "",
+    tokenAddress: "address"
+)
+
+let listTokensResponseStub1 = ListTokensResponse(
+    cursor: "",
+    result: [tokenDetailsStub1]
+)

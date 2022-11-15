@@ -18,6 +18,7 @@ final class ImmutableXTests: XCTestCase {
     let withdrawalsAPIMock = WithdrawalsAPIMock.self
     let ordersAPIMock = OrdersAPIMock.self
     let tradesAPIMock = TradesAPIMock.self
+    let tokensAPIMock = TokensAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -35,7 +36,8 @@ final class ImmutableXTests: XCTestCase {
         mintsAPI: mintsAPIMock,
         withdrawalAPI: withdrawalsAPIMock,
         ordersAPI: ordersAPIMock,
-        tradesAPI: tradesAPIMock
+        tradesAPI: tradesAPIMock,
+        tokensAPI: tokensAPIMock
     )
 
     override func setUp() {
@@ -56,6 +58,7 @@ final class ImmutableXTests: XCTestCase {
         withdrawalsAPIMock.resetMock()
         ordersAPIMock.resetMock()
         tradesAPIMock.resetMock()
+        tokensAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -162,6 +165,14 @@ final class ImmutableXTests: XCTestCase {
         let listTradesCompanion = TradesAPIMockListTradesCompanion()
         listTradesCompanion.returnValue = listTradesResponseStub1
         tradesAPIMock.mock(listTradesCompanion)
+
+        let getTokenCompanion = TokensAPIMock.GetTokenCompanion()
+        getTokenCompanion.returnValue = tokenDetailsStub1
+        tokensAPIMock.mock(getTokenCompanion)
+
+        let listTokensCompanion = TokensAPIMock.ListTokensCompanion()
+        listTokensCompanion.returnValue = listTokensResponseStub1
+        tokensAPIMock.mock(listTokensCompanion)
     }
 
     func testSdkVersion() {
@@ -598,6 +609,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listTrades()
+        }
+    }
+
+    // MARK: - Token
+
+    func testGetTokenSuccess() async throws {
+        let response = try await core.getToken(address: "")
+        XCTAssertEqual(response, tokenDetailsStub1)
+    }
+
+    func testGetTokenFailure() async {
+        let companion = TokensAPIMock.GetTokenCompanion()
+        companion.throwableError = DummyError.something
+        tokensAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getToken(address: "")
+        }
+    }
+
+    func testListTokensSuccess() async throws {
+        let response = try await core.listTokens()
+        XCTAssertEqual(response, listTokensResponseStub1)
+    }
+
+    func testListTokensFailure() async {
+        let companion = TokensAPIMock.ListTokensCompanion()
+        companion.throwableError = DummyError.something
+        tokensAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listTokens()
         }
     }
 }
