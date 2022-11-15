@@ -45,6 +45,7 @@ public struct ImmutableX {
     private let mintsAPI: MintsAPI.Type
     private let withdrawalAPI: WithdrawalsAPI.Type
     private let ordersAPI: OrdersAPI.Type
+    private let tradesAPI: TradesAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -65,7 +66,8 @@ public struct ImmutableX {
         balancesAPI: BalancesAPI.Type = BalancesAPI.self,
         mintsAPI: MintsAPI.Type = MintsAPI.self,
         withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self,
-        ordersAPI: OrdersAPI.Type = OrdersAPI.self
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self,
+        tradesAPI: TradesAPI.Type = TradesAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -84,6 +86,7 @@ public struct ImmutableX {
         self.mintsAPI = mintsAPI
         self.withdrawalAPI = withdrawalAPI
         self.ordersAPI = ordersAPI
+        self.tradesAPI = tradesAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -783,6 +786,71 @@ public struct ImmutableX {
                 auxiliaryFeePercentages: auxiliaryFeePercentages,
                 auxiliaryFeeRecipients: auxiliaryFeeRecipients,
                 includeFees: includeFees
+            )
+        }
+    }
+
+    /// Get details of a trade with the given ID
+    ///
+    /// - Parameter id: Trade ID
+    /// - Returns: ``Trade``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getTrade(id: String) async throws -> Trade {
+        try await APIErrorMapper.map(caller: "Get Trade") {
+            try await self.tradesAPI.getTrade(id: id)
+        }
+    }
+
+    /// Get a list of trades
+    ///
+    /// - Parameters:
+    ///     - partyAOrderId: Party A&#39;s (buy order) order id (optional)
+    ///     - partyATokenType: Party A&#39;s (buy order) token type of currency used to buy (optional)
+    ///     - partyATokenAddress: Party A&#39;s (buy order) token address of currency used to buy (optional)
+    ///     - partyBOrderId: Party B&#39;s (sell order) order id (optional)
+    ///     - partyBTokenType: Party B&#39;s (sell order) token type of NFT sold - always ERC721 (optional)
+    ///     - partyBTokenAddress: Party B&#39;s (sell order) collection address of NFT sold (optional)
+    ///     - partyBTokenId: Party B&#39;s (sell order) token id of NFT sold (optional)
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - minTimestamp: Minimum timestamp for this trade, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - maxTimestamp: Maximum timestamp for this trade, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    /// - Returns: ``ListTradesResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listTrades(
+        partyAOrderId: String? = nil,
+        partyATokenType: String? = nil,
+        partyATokenAddress: String? = nil,
+        partyBOrderId: String? = nil,
+        partyBTokenType: String? = nil,
+        partyBTokenAddress: String? = nil,
+        partyBTokenId: String? = nil,
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: String? = nil,
+        direction: String? = nil,
+        minTimestamp: String? = nil,
+        maxTimestamp: String? = nil
+    ) async throws -> ListTradesResponse {
+        try await APIErrorMapper.map(caller: "List Trades") {
+            try await self.tradesAPI.listTrades(
+                partyAOrderId: partyAOrderId,
+                partyATokenType: partyATokenType,
+                partyATokenAddress: partyATokenAddress,
+                partyBOrderId: partyBOrderId,
+                partyBTokenType: partyBTokenType,
+                partyBTokenAddress: partyBTokenAddress,
+                partyBTokenId: partyBTokenId,
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy,
+                direction: direction,
+                minTimestamp: minTimestamp,
+                maxTimestamp: maxTimestamp
             )
         }
     }

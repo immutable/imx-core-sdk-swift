@@ -17,6 +17,7 @@ final class ImmutableXTests: XCTestCase {
     let mintsAPIMock = MintsAPIMock.self
     let withdrawalsAPIMock = WithdrawalsAPIMock.self
     let ordersAPIMock = OrdersAPIMock.self
+    let tradesAPIMock = TradesAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -33,7 +34,8 @@ final class ImmutableXTests: XCTestCase {
         balancesAPI: balancesAPIMock,
         mintsAPI: mintsAPIMock,
         withdrawalAPI: withdrawalsAPIMock,
-        ordersAPI: ordersAPIMock
+        ordersAPI: ordersAPIMock,
+        tradesAPI: tradesAPIMock
     )
 
     override func setUp() {
@@ -53,6 +55,7 @@ final class ImmutableXTests: XCTestCase {
         mintsAPIMock.resetMock()
         withdrawalsAPIMock.resetMock()
         ordersAPIMock.resetMock()
+        tradesAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -151,6 +154,14 @@ final class ImmutableXTests: XCTestCase {
         let listOrderCompanion = OrdersAPIMockListOrdersCompanion()
         listOrderCompanion.returnValue = listOrdersResponseStub1
         ordersAPIMock.mock(listOrderCompanion)
+
+        let getTradeCompanion = TradesAPIMockGetTradeCompanion()
+        getTradeCompanion.returnValue = tradeStub1
+        tradesAPIMock.mock(getTradeCompanion)
+
+        let listTradesCompanion = TradesAPIMockListTradesCompanion()
+        listTradesCompanion.returnValue = listTradesResponseStub1
+        tradesAPIMock.mock(listTradesCompanion)
     }
 
     func testSdkVersion() {
@@ -555,6 +566,38 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listOrders()
+        }
+    }
+
+    // MARK: - Trade
+
+    func testGetTradeSuccess() async throws {
+        let response = try await core.getTrade(id: "")
+        XCTAssertEqual(response, tradeStub1)
+    }
+
+    func testGetTradeFailure() async {
+        let companion = TradesAPIMockGetTradeCompanion()
+        companion.throwableError = DummyError.something
+        tradesAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getTrade(id: "")
+        }
+    }
+
+    func testListTradesSuccess() async throws {
+        let response = try await core.listTrades()
+        XCTAssertEqual(response, listTradesResponseStub1)
+    }
+
+    func testListTradesFailure() async {
+        let companion = TradesAPIMockListTradesCompanion()
+        companion.throwableError = DummyError.something
+        tradesAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listTrades()
         }
     }
 }
