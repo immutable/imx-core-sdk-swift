@@ -306,3 +306,17 @@ let listOrdersResponseStub1 = ListOrdersResponse(
     remaining: 0,
     result: [orderActiveStub2]
 )
+
+let tradeStub1 = Trade(
+    a: TradeSide(orderId: 1, sold: "sold", tokenType: ""),
+    b: TradeSide(orderId: 2, sold: "sold", tokenType: ""),
+    status: "status",
+    timestamp: nil,
+    transactionId: 1
+)
+
+let listTradesResponseStub1 = ListTradesResponse(
+    cursor: "",
+    remaining: 0,
+    result: []
+)
