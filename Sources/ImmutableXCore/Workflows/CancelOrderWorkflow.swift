@@ -9,17 +9,29 @@ class CancelOrderWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CancelOrderResponse`` that will provide the cancelled Order id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func cancel(orderId: String, signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self) async throws -> CancelOrderResponse {
+    class func cancel(
+        orderId: String,
+        signer: Signer,
+        starkSigner: StarkSigner,
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self
+    ) async throws -> CancelOrderResponse {
         let address = try await signer.getAddress()
         let signableOrder = try await getSignableCancelOrder(orderId: orderId, api: ordersAPI)
         let starkSignature = try await starkSigner.signMessage(signableOrder.payloadHash)
         let ethSignature = try await signer.signMessage(signableOrder.signableMessage)
-        let signatures = WorkflowSignatures(ethAddress: address, ethSignature: ethSignature, starkSignature: starkSignature)
+        let signatures = WorkflowSignatures(
+            ethAddress: address,
+            ethSignature: ethSignature,
+            starkSignature: starkSignature
+        )
         return try await cancelOrder(orderId: orderId, signatures: signatures, api: ordersAPI)
     }
 
-    private static func getSignableCancelOrder(orderId: String, api: OrdersAPI.Type) async throws -> GetSignableCancelOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Signable cancel order") {
+    private static func getSignableCancelOrder(
+        orderId: String,
+        api: OrdersAPI.Type
+    ) async throws -> GetSignableCancelOrderResponse {
+        try await APIErrorMapper.map(caller: "Signable cancel order") {
             try await api.getSignableCancelOrder(
                 getSignableCancelOrderRequest: GetSignableCancelOrderRequest(
                     orderId: Int(orderId)!
@@ -28,8 +40,12 @@ class CancelOrderWorkflow {
         }
     }
 
-    private static func cancelOrder(orderId: String, signatures: WorkflowSignatures, api: OrdersAPI.Type) async throws -> CancelOrderResponse {
-        try await Workflow.mapAPIErrors(caller: "Cancel order") {
+    private static func cancelOrder(
+        orderId: String,
+        signatures: WorkflowSignatures,
+        api: OrdersAPI.Type
+    ) async throws -> CancelOrderResponse {
+        try await APIErrorMapper.map(caller: "Cancel order") {
             try await api.cancelOrder(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,

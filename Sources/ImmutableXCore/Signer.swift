@@ -1,6 +1,7 @@
 import Foundation
 
-/// This represents an L1 Ethereum wallet. Any wallet provider can be wrapped with this interface and be used with this SDK.
+/// This represents an L1 Ethereum wallet. Any wallet provider can be wrapped with this interface and be used with this
+/// SDK.
 public protocol Signer {
     /// This is an async method so that a ``Signer`` can be designed around an asynchronous source,
     /// such as hardware wallets.
@@ -18,7 +19,8 @@ public protocol Signer {
     func signMessage(_ message: String) async throws -> String
 }
 
-/// This represents the Immutable X Wallet on Layer 2 and will have reference to the user's Stark key pair for signing L2 transactions.
+/// This represents the ImmutableX Wallet on Layer 2 and will have reference to the user's Stark key pair for signing L2
+/// transactions.
 public protocol StarkSigner {
     /// This is an async method so that a ``Signer`` can be designed around an asynchronous source,
     /// such as hardware wallets.

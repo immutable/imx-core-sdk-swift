@@ -23,7 +23,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func cancelOrder(xImxEthAddress: String, xImxEthSignature: String, id: String, cancelOrderRequest: CancelOrderRequest) async throws -> CancelOrderResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = cancelOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, id: id, cancelOrderRequest: cancelOrderRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -32,7 +33,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = cancelOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, id: id, cancelOrderRequest: cancelOrderRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -41,8 +42,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -75,7 +76,7 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CancelOrderResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -88,7 +89,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createOrder(xImxEthAddress: String, xImxEthSignature: String, createOrderRequest: CreateOrderRequest) async throws -> CreateOrderResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = createOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createOrderRequest: createOrderRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -97,7 +99,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = createOrderWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createOrderRequest: createOrderRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -106,8 +108,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -136,7 +138,7 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateOrderResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -150,7 +152,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getOrder(id: String, includeFees: Bool? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil) async throws -> Order {
-        var requestTask: RequestTask?
+        let requestBuilder = getOrderWithRequestBuilder(id: id, includeFees: includeFees, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -159,7 +162,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = getOrderWithRequestBuilder(id: id, includeFees: includeFees, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -168,8 +171,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -193,9 +196,9 @@ internal class OrdersAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "include_fees": includeFees?.encodeToJSON(),
-            "auxiliary_fee_percentages": auxiliaryFeePercentages?.encodeToJSON(),
-            "auxiliary_fee_recipients": auxiliaryFeeRecipients?.encodeToJSON(),
+            "include_fees": (wrappedValue: includeFees?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_percentages": (wrappedValue: auxiliaryFeePercentages?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_recipients": (wrappedValue: auxiliaryFeeRecipients?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -206,7 +209,7 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Order>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -217,7 +220,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableCancelOrder(getSignableCancelOrderRequest: GetSignableCancelOrderRequest) async throws -> GetSignableCancelOrderResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableCancelOrderWithRequestBuilder(getSignableCancelOrderRequest: getSignableCancelOrderRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -226,7 +230,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = getSignableCancelOrderWithRequestBuilder(getSignableCancelOrderRequest: getSignableCancelOrderRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -235,8 +239,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -262,7 +266,7 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableCancelOrderResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -273,7 +277,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableOrder(getSignableOrderRequestV3: GetSignableOrderRequest) async throws -> GetSignableOrderResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableOrderWithRequestBuilder(getSignableOrderRequestV3: getSignableOrderRequestV3)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -282,7 +287,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = getSignableOrderWithRequestBuilder(getSignableOrderRequestV3: getSignableOrderRequestV3).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -291,8 +296,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -318,7 +323,7 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableOrderResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -380,7 +385,8 @@ internal class OrdersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listOrders(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listOrders? = nil, direction: String? = nil, user: String? = nil, status: Status_listOrders? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, updatedMinTimestamp: String? = nil, updatedMaxTimestamp: String? = nil, buyTokenType: String? = nil, buyTokenId: String? = nil, buyAssetId: String? = nil, buyTokenAddress: String? = nil, buyTokenName: String? = nil, buyMinQuantity: String? = nil, buyMaxQuantity: String? = nil, buyMetadata: String? = nil, sellTokenType: String? = nil, sellTokenId: String? = nil, sellAssetId: String? = nil, sellTokenAddress: String? = nil, sellTokenName: String? = nil, sellMinQuantity: String? = nil, sellMaxQuantity: String? = nil, sellMetadata: String? = nil, auxiliaryFeePercentages: String? = nil, auxiliaryFeeRecipients: String? = nil, includeFees: Bool? = nil) async throws -> ListOrdersResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listOrdersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, buyTokenType: buyTokenType, buyTokenId: buyTokenId, buyAssetId: buyAssetId, buyTokenAddress: buyTokenAddress, buyTokenName: buyTokenName, buyMinQuantity: buyMinQuantity, buyMaxQuantity: buyMaxQuantity, buyMetadata: buyMetadata, sellTokenType: sellTokenType, sellTokenId: sellTokenId, sellAssetId: sellAssetId, sellTokenAddress: sellTokenAddress, sellTokenName: sellTokenName, sellMinQuantity: sellMinQuantity, sellMaxQuantity: sellMaxQuantity, sellMetadata: sellMetadata, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients, includeFees: includeFees)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -389,7 +395,7 @@ internal class OrdersAPI {
                   return
                 }
 
-                requestTask = listOrdersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, updatedMinTimestamp: updatedMinTimestamp, updatedMaxTimestamp: updatedMaxTimestamp, buyTokenType: buyTokenType, buyTokenId: buyTokenId, buyAssetId: buyAssetId, buyTokenAddress: buyTokenAddress, buyTokenName: buyTokenName, buyMinQuantity: buyMinQuantity, buyMaxQuantity: buyMaxQuantity, buyMetadata: buyMetadata, sellTokenType: sellTokenType, sellTokenId: sellTokenId, sellAssetId: sellAssetId, sellTokenAddress: sellTokenAddress, sellTokenName: sellTokenName, sellMinQuantity: sellMinQuantity, sellMaxQuantity: sellMaxQuantity, sellMetadata: sellMetadata, auxiliaryFeePercentages: auxiliaryFeePercentages, auxiliaryFeeRecipients: auxiliaryFeeRecipients, includeFees: includeFees).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -398,8 +404,8 @@ internal class OrdersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -445,35 +451,35 @@ internal class OrdersAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "user": user?.encodeToJSON(),
-            "status": status?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
-            "updated_min_timestamp": updatedMinTimestamp?.encodeToJSON(),
-            "updated_max_timestamp": updatedMaxTimestamp?.encodeToJSON(),
-            "buy_token_type": buyTokenType?.encodeToJSON(),
-            "buy_token_id": buyTokenId?.encodeToJSON(),
-            "buy_asset_id": buyAssetId?.encodeToJSON(),
-            "buy_token_address": buyTokenAddress?.encodeToJSON(),
-            "buy_token_name": buyTokenName?.encodeToJSON(),
-            "buy_min_quantity": buyMinQuantity?.encodeToJSON(),
-            "buy_max_quantity": buyMaxQuantity?.encodeToJSON(),
-            "buy_metadata": buyMetadata?.encodeToJSON(),
-            "sell_token_type": sellTokenType?.encodeToJSON(),
-            "sell_token_id": sellTokenId?.encodeToJSON(),
-            "sell_asset_id": sellAssetId?.encodeToJSON(),
-            "sell_token_address": sellTokenAddress?.encodeToJSON(),
-            "sell_token_name": sellTokenName?.encodeToJSON(),
-            "sell_min_quantity": sellMinQuantity?.encodeToJSON(),
-            "sell_max_quantity": sellMaxQuantity?.encodeToJSON(),
-            "sell_metadata": sellMetadata?.encodeToJSON(),
-            "auxiliary_fee_percentages": auxiliaryFeePercentages?.encodeToJSON(),
-            "auxiliary_fee_recipients": auxiliaryFeeRecipients?.encodeToJSON(),
-            "include_fees": includeFees?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "user": (wrappedValue: user?.encodeToJSON(), isExplode: false),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: false),
+            "min_timestamp": (wrappedValue: minTimestamp?.encodeToJSON(), isExplode: false),
+            "max_timestamp": (wrappedValue: maxTimestamp?.encodeToJSON(), isExplode: false),
+            "updated_min_timestamp": (wrappedValue: updatedMinTimestamp?.encodeToJSON(), isExplode: false),
+            "updated_max_timestamp": (wrappedValue: updatedMaxTimestamp?.encodeToJSON(), isExplode: false),
+            "buy_token_type": (wrappedValue: buyTokenType?.encodeToJSON(), isExplode: false),
+            "buy_token_id": (wrappedValue: buyTokenId?.encodeToJSON(), isExplode: false),
+            "buy_asset_id": (wrappedValue: buyAssetId?.encodeToJSON(), isExplode: false),
+            "buy_token_address": (wrappedValue: buyTokenAddress?.encodeToJSON(), isExplode: false),
+            "buy_token_name": (wrappedValue: buyTokenName?.encodeToJSON(), isExplode: false),
+            "buy_min_quantity": (wrappedValue: buyMinQuantity?.encodeToJSON(), isExplode: false),
+            "buy_max_quantity": (wrappedValue: buyMaxQuantity?.encodeToJSON(), isExplode: false),
+            "buy_metadata": (wrappedValue: buyMetadata?.encodeToJSON(), isExplode: false),
+            "sell_token_type": (wrappedValue: sellTokenType?.encodeToJSON(), isExplode: false),
+            "sell_token_id": (wrappedValue: sellTokenId?.encodeToJSON(), isExplode: false),
+            "sell_asset_id": (wrappedValue: sellAssetId?.encodeToJSON(), isExplode: false),
+            "sell_token_address": (wrappedValue: sellTokenAddress?.encodeToJSON(), isExplode: false),
+            "sell_token_name": (wrappedValue: sellTokenName?.encodeToJSON(), isExplode: false),
+            "sell_min_quantity": (wrappedValue: sellMinQuantity?.encodeToJSON(), isExplode: false),
+            "sell_max_quantity": (wrappedValue: sellMaxQuantity?.encodeToJSON(), isExplode: false),
+            "sell_metadata": (wrappedValue: sellMetadata?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_percentages": (wrappedValue: auxiliaryFeePercentages?.encodeToJSON(), isExplode: false),
+            "auxiliary_fee_recipients": (wrappedValue: auxiliaryFeeRecipients?.encodeToJSON(), isExplode: false),
+            "include_fees": (wrappedValue: includeFees?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -484,6 +490,6 @@ internal class OrdersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListOrdersResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

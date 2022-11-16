@@ -9,7 +9,8 @@ public struct ERC20Asset: AssetModel {
     public let tokenAddress: String
 
     /// The quantization factor of the ERC20 token.
-    /// Refer [here](https://docs.starkware.co/starkex-v4/starkex-deep-dive/starkex-specific-concepts#quantization) for more information.
+    /// Refer [here](https://docs.starkware.co/starkex-v4/starkex-deep-dive/starkex-specific-concepts#quantization) for
+    /// more information.
     public let decimals: Int
 
     public init(quantity: String, tokenAddress: String, decimals: Int) {

@@ -20,7 +20,8 @@ internal class TokensAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getToken(address: String) async throws -> TokenDetails {
-        var requestTask: RequestTask?
+        let requestBuilder = getTokenWithRequestBuilder(address: address)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -29,7 +30,7 @@ internal class TokensAPI {
                   return
                 }
 
-                requestTask = getTokenWithRequestBuilder(address: address).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -38,8 +39,8 @@ internal class TokensAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -68,7 +69,7 @@ internal class TokensAPI {
 
         let localVariableRequestBuilder: RequestBuilder<TokenDetails>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -80,7 +81,8 @@ internal class TokensAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listTokens(address: String? = nil, symbols: String? = nil) async throws -> ListTokensResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listTokensWithRequestBuilder(address: address, symbols: symbols)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -89,7 +91,7 @@ internal class TokensAPI {
                   return
                 }
 
-                requestTask = listTokensWithRequestBuilder(address: address, symbols: symbols).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -98,8 +100,8 @@ internal class TokensAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -118,8 +120,8 @@ internal class TokensAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "address": address?.encodeToJSON(),
-            "symbols": symbols?.encodeToJSON(),
+            "address": (wrappedValue: address?.encodeToJSON(), isExplode: false),
+            "symbols": (wrappedValue: symbols?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -130,6 +132,6 @@ internal class TokensAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListTokensResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

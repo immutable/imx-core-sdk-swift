@@ -22,7 +22,8 @@ internal class WithdrawalsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createWithdrawal(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) async throws -> CreateWithdrawalResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = createWithdrawalWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createWithdrawalRequest: createWithdrawalRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class WithdrawalsAPI {
                   return
                 }
 
-                requestTask = createWithdrawalWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createWithdrawalRequest: createWithdrawalRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class WithdrawalsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -70,7 +71,7 @@ internal class WithdrawalsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateWithdrawalResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -81,7 +82,8 @@ internal class WithdrawalsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableWithdrawal(getSignableWithdrawalRequest: GetSignableWithdrawalRequest) async throws -> GetSignableWithdrawalResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableWithdrawalWithRequestBuilder(getSignableWithdrawalRequest: getSignableWithdrawalRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -90,7 +92,7 @@ internal class WithdrawalsAPI {
                   return
                 }
 
-                requestTask = getSignableWithdrawalWithRequestBuilder(getSignableWithdrawalRequest: getSignableWithdrawalRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -99,8 +101,8 @@ internal class WithdrawalsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -126,7 +128,7 @@ internal class WithdrawalsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableWithdrawalResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -137,7 +139,8 @@ internal class WithdrawalsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getWithdrawal(id: String) async throws -> Withdrawal {
-        var requestTask: RequestTask?
+        let requestBuilder = getWithdrawalWithRequestBuilder(id: id)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -146,7 +149,7 @@ internal class WithdrawalsAPI {
                   return
                 }
 
-                requestTask = getWithdrawalWithRequestBuilder(id: id).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -155,8 +158,8 @@ internal class WithdrawalsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -185,7 +188,7 @@ internal class WithdrawalsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Withdrawal>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -213,7 +216,8 @@ internal class WithdrawalsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listWithdrawals(withdrawnToWallet: Bool? = nil, rollupStatus: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListWithdrawalsResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listWithdrawalsWithRequestBuilder(withdrawnToWallet: withdrawnToWallet, rollupStatus: rollupStatus, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -222,7 +226,7 @@ internal class WithdrawalsAPI {
                   return
                 }
 
-                requestTask = listWithdrawalsWithRequestBuilder(withdrawnToWallet: withdrawnToWallet, rollupStatus: rollupStatus, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -231,8 +235,8 @@ internal class WithdrawalsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -267,24 +271,24 @@ internal class WithdrawalsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "withdrawn_to_wallet": withdrawnToWallet?.encodeToJSON(),
-            "rollup_status": rollupStatus?.encodeToJSON(),
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "user": user?.encodeToJSON(),
-            "status": status?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
-            "token_type": tokenType?.encodeToJSON(),
-            "token_id": tokenId?.encodeToJSON(),
-            "asset_id": assetId?.encodeToJSON(),
-            "token_address": tokenAddress?.encodeToJSON(),
-            "token_name": tokenName?.encodeToJSON(),
-            "min_quantity": minQuantity?.encodeToJSON(),
-            "max_quantity": maxQuantity?.encodeToJSON(),
-            "metadata": metadata?.encodeToJSON(),
+            "withdrawn_to_wallet": (wrappedValue: withdrawnToWallet?.encodeToJSON(), isExplode: false),
+            "rollup_status": (wrappedValue: rollupStatus?.encodeToJSON(), isExplode: false),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "user": (wrappedValue: user?.encodeToJSON(), isExplode: false),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: false),
+            "min_timestamp": (wrappedValue: minTimestamp?.encodeToJSON(), isExplode: false),
+            "max_timestamp": (wrappedValue: maxTimestamp?.encodeToJSON(), isExplode: false),
+            "token_type": (wrappedValue: tokenType?.encodeToJSON(), isExplode: false),
+            "token_id": (wrappedValue: tokenId?.encodeToJSON(), isExplode: false),
+            "asset_id": (wrappedValue: assetId?.encodeToJSON(), isExplode: false),
+            "token_address": (wrappedValue: tokenAddress?.encodeToJSON(), isExplode: false),
+            "token_name": (wrappedValue: tokenName?.encodeToJSON(), isExplode: false),
+            "min_quantity": (wrappedValue: minQuantity?.encodeToJSON(), isExplode: false),
+            "max_quantity": (wrappedValue: maxQuantity?.encodeToJSON(), isExplode: false),
+            "metadata": (wrappedValue: metadata?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -295,6 +299,6 @@ internal class WithdrawalsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListWithdrawalsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

@@ -10,25 +10,44 @@ class BuyWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTradeResponse`` that will provide the Trade id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func buy(orderId: String, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self, tradesAPI: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
+    class func buy(
+        orderId: String,
+        fees: [FeeEntry],
+        signer: Signer,
+        starkSigner: StarkSigner,
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self,
+        tradesAPI: TradesAPI.Type = TradesAPI.self
+    ) async throws -> CreateTradeResponse {
         let address = try await signer.getAddress()
         let order = try await getOrderDetails(orderId: orderId, fees: fees, api: ordersAPI)
         let signableTrade = try await getSignableTrade(order: order, address: address, fees: fees, api: tradesAPI)
         let starkSignature = try await starkSigner.signMessage(signableTrade.payloadHash)
         let ethSignature = try await signer.signMessage(signableTrade.signableMessage)
-        let signatures = WorkflowSignatures(ethAddress: address, ethSignature: ethSignature, starkSignature: starkSignature)
-        return try await createTrade(orderId: Int(orderId)!, response: signableTrade, fees: fees, signatures: signatures, api: tradesAPI)
+        let signatures = WorkflowSignatures(
+            ethAddress: address,
+            ethSignature: ethSignature,
+            starkSignature: starkSignature
+        )
+        return try await createTrade(
+            orderId: Int(orderId)!,
+            response: signableTrade,
+            fees: fees,
+            signatures: signatures,
+            api: tradesAPI
+        )
     }
 
     private static func getOrderDetails(orderId: String, fees: [FeeEntry], api: OrdersAPI.Type) async throws -> Order {
-        let feePercentages = try fees.map { try $0.feePercentage.orThrow(.invalidRequest(reason: "Invalid fee percentage")) }
-            .map(\.asString)
-            .joined(separator: ",")
+        let feePercentages = try fees.map {
+            try $0.feePercentage.orThrow(.invalidRequest(reason: "Invalid fee percentage"))
+        }
+        .map(\.asString)
+        .joined(separator: ",")
 
         let feeRecipients = try fees.map { try $0.address.orThrow(.invalidRequest(reason: "Invalid fee address")) }
             .joined(separator: ",")
 
-        return try await Workflow.mapAPIErrors(caller: "Order details") {
+        return try await APIErrorMapper.map(caller: "Order details") {
             try await api.getOrder(
                 id: orderId,
                 includeFees: true,
@@ -38,10 +57,17 @@ class BuyWorkflow {
         }
     }
 
-    private static func getSignableTrade(order: Order, address: String, fees: [FeeEntry], api: TradesAPI.Type) async throws -> GetSignableTradeResponse {
+    private static func getSignableTrade(
+        order: Order,
+        address: String,
+        fees: [FeeEntry],
+        api: TradesAPI.Type
+    ) async throws -> GetSignableTradeResponse {
         guard order.user != address else { throw ImmutableXError.invalidRequest(reason: "Cannot purchase own order") }
-        guard order.status == OrderStatus.active.rawValue else { throw ImmutableXError.invalidRequest(reason: "Order not available for purchase") }
-        return try await Workflow.mapAPIErrors(caller: "Signable trade") {
+        guard order.status == OrderStatus.active.rawValue else {
+            throw ImmutableXError.invalidRequest(reason: "Order not available for purchase")
+        }
+        return try await APIErrorMapper.map(caller: "Signable trade") {
             try await api.getSignableTrade(
                 getSignableTradeRequest: GetSignableTradeRequest(
                     fees: fees,
@@ -52,8 +78,14 @@ class BuyWorkflow {
         }
     }
 
-    private static func createTrade(orderId: Int, response: GetSignableTradeResponse, fees: [FeeEntry], signatures: WorkflowSignatures, api: TradesAPI.Type) async throws -> CreateTradeResponse {
-        try await Workflow.mapAPIErrors(caller: "Create trade") {
+    private static func createTrade(
+        orderId: Int,
+        response: GetSignableTradeResponse,
+        fees: [FeeEntry],
+        signatures: WorkflowSignatures,
+        api: TradesAPI.Type
+    ) async throws -> CreateTradeResponse {
+        try await APIErrorMapper.map(caller: "Create trade") {
             try await api.createTrade(
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,

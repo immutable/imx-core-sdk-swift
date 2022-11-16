@@ -21,7 +21,8 @@ internal class EncodingAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func encodeAsset(assetType: String, encodeAssetRequest: EncodeAssetRequest) async throws -> EncodeAssetResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = encodeAssetWithRequestBuilder(assetType: assetType, encodeAssetRequest: encodeAssetRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -30,7 +31,7 @@ internal class EncodingAPI {
                   return
                 }
 
-                requestTask = encodeAssetWithRequestBuilder(assetType: assetType, encodeAssetRequest: encodeAssetRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -39,8 +40,8 @@ internal class EncodingAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -70,6 +71,6 @@ internal class EncodingAPI {
 
         let localVariableRequestBuilder: RequestBuilder<EncodeAssetResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

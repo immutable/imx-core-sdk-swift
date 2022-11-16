@@ -1,7 +1,7 @@
 disabled_rules:
   - trailing_comma
-  - line_length
   - identifier_name # Lots of math operations are written with short variable names as a standard
+  - inclusive_language
 included:
   - Sources
 excluded:

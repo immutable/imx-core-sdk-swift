@@ -18,7 +18,7 @@ public struct Trade: Codable, Hashable {
     public private(set) var status: String
     /** Time this trade occurred */
     public private(set) var timestamp: String?
-    /** Sequential ID of this trade within Immutable X */
+    /** Sequential ID of this trade within ImmutableX */
     public private(set) var transactionId: Int
 
     public init(a: TradeSide, b: TradeSide, status: String, timestamp: String?, transactionId: Int) {

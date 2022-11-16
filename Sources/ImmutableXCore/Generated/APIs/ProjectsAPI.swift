@@ -22,7 +22,8 @@ internal class ProjectsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createProject(iMXSignature: String, iMXTimestamp: String, createProjectRequest: CreateProjectRequest) async throws -> CreateProjectResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = createProjectWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, createProjectRequest: createProjectRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class ProjectsAPI {
                   return
                 }
 
-                requestTask = createProjectWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, createProjectRequest: createProjectRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class ProjectsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -70,7 +71,7 @@ internal class ProjectsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateProjectResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -83,7 +84,8 @@ internal class ProjectsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getProject(id: String, iMXSignature: String, iMXTimestamp: String) async throws -> Project {
-        var requestTask: RequestTask?
+        let requestBuilder = getProjectWithRequestBuilder(id: id, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -92,7 +94,7 @@ internal class ProjectsAPI {
                   return
                 }
 
-                requestTask = getProjectWithRequestBuilder(id: id, iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -101,8 +103,8 @@ internal class ProjectsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -134,7 +136,7 @@ internal class ProjectsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Project>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -150,7 +152,8 @@ internal class ProjectsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getProjects(iMXSignature: String, iMXTimestamp: String, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil) async throws -> GetProjectsResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getProjectsWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -159,7 +162,7 @@ internal class ProjectsAPI {
                   return
                 }
 
-                requestTask = getProjectsWithRequestBuilder(iMXSignature: iMXSignature, iMXTimestamp: iMXTimestamp, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -168,8 +171,8 @@ internal class ProjectsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -192,10 +195,10 @@ internal class ProjectsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -207,6 +210,6 @@ internal class ProjectsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetProjectsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

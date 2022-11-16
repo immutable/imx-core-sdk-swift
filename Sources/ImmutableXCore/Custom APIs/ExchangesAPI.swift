@@ -61,7 +61,8 @@ class ExchangesAPI {
         let requestBuilder = requestBuilderType.init(
             method: "POST",
             URLString: URLString,
-            parameters: parameters
+            parameters: parameters,
+            requiresAuthentication: false
         )
 
         return try await requestBuilder.execute()
@@ -75,7 +76,8 @@ class ExchangesAPI {
         let requestBuilder = requestBuilderType.init(
             method: "GET",
             URLString: URLString,
-            parameters: nil
+            parameters: nil,
+            requiresAuthentication: false
         )
 
         let response = try await requestBuilder.execute()

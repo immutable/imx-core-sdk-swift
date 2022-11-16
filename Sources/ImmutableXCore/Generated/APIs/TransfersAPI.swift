@@ -22,7 +22,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = createTransferWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequestV2: createTransferRequestV2)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -31,7 +32,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = createTransferWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequestV2: createTransferRequestV2).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -40,8 +41,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -70,7 +71,7 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateTransferResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -83,7 +84,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func createTransferV1(xImxEthAddress: String, xImxEthSignature: String, createTransferRequest: CreateTransferRequestV1) async throws -> CreateTransferResponseV1 {
-        var requestTask: RequestTask?
+        let requestBuilder = createTransferV1WithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequest: createTransferRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -92,7 +94,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = createTransferV1WithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTransferRequest: createTransferRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -101,8 +103,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -131,7 +133,7 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<CreateTransferResponseV1>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -142,7 +144,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableTransfer(getSignableTransferRequestV2: GetSignableTransferRequest) async throws -> GetSignableTransferResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableTransferWithRequestBuilder(getSignableTransferRequestV2: getSignableTransferRequestV2)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -151,7 +154,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = getSignableTransferWithRequestBuilder(getSignableTransferRequestV2: getSignableTransferRequestV2).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -160,8 +163,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -187,7 +190,7 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableTransferResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -198,7 +201,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getSignableTransferV1(getSignableTransferRequest: GetSignableTransferRequestV1) async throws -> GetSignableTransferResponseV1 {
-        var requestTask: RequestTask?
+        let requestBuilder = getSignableTransferV1WithRequestBuilder(getSignableTransferRequest: getSignableTransferRequest)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -207,7 +211,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = getSignableTransferV1WithRequestBuilder(getSignableTransferRequest: getSignableTransferRequest).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -216,8 +220,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -243,7 +247,7 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<GetSignableTransferResponseV1>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -254,7 +258,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getTransfer(id: String) async throws -> Transfer {
-        var requestTask: RequestTask?
+        let requestBuilder = getTransferWithRequestBuilder(id: id)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -263,7 +268,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = getTransferWithRequestBuilder(id: id).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -272,8 +277,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -302,7 +307,7 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Transfer>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -348,7 +353,8 @@ internal class TransfersAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listTransfers(pageSize: Int? = nil, cursor: String? = nil, orderBy: OrderBy_listTransfers? = nil, direction: String? = nil, user: String? = nil, receiver: String? = nil, status: Status_listTransfers? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListTransfersResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listTransfersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, receiver: receiver, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -357,7 +363,7 @@ internal class TransfersAPI {
                   return
                 }
 
-                requestTask = listTransfersWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, receiver: receiver, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -366,8 +372,8 @@ internal class TransfersAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -401,23 +407,23 @@ internal class TransfersAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "user": user?.encodeToJSON(),
-            "receiver": receiver?.encodeToJSON(),
-            "status": status?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
-            "token_type": tokenType?.encodeToJSON(),
-            "token_id": tokenId?.encodeToJSON(),
-            "asset_id": assetId?.encodeToJSON(),
-            "token_address": tokenAddress?.encodeToJSON(),
-            "token_name": tokenName?.encodeToJSON(),
-            "min_quantity": minQuantity?.encodeToJSON(),
-            "max_quantity": maxQuantity?.encodeToJSON(),
-            "metadata": metadata?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "user": (wrappedValue: user?.encodeToJSON(), isExplode: false),
+            "receiver": (wrappedValue: receiver?.encodeToJSON(), isExplode: false),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: false),
+            "min_timestamp": (wrappedValue: minTimestamp?.encodeToJSON(), isExplode: false),
+            "max_timestamp": (wrappedValue: maxTimestamp?.encodeToJSON(), isExplode: false),
+            "token_type": (wrappedValue: tokenType?.encodeToJSON(), isExplode: false),
+            "token_id": (wrappedValue: tokenId?.encodeToJSON(), isExplode: false),
+            "asset_id": (wrappedValue: assetId?.encodeToJSON(), isExplode: false),
+            "token_address": (wrappedValue: tokenAddress?.encodeToJSON(), isExplode: false),
+            "token_name": (wrappedValue: tokenName?.encodeToJSON(), isExplode: false),
+            "min_quantity": (wrappedValue: minQuantity?.encodeToJSON(), isExplode: false),
+            "max_quantity": (wrappedValue: maxQuantity?.encodeToJSON(), isExplode: false),
+            "metadata": (wrappedValue: metadata?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -428,6 +434,6 @@ internal class TransfersAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListTransfersResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

@@ -20,7 +20,8 @@ internal class MintsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getMint(id: String) async throws -> Mint {
-        var requestTask: RequestTask?
+        let requestBuilder = getMintWithRequestBuilder(id: id)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -29,7 +30,7 @@ internal class MintsAPI {
                   return
                 }
 
-                requestTask = getMintWithRequestBuilder(id: id).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -38,8 +39,8 @@ internal class MintsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -68,7 +69,7 @@ internal class MintsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<Mint>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -80,7 +81,8 @@ internal class MintsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func getMintableTokenDetailsByClientTokenId(tokenAddress: String, tokenId: String) async throws -> MintableTokenDetails {
-        var requestTask: RequestTask?
+        let requestBuilder = getMintableTokenDetailsByClientTokenIdWithRequestBuilder(tokenAddress: tokenAddress, tokenId: tokenId)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -89,7 +91,7 @@ internal class MintsAPI {
                   return
                 }
 
-                requestTask = getMintableTokenDetailsByClientTokenIdWithRequestBuilder(tokenAddress: tokenAddress, tokenId: tokenId).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -98,8 +100,8 @@ internal class MintsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -132,7 +134,7 @@ internal class MintsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<MintableTokenDetails>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -158,7 +160,8 @@ internal class MintsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func listMints(pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenName: String? = nil, tokenAddress: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListMintsResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = listMintsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenName: tokenName, tokenAddress: tokenAddress, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -167,7 +170,7 @@ internal class MintsAPI {
                   return
                 }
 
-                requestTask = listMintsWithRequestBuilder(pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenName: tokenName, tokenAddress: tokenAddress, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -176,8 +179,8 @@ internal class MintsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -210,22 +213,22 @@ internal class MintsAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page_size": pageSize?.encodeToJSON(),
-            "cursor": cursor?.encodeToJSON(),
-            "order_by": orderBy?.encodeToJSON(),
-            "direction": direction?.encodeToJSON(),
-            "user": user?.encodeToJSON(),
-            "status": status?.encodeToJSON(),
-            "min_timestamp": minTimestamp?.encodeToJSON(),
-            "max_timestamp": maxTimestamp?.encodeToJSON(),
-            "token_type": tokenType?.encodeToJSON(),
-            "token_id": tokenId?.encodeToJSON(),
-            "asset_id": assetId?.encodeToJSON(),
-            "token_name": tokenName?.encodeToJSON(),
-            "token_address": tokenAddress?.encodeToJSON(),
-            "min_quantity": minQuantity?.encodeToJSON(),
-            "max_quantity": maxQuantity?.encodeToJSON(),
-            "metadata": metadata?.encodeToJSON(),
+            "page_size": (wrappedValue: pageSize?.encodeToJSON(), isExplode: false),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: false),
+            "order_by": (wrappedValue: orderBy?.encodeToJSON(), isExplode: false),
+            "direction": (wrappedValue: direction?.encodeToJSON(), isExplode: false),
+            "user": (wrappedValue: user?.encodeToJSON(), isExplode: false),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: false),
+            "min_timestamp": (wrappedValue: minTimestamp?.encodeToJSON(), isExplode: false),
+            "max_timestamp": (wrappedValue: maxTimestamp?.encodeToJSON(), isExplode: false),
+            "token_type": (wrappedValue: tokenType?.encodeToJSON(), isExplode: false),
+            "token_id": (wrappedValue: tokenId?.encodeToJSON(), isExplode: false),
+            "asset_id": (wrappedValue: assetId?.encodeToJSON(), isExplode: false),
+            "token_name": (wrappedValue: tokenName?.encodeToJSON(), isExplode: false),
+            "token_address": (wrappedValue: tokenAddress?.encodeToJSON(), isExplode: false),
+            "min_quantity": (wrappedValue: minQuantity?.encodeToJSON(), isExplode: false),
+            "max_quantity": (wrappedValue: maxQuantity?.encodeToJSON(), isExplode: false),
+            "metadata": (wrappedValue: metadata?.encodeToJSON(), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -236,7 +239,7 @@ internal class MintsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<ListMintsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 
     /**
@@ -247,7 +250,8 @@ internal class MintsAPI {
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     internal class func mintTokens(mintTokensRequestV2: [MintRequest]) async throws -> MintTokensResponse {
-        var requestTask: RequestTask?
+        let requestBuilder = mintTokensWithRequestBuilder(mintTokensRequestV2: mintTokensRequestV2)
+        let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
             try Task.checkCancellation()
             return try await withCheckedThrowingContinuation { continuation in
@@ -256,7 +260,7 @@ internal class MintsAPI {
                   return
                 }
 
-                requestTask = mintTokensWithRequestBuilder(mintTokensRequestV2: mintTokensRequestV2).execute { result in
+                requestBuilder.execute { result in
                     switch result {
                     case let .success(response):
                         continuation.resume(returning: response.body)
@@ -265,8 +269,8 @@ internal class MintsAPI {
                     }
                 }
             }
-        } onCancel: { [requestTask] in
-            requestTask?.cancel()
+        } onCancel: {
+            requestTask.cancel()
         }
     }
 
@@ -293,6 +297,6 @@ internal class MintsAPI {
 
         let localVariableRequestBuilder: RequestBuilder<MintTokensResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

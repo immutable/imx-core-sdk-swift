@@ -164,3 +164,173 @@ let transactionIdResponseStub1 = GetTransactionIdResponse(id: 123, walletAddress
 let currenciesReponseStub1 = GetCurrenciesResponse(
     currencyCodes: ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"]
 )
+
+let depositStub1 = Deposit(
+    status: "status",
+    timestamp: "timestamp",
+    token: tokenETHStub1,
+    transactionId: 1,
+    user: "user"
+)
+
+let listDepositResponsesStub1 = ListDepositsResponse(
+    cursor: "cursor",
+    remaining: 1,
+    result: [depositStub1]
+)
+
+let assetStub1 = Asset(
+    collection: .init(iconUrl: nil, name: ""),
+    createdAt: nil,
+    description: nil,
+    imageUrl: nil,
+    metadata: nil,
+    name: nil,
+    status: "status",
+    tokenAddress: "address",
+    tokenId: "1",
+    updatedAt: nil,
+    uri: nil,
+    user: "user"
+)
+
+let assetWithOrdersStub1 = AssetWithOrders(
+    collection: .init(iconUrl: nil, name: ""),
+    createdAt: nil,
+    description: nil,
+    imageUrl: nil,
+    metadata: nil,
+    name: nil,
+    status: "status",
+    tokenAddress: "address",
+    tokenId: "1",
+    updatedAt: nil,
+    uri: nil,
+    user: "user"
+)
+
+let listAssetsResponseStub1 = ListAssetsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [assetWithOrdersStub1]
+)
+
+let collectionStub1 = Collection(
+    address: "address",
+    collectionImageUrl: nil,
+    description: nil,
+    iconUrl: nil,
+    metadataApiUrl: nil,
+    name: "name",
+    projectId: 1,
+    projectOwnerAddress: "address"
+)
+
+let collectionFilterStub1 = CollectionFilter(
+    key: "key",
+    range: nil,
+    type: nil,
+    value: nil
+)
+
+let listCollectionResponseStub1 = ListCollectionsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [collectionStub1]
+)
+
+let projectStub1 = Project(
+    collectionLimitExpiresAt: "",
+    collectionMonthlyLimit: 1,
+    collectionRemaining: 1,
+    companyName: "companyName",
+    contactEmail: "email",
+    id: 1,
+    mintLimitExpiresAt: "",
+    mintMonthlyLimit: 1,
+    mintRemaining: 1,
+    name: "Proj"
+)
+
+let getProjectResponseStub1 = GetProjectsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [projectStub1]
+)
+
+let balanceStub1 = Balance(
+    balance: "1",
+    preparingWithdrawal: "",
+    symbol: "ETH",
+    tokenAddress: "address",
+    withdrawable: ""
+)
+
+let listBalancesResponseStub1 = ListBalancesResponse(
+    cursor: "",
+    result: [balanceStub1]
+)
+
+let mintStub1 = Mint(
+    status: "status",
+    timestamp: "",
+    token: tokenETHStub1,
+    transactionId: 1,
+    user: "user"
+)
+
+let listMintsResponseStub1 = ListMintsResponse(
+    cursor: "",
+    remaining: 1,
+    result: [mintStub1]
+)
+
+let withdrawalStub1 = Withdrawal(
+    rollupStatus: "status",
+    sender: "sender",
+    status: "status",
+    timestamp: "",
+    token: tokenETHStub1,
+    transactionId: 1,
+    withdrawnToWallet: false
+)
+
+let listWithdrawalsResponseStub1 = ListWithdrawalsResponse(
+    cursor: "",
+    remaining: 0,
+    result: [withdrawalStub1]
+)
+
+let listOrdersResponseStub1 = ListOrdersResponse(
+    cursor: "",
+    remaining: 0,
+    result: [orderActiveStub2]
+)
+
+let tradeStub1 = Trade(
+    a: TradeSide(orderId: 1, sold: "sold", tokenType: ""),
+    b: TradeSide(orderId: 2, sold: "sold", tokenType: ""),
+    status: "status",
+    timestamp: nil,
+    transactionId: 1
+)
+
+let listTradesResponseStub1 = ListTradesResponse(
+    cursor: "",
+    remaining: 0,
+    result: []
+)
+
+let tokenDetailsStub1 = TokenDetails(
+    decimals: "decimals",
+    imageUrl: "",
+    name: "name",
+    quantum: "",
+    symbol: "",
+    tokenAddress: "address"
+)
+
+let listTokensResponseStub1 = ListTokensResponse(
+    cursor: "",
+    result: [tokenDetailsStub1]
+)

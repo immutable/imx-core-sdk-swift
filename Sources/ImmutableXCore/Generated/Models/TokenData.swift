@@ -14,7 +14,7 @@ public struct TokenData: Codable, Hashable {
 
     /** Number of decimals supported by this asset */
     public private(set) var decimals: Int?
-    /** [DEPRECATED] Internal Immutable X Token ID */
+    /** [DEPRECATED] Internal ImmutableX Token ID */
     public private(set) var id: String?
     public private(set) var properties: AssetProperties?
     /** Quantity of this asset */

@@ -10,7 +10,14 @@ class BuyCryptoWorkflow {
     ///     - base: the config to be used for API keys and providers URLs
     /// - Returns: a website URL string to be used to launch a WebView or Browser to buy crypto
     /// - Throws: A variation of ``ImmutableXError``
-    class func buyCryptoURL(colorCodeHex: String, signer: Signer, base: ImmutableXBase = ImmutableX.shared.base, moonpayAPI: MoonpayAPI = MoonpayAPI(), exchangesAPI: ExchangesAPI = ExchangesAPI(), usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> String {
+    class func buyCryptoURL(
+        colorCodeHex: String,
+        signer: Signer,
+        base: ImmutableXBase = ImmutableX.shared.base,
+        moonpayAPI: MoonpayAPI = MoonpayAPI(),
+        exchangesAPI: ExchangesAPI = ExchangesAPI(),
+        usersAPI: UsersAPI.Type = UsersAPI.self
+    ) async throws -> String {
         let address = try await signer.getAddress()
         let isRegistered = try await RegisterWorkflow.isUserRegistered(address: address, api: usersAPI)
 
@@ -34,21 +41,24 @@ class BuyCryptoWorkflow {
     }
 
     private static func getTransactionId(address: String, api: ExchangesAPI) async throws -> GetTransactionIdResponse {
-        try await Workflow.mapAPIErrors(caller: "Fetch transaction id") {
+        try await APIErrorMapper.map(caller: "Fetch transaction id") {
             try await api.getTransactionId(
                 GetTransactionIdRequest(walletAddress: address, provider: .moonpay)
             )
         }
     }
 
-    private static func getSupportedCurrencies(address: String, api: ExchangesAPI) async throws -> GetCurrenciesResponse {
-        try await Workflow.mapAPIErrors(caller: "Fetch supported currencies") {
+    private static func getSupportedCurrencies(
+        address: String,
+        api: ExchangesAPI
+    ) async throws -> GetCurrenciesResponse {
+        try await APIErrorMapper.map(caller: "Fetch supported currencies") {
             try await api.getCurrencies(address: address)
         }
     }
 
     private static func getBuyCryptoURL(request: GetBuyCryptoURLRequest, api: MoonpayAPI) async throws -> String {
-        try await Workflow.mapAPIErrors(caller: "Fetch crypto url") {
+        try await APIErrorMapper.map(caller: "Fetch crypto url") {
             try await api.getBuyCryptoURL(request)
         }
     }

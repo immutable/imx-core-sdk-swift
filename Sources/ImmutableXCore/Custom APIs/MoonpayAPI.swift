@@ -7,7 +7,13 @@ struct GetBuyCryptoURLRequest: Codable {
     let walletAddress: String
     let currencies: [String: String]
 
-    init(apiKey: String = ImmutableX.shared.base.moonpayApiKey, colorCodeHex: String, externalTransaction: Int, walletAddress: String, currencies: [String: String]) {
+    init(
+        apiKey: String = ImmutableX.shared.base.moonpayApiKey,
+        colorCodeHex: String,
+        externalTransaction: Int,
+        walletAddress: String,
+        currencies: [String: String]
+    ) {
         self.apiKey = apiKey
         self.colorCodeHex = colorCodeHex
         self.externalTransaction = externalTransaction
@@ -17,11 +23,14 @@ struct GetBuyCryptoURLRequest: Codable {
 
     func asURLEncodedString() throws -> String {
         let currenciesJson = try JSONSerialization.data(withJSONObject: currencies, options: .fragmentsAllowed)
-        let jsonString = try String(data: currenciesJson, encoding: .utf8).orThrow(.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
+        let jsonString = try String(data: currenciesJson, encoding: .utf8)
+            .orThrow(.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
 
         // Moonpay won't allow colon or comma as query parameter
-        let jsonEncoded = try jsonString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed.subtracting(CharacterSet(charactersIn: ":,")))
-            .orThrow(.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
+        let jsonEncoded = try jsonString.addingPercentEncoding(
+            withAllowedCharacters: .urlQueryAllowed.subtracting(CharacterSet(charactersIn: ":,"))
+        )
+        .orThrow(.invalidRequest(reason: "Invalid Buy Crypto Arguments"))
 
         // URLComponents applies encoding in a way that won't work with Moonpay
         return "apiKey=\(apiKey)" +
@@ -46,7 +55,10 @@ class MoonpayAPI {
     let requestBuilderFactory: RequestBuilderFactory
     let core: ImmutableX
 
-    init(requestBuilderFactory: RequestBuilderFactory = OpenAPIClientAPI.requestBuilderFactory, core: ImmutableX = ImmutableX.shared) {
+    init(
+        requestBuilderFactory: RequestBuilderFactory = OpenAPIClientAPI.requestBuilderFactory,
+        core: ImmutableX = ImmutableX.shared
+    ) {
         self.requestBuilderFactory = requestBuilderFactory
         self.core = core
     }
@@ -66,7 +78,8 @@ class MoonpayAPI {
         let requestBuilder = requestBuilderType.init(
             method: "POST",
             URLString: URLString,
-            parameters: parameters
+            parameters: parameters,
+            requiresAuthentication: false
         )
 
         let response = try await requestBuilder.execute()

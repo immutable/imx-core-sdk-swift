@@ -22,28 +22,12 @@ public extension StarkKey {
     }
 
     /// Generate a Stark key pair from a L1 wallet.
-    /// - Parameter signer: the signer that the key pair will be derived from
-    /// - Returns: a Stark key pair as ``KeyPair`` if successful or an ``ImmutableXError``
-    ///  error through the `onCompletion` callback
-    ///
-    /// - Note: `onCompletion` is executed on the Main Thread
-    static func generateKeyPair(from signer: Signer, onCompletion: @escaping (Result<KeyPair, ImmutableXError>) -> Void) {
-        Task { @MainActor in
-            do {
-                let pair = try await generateKeyPair(from: signer)
-                onCompletion(.success(pair))
-            } catch {
-                onCompletion(.failure(error.asImmutableXError))
-            }
-        }
-    }
-
-    /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address
     /// - Returns: Stark key pair as ``KeyPair``
     /// - Throws: ``ImmutableXError``
     static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> KeyPair {
+        // swiftlint:disable:next line_length
         // https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
         let seed = signature.dropHexPrefix[64 ..< 128]
         return try generateStarkKeyPairFromSeed(seed, path: accountPathFromAddress(ethereumAddress))
@@ -126,8 +110,10 @@ public extension StarkKey {
         return starkSignature.serialized()
     }
 
+    // swiftlint:disable line_length
     // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/CommonSigning/ECDSA.swift#L32
     // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/ECDSASigner.java#L93
+    // swiftlint:enable line_length
     internal static func sign(_ message: Message, using privateKey: PrivateKey) throws -> StarkSignature {
         let messageNumber = message.asBigInt
         var z = CryptoUtil.truncateToN(message: messageNumber)
@@ -154,9 +140,11 @@ public extension StarkKey {
         return try StarkSignature(r: r, s: s)
     }
 
+    // swiftlint:disable line_length
     // https://datatracker.ietf.org/doc/html/rfc6979#section-3.2
     // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/SignatureNonce%2BRFC-6979.swift#L29
     // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/HMacDSAKCalculator.java#L104
+    // swiftlint:enable line_length
     internal static func generateK(from privateKey: PrivateKey, for message: Message) throws -> BigInt {
         let byteCount = message.hashedData.count
         let d = privateKey.number.as256bitLongData()

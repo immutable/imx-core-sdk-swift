@@ -7,7 +7,8 @@ public protocol AssetModel {
     /// The amount of the asset to be transferred/sold/bought
     var quantity: String { get }
 
-    /// This converts this convenience model into the ``SignableToken`` API model which will be used for the client calls.
+    /// This converts this convenience model into the ``SignableToken`` API model which will be used for the client
+    /// calls.
     func asSignableToken() -> SignableToken
 }
 

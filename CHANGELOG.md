@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-for added features.
+- `getUser(ethAddress:)` has been added to ImmutableX instance.
 
 ### Changed
 
@@ -22,6 +22,7 @@ for soon-to-be removed features.
 ### Removed
 
 - (Breaking): all clients have been removed in favour of direct methods in the ImmutableX instance.
+- (Breaking): removed closure based APIs from ImmutableX instance.
 
 ### Fixed
 
