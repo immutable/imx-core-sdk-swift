@@ -174,8 +174,12 @@ public struct ImmutableX {
         starkSigner: StarkSigner
     ) async throws -> CreateTransferResponse {
         try await transferWorkflow.transfer(
-            token: token,
-            recipientAddress: recipientAddress,
+            transfers: [
+                .init(
+                    token: token,
+                    recipientAddress: recipientAddress
+                ),
+            ],
             signer: signer,
             starkSigner: starkSigner
         )
