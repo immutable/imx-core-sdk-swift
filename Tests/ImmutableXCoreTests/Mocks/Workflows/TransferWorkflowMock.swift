@@ -18,7 +18,12 @@ class TransferWorkflowMock: TransferWorkflow {
         companion = nil
     }
 
-    override class func transfer(token: AssetModel, recipientAddress: String, signer: Signer, starkSigner: StarkSigner, transfersAPI: TransfersAPI.Type = TransfersAPI.self) async throws -> CreateTransferResponse {
+    override class func transfer(
+        transfers: [TransferData],
+        signer: Signer,
+        starkSigner: StarkSigner,
+        transfersAPI: TransfersAPI.Type = TransfersAPI.self
+    ) async throws -> CreateTransferResponse {
         let companion = companion!
 
         if let error = companion.throwableError {

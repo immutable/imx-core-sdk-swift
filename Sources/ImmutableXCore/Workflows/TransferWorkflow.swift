@@ -1,18 +1,27 @@
 import Foundation
 
+public struct TransferData {
+    public let token: AssetModel
+    public let recipientAddress: String
+
+    public init(token: AssetModel, recipientAddress: String) {
+        self.token = token
+        self.recipientAddress = recipientAddress
+    }
+}
+
 class TransferWorkflow {
     /// This is a utility function that will chain the necessary calls to transfer a token.
     ///
     /// - Parameters:
-    ///     - token: to be transferred (ETH, ERC20, or ERC721)
-    ///     - recipientAddress: of the wallet that will receive the token
+    ///     - transfers: contains a list of ``TransferData`` with `token` to be transferred (ETH, ERC20, or ERC721)
+    ///     and `recipientAddress` of the wallet that will receive the token
     ///     - signer: represents the users L1 wallet to get the address
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
     /// - Throws: A variation of ``ImmutableXError``
     class func transfer(
-        token: AssetModel,
-        recipientAddress: String,
+        transfers: [TransferData],
         signer: Signer,
         starkSigner: StarkSigner,
         transfersAPI: TransfersAPI.Type = TransfersAPI.self
@@ -20,46 +29,61 @@ class TransferWorkflow {
         let address = try await signer.getAddress()
         let response = try await getSignableTransfer(
             address: address,
-            token: token,
-            recipientAddress: recipientAddress,
+            transfers: transfers,
             api: transfersAPI
         )
-        let signableResponse = try response
-            .signableResponses
-            .first
-            .orThrow(.invalidRequest(reason: "Invalid signable response"))
-        let starkSignature = try await starkSigner.signMessage(signableResponse.payloadHash)
+
+        guard !response.signableResponses.isEmpty else {
+            throw ImmutableXError.invalidRequest(reason: "Invalid signable response")
+        }
+
+        let starkSignatures = try await getStarkSignatures(
+            response.signableResponses,
+            starkSigner: starkSigner
+        )
         let ethSignature = try await signer.signMessage(response.signableMessage)
         let signatures = WorkflowSignatures(
             ethAddress: address,
             ethSignature: ethSignature,
-            starkSignature: starkSignature
+            starkSignatures: starkSignatures
         )
         return try await createTransfer(
             response: response,
-            signableResponse: signableResponse,
             signatures: signatures,
             api: transfersAPI
         )
     }
 
+    private static func getStarkSignatures(
+        _ signableResponses: [SignableTransferResponseDetails],
+        starkSigner: StarkSigner
+    ) async throws -> [String] {
+        var signatures = [String]()
+
+        for response in signableResponses {
+            let signature = try await starkSigner.signMessage(response.payloadHash)
+            signatures.append(signature)
+        }
+
+        return signatures
+    }
+
     private static func getSignableTransfer(
         address: String,
-        token: AssetModel,
-        recipientAddress: String,
+        transfers: [TransferData],
         api: TransfersAPI.Type
     ) async throws -> GetSignableTransferResponse {
         try await APIErrorMapper.map(caller: "Signable transfer") {
             try await api.getSignableTransfer(
                 getSignableTransferRequestV2: GetSignableTransferRequest(
                     senderEtherKey: address,
-                    signableRequests: [
+                    signableRequests: transfers.map {
                         SignableTransferDetails(
-                            amount: token.quantity,
-                            receiver: recipientAddress,
-                            token: token.asSignableToken()
-                        ),
-                    ]
+                            amount: $0.token.quantity,
+                            receiver: $0.recipientAddress,
+                            token: $0.token.asSignableToken()
+                        )
+                    }
                 )
             )
         }
@@ -67,7 +91,6 @@ class TransferWorkflow {
 
     private static func createTransfer(
         response: GetSignableTransferResponse,
-        signableResponse: SignableTransferResponseDetails,
         signatures: WorkflowSignatures,
         api: TransfersAPI.Type
     ) async throws -> CreateTransferResponse {
@@ -76,7 +99,7 @@ class TransferWorkflow {
                 xImxEthAddress: signatures.ethAddress,
                 xImxEthSignature: signatures.serializedEthSignature,
                 createTransferRequestV2: CreateTransferRequest(
-                    requests: [
+                    requests: response.signableResponses.enumerated().map { index, signableResponse in
                         TransferRequest(
                             amount: signableResponse.amount,
                             assetId: signableResponse.assetId,
@@ -85,9 +108,9 @@ class TransferWorkflow {
                             receiverStarkKey: signableResponse.receiverStarkKey,
                             receiverVaultId: signableResponse.receiverVaultId,
                             senderVaultId: signableResponse.senderVaultId,
-                            starkSignature: signatures.starkSignature
-                        ),
-                    ],
+                            starkSignature: signatures.starkSignatures[index]
+                        )
+                    },
                     senderStarkKey: response.senderStarkKey
                 )
             )

@@ -23,8 +23,12 @@ final class TransferWorkflowTests: XCTestCase {
 
     func testTransferERC20FlowSuccess() async throws {
         let response = try await TransferWorkflow.transfer(
-            token: erc20Token,
-            recipientAddress: recipientAddress,
+            transfers: [
+                .init(
+                    token: erc20Token,
+                    recipientAddress: recipientAddress
+                ),
+            ],
             signer: SignerMock(),
             starkSigner: StarkSignerMock(),
             transfersAPI: transfersAPI
@@ -35,8 +39,12 @@ final class TransferWorkflowTests: XCTestCase {
 
     func testTransferETHFlowSuccess() async throws {
         let response = try await TransferWorkflow.transfer(
-            token: ethToken,
-            recipientAddress: recipientAddress,
+            transfers: [
+                .init(
+                    token: ethToken,
+                    recipientAddress: recipientAddress
+                ),
+            ],
             signer: SignerMock(),
             starkSigner: StarkSignerMock(),
             transfersAPI: transfersAPI
@@ -47,8 +55,12 @@ final class TransferWorkflowTests: XCTestCase {
 
     func testTransferERC721FlowSuccess() async throws {
         let response = try await TransferWorkflow.transfer(
-            token: erc721Token,
-            recipientAddress: recipientAddress,
+            transfers: [
+                .init(
+                    token: erc721Token,
+                    recipientAddress: recipientAddress
+                ),
+            ],
             signer: SignerMock(),
             starkSigner: StarkSignerMock(),
             transfersAPI: transfersAPI
@@ -64,8 +76,12 @@ final class TransferWorkflowTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await TransferWorkflow.transfer(
-                token: erc721Token,
-                recipientAddress: recipientAddress,
+                transfers: [
+                    .init(
+                        token: erc721Token,
+                        recipientAddress: recipientAddress
+                    ),
+                ],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
                 transfersAPI: self.transfersAPI
@@ -80,8 +96,12 @@ final class TransferWorkflowTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await TransferWorkflow.transfer(
-                token: erc721Token,
-                recipientAddress: recipientAddress,
+                transfers: [
+                    .init(
+                        token: erc721Token,
+                        recipientAddress: recipientAddress
+                    ),
+                ],
                 signer: SignerMock(),
                 starkSigner: StarkSignerMock(),
                 transfersAPI: self.transfersAPI
