@@ -334,3 +334,18 @@ let listTokensResponseStub1 = ListTokensResponse(
     cursor: "",
     result: [tokenDetailsStub1]
 )
+
+let transferStub1 = Transfer(
+    receiver: "",
+    status: "status",
+    timestamp: nil,
+    token: tokenETHStub1,
+    transactionId: 1,
+    user: ""
+)
+
+let listTransfersStub1 = ListTransfersResponse(
+    cursor: "",
+    remaining: 0,
+    result: [transferStub1]
+)

@@ -19,6 +19,7 @@ final class ImmutableXTests: XCTestCase {
     let ordersAPIMock = OrdersAPIMock.self
     let tradesAPIMock = TradesAPIMock.self
     let tokensAPIMock = TokensAPIMock.self
+    let transfersAPIMock = TransfersAPIMock.self
 
     lazy var core = ImmutableX(
         buyWorkflow: buyWorkflow,
@@ -37,7 +38,8 @@ final class ImmutableXTests: XCTestCase {
         withdrawalAPI: withdrawalsAPIMock,
         ordersAPI: ordersAPIMock,
         tradesAPI: tradesAPIMock,
-        tokensAPI: tokensAPIMock
+        tokensAPI: tokensAPIMock,
+        transfersAPI: transfersAPIMock
     )
 
     override func setUp() {
@@ -59,6 +61,7 @@ final class ImmutableXTests: XCTestCase {
         ordersAPIMock.resetMock()
         tradesAPIMock.resetMock()
         tokensAPIMock.resetMock()
+        transfersAPIMock.resetMock()
 
         ImmutableX.initialize()
 
@@ -173,6 +176,14 @@ final class ImmutableXTests: XCTestCase {
         let listTokensCompanion = TokensAPIMock.ListTokensCompanion()
         listTokensCompanion.returnValue = listTokensResponseStub1
         tokensAPIMock.mock(listTokensCompanion)
+
+        let getTransferCompanion = TransfersAPIMockGetTransferCompanion()
+        getTransferCompanion.returnValue = transferStub1
+        transfersAPIMock.mock(getTransferCompanion)
+
+        let listTransfersCompanion = TransfersAPIMockListTransfersCompanion()
+        listTransfersCompanion.returnValue = listTransfersStub1
+        transfersAPIMock.mock(listTransfersCompanion)
     }
 
     func testSdkVersion() {
@@ -641,6 +652,65 @@ final class ImmutableXTests: XCTestCase {
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listTokens()
+        }
+    }
+
+    // MARK: - Transfer
+
+    func testGetTransferSuccess() async throws {
+        let response = try await core.getTransfer(id: "")
+        XCTAssertEqual(response, transferStub1)
+    }
+
+    func testGetTransferFailure() async {
+        let companion = TransfersAPIMockGetTransferCompanion()
+        companion.throwableError = DummyError.something
+        transfersAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.getTransfer(id: "")
+        }
+    }
+
+    func testListTransfersSuccess() async throws {
+        let response = try await core.listTransfers()
+        XCTAssertEqual(response, listTransfersStub1)
+    }
+
+    func testListTransfersFailure() async {
+        let companion = TransfersAPIMockListTransfersCompanion()
+        companion.throwableError = DummyError.something
+        transfersAPIMock.mock(companion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.listTransfers()
+        }
+    }
+
+    func testBatchTransferSuccess() async throws {
+        let response = try await core.batchTransfer(
+            transfers: [
+                .init(token: ethAssetStub1, recipientAddress: ""),
+            ],
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock()
+        )
+        XCTAssertEqual(response, createTransferResponseStub1)
+    }
+
+    func testBatchTransferFailure() async {
+        let transferCompanion = TransferWorkflowCompanion()
+        transferCompanion.throwableError = DummyError.something
+        transferWorkflowMock.mock(transferCompanion)
+
+        await XCTAssertThrowsErrorAsync {
+            _ = try await core.batchTransfer(
+                transfers: [
+                    .init(token: ethAssetStub1, recipientAddress: ""),
+                ],
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock()
+            )
         }
     }
 }
