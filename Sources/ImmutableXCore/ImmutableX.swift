@@ -47,6 +47,7 @@ public struct ImmutableX {
     private let ordersAPI: OrdersAPI.Type
     private let tradesAPI: TradesAPI.Type
     private let tokensAPI: TokensAPI.Type
+    private let transfersAPI: TransfersAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -69,7 +70,8 @@ public struct ImmutableX {
         withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self,
         ordersAPI: OrdersAPI.Type = OrdersAPI.self,
         tradesAPI: TradesAPI.Type = TradesAPI.self,
-        tokensAPI: TokensAPI.Type = TokensAPI.self
+        tokensAPI: TokensAPI.Type = TokensAPI.self,
+        transfersAPI: TransfersAPI.Type = TransfersAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -90,6 +92,7 @@ public struct ImmutableX {
         self.ordersAPI = ordersAPI
         self.tradesAPI = tradesAPI
         self.tokensAPI = tokensAPI
+        self.transfersAPI = transfersAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -886,6 +889,105 @@ public struct ImmutableX {
     ) async throws -> ListTokensResponse {
         try await APIErrorMapper.map(caller: "List Tokens") {
             try await self.tokensAPI.listTokens(address: address, symbols: symbols)
+        }
+    }
+
+    /// Get details of a transfer with the given ID
+    ///
+    /// - Parameter id: Transfer ID
+    /// - Returns: ``Transfer``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func getTransfer(id: String) async throws -> Transfer {
+        try await APIErrorMapper.map(caller: "Get Transfer") {
+            try await self.transfersAPI.getTransfer(id: id)
+        }
+    }
+
+    /// Get a list of transfers
+    ///
+    /// - Parameters:
+    ///     - pageSize: Page size of the result (optional)
+    ///     - cursor: Cursor (optional)
+    ///     - orderBy: Property to sort by (optional)
+    ///     - direction: Direction to sort (asc/desc) (optional)
+    ///     - user: Ethereum address of the user who submitted this transfer (optional)
+    ///     - receiver: Ethereum address of the user who received this transfer (optional)
+    ///     - status: Status of this transfer (optional)
+    ///     - minTimestamp: Minimum timestamp for this transfer, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - maxTimestamp: Maximum timestamp for this transfer, in ISO 8601 UTC format.
+    ///     Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
+    ///     - tokenType: Token type of the transferred asset (optional)
+    ///     - tokenId: ERC721 Token ID of the minted asset (optional)
+    ///     - assetId: Internal IMX ID of the minted asset (optional)
+    ///     - tokenAddress: Token address of the transferred asset (optional)
+    ///     - tokenName: Token name of the transferred asset (optional)
+    ///     - minQuantity: Max quantity for the transferred asset (optional)
+    ///     - maxQuantity: Max quantity for the transferred asset (optional)
+    ///     - metadata: JSON-encoded metadata filters for the transferred asset (optional)
+    /// - Returns: ``ListTransfersResponse``
+    /// - Throws: A variation of ``ImmutableXError``
+    public func listTransfers(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: ListTransfersOrderBy? = nil,
+        direction: String? = nil,
+        user: String? = nil,
+        receiver: String? = nil,
+        status: ListTransfersStatus? = nil,
+        minTimestamp: String? = nil,
+        maxTimestamp: String? = nil,
+        tokenType: String? = nil,
+        tokenId: String? = nil,
+        assetId: String? = nil,
+        tokenAddress: String? = nil,
+        tokenName: String? = nil,
+        minQuantity: String? = nil,
+        maxQuantity: String? = nil,
+        metadata: String? = nil
+    ) async throws -> ListTransfersResponse {
+        try await APIErrorMapper.map(caller: "List Transfers") {
+            try await self.transfersAPI.listTransfers(
+                pageSize: pageSize,
+                cursor: cursor,
+                orderBy: orderBy?.asApiArgument,
+                direction: direction,
+                user: user,
+                receiver: receiver,
+                status: status?.asApiArgument,
+                minTimestamp: minTimestamp,
+                maxTimestamp: maxTimestamp,
+                tokenType: tokenType,
+                tokenId: tokenId,
+                assetId: assetId,
+                tokenAddress: tokenAddress,
+                tokenName: tokenName,
+                minQuantity: minQuantity,
+                maxQuantity: maxQuantity,
+                metadata: metadata
+            )
+        }
+    }
+
+    /// This is a utility function that will chain the necessary calls to transfer a token.
+    ///
+    /// - Parameters:
+    ///     - transfers: list of all transfers and their individual tokens and recipients
+    ///     - signer: represents the users L1 wallet to get the address
+    ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
+    /// - Returns: ``CreateTransferResponse`` that will provide the transfer id if successful.
+    /// - Throws: A variation of ``ImmutableXError``
+    public func batchTransfer(
+        transfers: [TransferData],
+        signer: Signer,
+        starkSigner: StarkSigner
+    ) async throws -> CreateTransferResponse {
+        try await APIErrorMapper.map(caller: "Batch Transfers") {
+            try await self.transferWorkflow.transfer(
+                transfers: transfers,
+                signer: signer,
+                starkSigner: starkSigner
+            )
         }
     }
 }
