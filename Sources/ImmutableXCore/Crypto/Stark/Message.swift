@@ -2,18 +2,18 @@ import BigInt
 import CryptoKit
 import Foundation
 
-public struct Message {
-    public let hashedData: Data
+struct Message {
+    let hashedData: Data
 
-    public var asBigInt: BigInt {
+    var asBigInt: BigInt {
         BigInt(data: hashedData)
     }
 
-    public init(hashedData: Data) {
+    init(hashedData: Data) {
         self.hashedData = hashedData
     }
 
-    public init(hashedHex: String) {
+    init(hashedHex: String) {
         self.init(hashedData: hashedHex.hexToData())
     }
 }
