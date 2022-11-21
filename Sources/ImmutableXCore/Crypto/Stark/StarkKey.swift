@@ -13,9 +13,9 @@ public enum StarkKey {
 public extension StarkKey {
     /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signer: the signer that the key pair will be derived from
-    /// - Returns: Stark key pair as ``KeyPair``
+    /// - Returns: Stark key pair as ``ECKeyPair``
     /// - Throws: ``ImmutableXError``
-    static func generateKeyPair(from signer: Signer) async throws -> KeyPair {
+    static func generateKeyPair(from signer: Signer) async throws -> ECKeyPair {
         let address = try await signer.getAddress()
         let signature = try await signer.signMessage(Constants.starkMessage)
         return try generateKeyPairFromRawSignature(signature, ethereumAddress: address)
@@ -24,9 +24,9 @@ public extension StarkKey {
     /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address
-    /// - Returns: Stark key pair as ``KeyPair``
+    /// - Returns: Stark key pair as ``ECKeyPair``
     /// - Throws: ``ImmutableXError``
-    static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> KeyPair {
+    static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> ECKeyPair {
         // swiftlint:disable:next line_length
         // https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
         let seed = signature.dropHexPrefix[64 ..< 128]
@@ -70,14 +70,14 @@ public extension StarkKey {
 
     /// Derives the private key from the seed and path, then grinds it to find its final private key hex.
     /// https://docs.starkware.co/starkex-v4/crypto/key-derivation
-    private static func generateStarkKeyPairFromSeed(_ seed: String, path: String) throws -> KeyPair {
+    private static func generateStarkKeyPairFromSeed(_ seed: String, path: String) throws -> ECKeyPair {
         let keySeed = try BIP32Key.derive(seed: Data(hex: seed), path: path)
         let privateKeyHex = grindKey(keySeed: keySeed)
-        let privateKey = try PrivateKey(hex: privateKeyHex)
+        let privateKey = try ECPrivateKey(hex: privateKeyHex)
 
-        return KeyPair(
+        return ECKeyPair(
             private: privateKey,
-            public: try PublicKey(privateKey: privateKey)
+            public: try ECPublicKey(privateKey: privateKey)
         )
     }
 }
@@ -93,7 +93,7 @@ public extension StarkKey {
     ///
     /// - Returns: Stark signature
     static func sign(message: String, withPrivateKeyHex privateKeyHex: String) throws -> String {
-        try sign(message: message, with: try PrivateKey(hex: privateKeyHex))
+        try sign(message: message, with: try ECPrivateKey(hex: privateKeyHex))
     }
 
     /// Signs the given `message` with the given `privateKey`.
@@ -103,7 +103,7 @@ public extension StarkKey {
     ///     - privateKey: key to be used in the signature
     ///
     /// - Returns: Stark signature
-    static func sign(message: String, with privateKey: PrivateKey) throws -> String {
+    static func sign(message: String, with privateKey: ECPrivateKey) throws -> String {
         let fixedMessage = try CryptoUtil.fix(message: message)
         let message = Message(hashedHex: fixedMessage)
         let starkSignature = try sign(message, using: privateKey)
@@ -114,7 +114,7 @@ public extension StarkKey {
     // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/CommonSigning/ECDSA.swift#L32
     // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/ECDSASigner.java#L93
     // swiftlint:enable line_length
-    internal static func sign(_ message: Message, using privateKey: PrivateKey) throws -> StarkSignature {
+    internal static func sign(_ message: Message, using privateKey: ECPrivateKey) throws -> StarkSignature {
         let messageNumber = message.asBigInt
         var z = CryptoUtil.truncateToN(message: messageNumber)
         let sanitised = z.asHexString().sanitizeBytes()
@@ -145,7 +145,7 @@ public extension StarkKey {
     // Base implementation from https://github.com/Sajjon/EllipticCurveKit/blob/main/Sources/EllipticCurveKit/EllipticCurve/Signing/SignatureNonce%2BRFC-6979.swift#L29
     // and https://github.com/bcgit/bc-java/blob/master/core/src/main/java/org/bouncycastle/crypto/signers/HMacDSAKCalculator.java#L104
     // swiftlint:enable line_length
-    internal static func generateK(from privateKey: PrivateKey, for message: Message) throws -> BigInt {
+    internal static func generateK(from privateKey: ECPrivateKey, for message: Message) throws -> BigInt {
         let byteCount = message.hashedData.count
         let d = privateKey.number.as256bitLongData()
         let nByteCount = StarkCurve.N.magnitude.bitWidth.byteCountFromBitCount

@@ -29,7 +29,7 @@ struct StarkCurve {
     static let a = BigInt(1)
     static let b = BigInt("3141592653589793238462643383279502884197169399375105820974944592307816406665")
 
-    static let G = CurvePoint(
+    static let G = ECCurvePoint(
         x: BigInt("874739451078007766457464989774322083649278607533249481151382481072868806602"),
         y: BigInt("152666792071518830868575557812948353041420400780739481342941381225525861407")
     )
@@ -73,7 +73,7 @@ extension StarkCurve {
 extension StarkCurve {
     /// Adds given points ``p1`` and ``p2`` if different, otherwise doubles them
     /// https://crypto.stanford.edu/pbc/notes/elliptic/explicit.html
-    static func addition(_ p1: CurvePoint?, _ p2: CurvePoint?) -> CurvePoint? {
+    static func addition(_ p1: ECCurvePoint?, _ p2: ECCurvePoint?) -> ECCurvePoint? {
         guard let p1 else { return p2 }
         guard let p2 else { return p1 }
 
@@ -90,9 +90,9 @@ extension StarkCurve {
 
     /// Multiplies the given ``point`` by ``number``
     /// https://crypto.stanford.edu/pbc/notes/elliptic/explicit.html
-    static func multiply(_ point: CurvePoint, by number: BigInt) -> CurvePoint {
-        var P: CurvePoint? = point
-        var r: CurvePoint!
+    static func multiply(_ point: ECCurvePoint, by number: BigInt) -> ECCurvePoint {
+        var P: ECCurvePoint? = point
+        var r: ECCurvePoint!
 
         for i in 0 ..< number.magnitude.bitWidth {
             if number.magnitude[bitAt: i] {
@@ -104,25 +104,25 @@ extension StarkCurve {
     }
 
     /// Multiplies ``StarkCurve.G`` point by given ``number``
-    static func multiplyG(by number: BigInt) -> CurvePoint {
+    static func multiplyG(by number: BigInt) -> ECCurvePoint {
         multiply(StarkCurve.G, by: number)
     }
 
     /// Adds given points ``p1`` and ``p2``
     /// https://crypto.stanford.edu/pbc/notes/elliptic/explicit.html
-    private static func addPoint(_ p1: CurvePoint, to p2: CurvePoint) -> CurvePoint {
+    private static func addPoint(_ p1: ECCurvePoint, to p2: ECCurvePoint) -> ECCurvePoint {
         let mipResult = modInverseP(p2.y - p1.y, p2.x - p1.x)
         let x3 = modP(mipResult * mipResult - p1.x - p2.x)
         let y3 = modP(mipResult * (p1.x - x3) - p1.y)
-        return CurvePoint(x: x3, y: y3)
+        return ECCurvePoint(x: x3, y: y3)
     }
 
     /// Doubles the given point ``p`` based on ``StarkCurve.a``
     /// https://crypto.stanford.edu/pbc/notes/elliptic/explicit.html
-    private static func doublePoint(_ p: CurvePoint) -> CurvePoint {
+    private static func doublePoint(_ p: ECCurvePoint) -> ECCurvePoint {
         let mipResult = modInverseP(3 * (p.x * p.x) + StarkCurve.a, 2 * p.y)
         let x3 = modP(mipResult * mipResult - 2 * p.x)
         let y3 = modP(mipResult * (p.x - x3) - p.y)
-        return CurvePoint(x: x3, y: y3)
+        return ECCurvePoint(x: x3, y: y3)
     }
 }
