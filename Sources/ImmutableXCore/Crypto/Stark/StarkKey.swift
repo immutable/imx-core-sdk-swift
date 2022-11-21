@@ -15,7 +15,7 @@ public extension StarkKey {
     /// - Parameter signer: the signer that the key pair will be derived from
     /// - Returns: Stark key pair as ``ECKeyPair``
     /// - Throws: ``ImmutableXError``
-    static func generateKeyPair(from signer: Signer) async throws -> ECKeyPair {
+    static func generateLegacyKeyPair(from signer: Signer) async throws -> ECKeyPair {
         let address = try await signer.getAddress()
         let signature = try await signer.signMessage(Constants.starkMessage)
         return try generateKeyPairFromRawSignature(signature, ethereumAddress: address)
@@ -26,7 +26,10 @@ public extension StarkKey {
     /// - Parameter ethereumAddress: the connected wallet address
     /// - Returns: Stark key pair as ``ECKeyPair``
     /// - Throws: ``ImmutableXError``
-    static func generateKeyPairFromRawSignature(_ signature: String, ethereumAddress: String) throws -> ECKeyPair {
+    internal static func generateKeyPairFromRawSignature(
+        _ signature: String,
+        ethereumAddress: String
+    ) throws -> ECKeyPair {
         // swiftlint:disable:next line_length
         // https://github.com/ethers-io/ethers.js/blob/3de1b815014b10d223a42e524fe9c25f9087293b/packages/bytes/src.ts/index.ts#L347
         let seed = signature.dropHexPrefix[64 ..< 128]
