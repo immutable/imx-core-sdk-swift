@@ -41,6 +41,9 @@ Ropsten has been deprecated and won't work anymore. Sandbox is the preferred tes
 - (Breaking): rename PrivateKey, PublicKey, KeyPair and CurvePoint to ECPrivateKey, ECPublicKey, ECKeyPair and ECCurvePoint respectively
 The previous names were too generic and would easily conflict with other classes/structs. These have then been prefixed with EC for Elliptic Curve.
 
+- (Breaking): rename StarkKey's generateKeyPair to generateLegacyKeyPair
+This keypair generation is specific to ImmutableX's Link and should be used only for compatibility reasons.
+
 ### Fixed
 
 - re-include macos as a Cocoapods target
@@ -49,6 +52,8 @@ The Core SDK is generic enough that it should work on macOS. It had accidentally
 ## [0.3.1] - 2022-10-19
 
 ### Removed
+
+- (Breaking): remove StarkKey's generateKeyPairFromRawSignature method from public interface 
 
 - version file
 
