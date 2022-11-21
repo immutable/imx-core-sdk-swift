@@ -1,7 +1,7 @@
 import Foundation
 
 public enum ImmutableXError: Error {
-    /// Error related to deriving or parsing ``PrivateKey`` and ``PublicKey``
+    /// Error related to deriving or parsing ``ECPrivateKey`` and ``ECPublicKey``
     case invalidKeyData
 
     /// Signature's ``StarkSignature/r`` or ``StarkSignature/s`` are out of the curve's range

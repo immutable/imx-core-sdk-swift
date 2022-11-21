@@ -1,20 +1,20 @@
 import Foundation
 
-/// A simple implementation of ``StarkSigner`` that holds the ``KeyPair`` in memory.
+/// A simple implementation of ``StarkSigner`` that holds the ``ECKeyPair`` in memory.
 public struct StandardStarkSigner: StarkSigner {
-    public let pair: KeyPair
+    public let pair: ECKeyPair
 
-    public init(pair: KeyPair) {
+    public init(pair: ECKeyPair) {
         self.pair = pair
     }
 
-    public init(privateKey: PrivateKey) throws {
-        let publicKey = try PublicKey(privateKey: privateKey)
-        self.init(pair: KeyPair(private: privateKey, public: publicKey))
+    public init(privateKey: ECPrivateKey) throws {
+        let publicKey = try ECPublicKey(privateKey: privateKey)
+        self.init(pair: ECKeyPair(private: privateKey, public: publicKey))
     }
 
     public init(privateKeyHex: String) throws {
-        try self.init(privateKey: try PrivateKey(hex: privateKeyHex))
+        try self.init(privateKey: try ECPrivateKey(hex: privateKeyHex))
     }
 
     public func getAddress() async throws -> String {
