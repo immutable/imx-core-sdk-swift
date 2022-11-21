@@ -1,7 +1,14 @@
 import Foundation
 @testable import ImmutableXCore
 
-let coreStub1 = ImmutableX(base: .sandbox, buyWorkflow: BuyWorkflowMock.self, sellWorkflow: SellWorkflowMock.self, cancelOrderWorkflow: CancelOrderWorkflowMock.self, transferWorkflow: TransferWorkflowMock.self, registerWorkflow: RegisterWorkflowMock.self)
+let coreStub1 = ImmutableX(
+    base: .sandbox,
+    buyWorkflow: BuyWorkflowMock.self,
+    sellWorkflow: SellWorkflowMock.self,
+    cancelOrderWorkflow: CancelOrderWorkflowMock.self,
+    transferWorkflow: TransferWorkflowMock.self,
+    registerWorkflow: RegisterWorkflowMock.self
+)
 
 let tokenETHStub1 = Token(
     data: TokenData(
@@ -159,7 +166,11 @@ let registerUserResponseStub1 = RegisterUserResponse(txHash: "hash")
 
 let signedMoonpayResponseStub1 = GetSignedMoonpayResponse(signature: "signature")
 
-let transactionIdResponseStub1 = GetTransactionIdResponse(id: 123, walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay)
+let transactionIdResponseStub1 = GetTransactionIdResponse(
+    id: 123,
+    walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f",
+    provider: .moonpay
+)
 
 let currenciesReponseStub1 = GetCurrenciesResponse(
     currencyCodes: ["code": "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f"]

@@ -57,7 +57,9 @@ final class UsersAPIMock: UsersAPI {
 
     // MARK: - getSignableRegistrationOffchain
 
-    override class func getSignableRegistrationOffchain(getSignableRegistrationRequest: GetSignableRegistrationRequest) async throws -> GetSignableRegistrationOffchainResponse {
+    override class func getSignableRegistrationOffchain(
+        getSignableRegistrationRequest: GetSignableRegistrationRequest
+    ) async throws -> GetSignableRegistrationOffchainResponse {
         let companion = getSignableCompanion!
         companion.callsCount += 1
 
@@ -70,7 +72,9 @@ final class UsersAPIMock: UsersAPI {
 
     // MARK: - registerUser
 
-    override class func registerUser(registerUserRequest: RegisterUserRequest) async throws -> RegisterUserResponse {
+    override class func registerUser(
+        registerUserRequest: RegisterUserRequest
+    ) async throws -> RegisterUserResponse {
         let companion = registerCompanion!
         companion.callsCount += 1
 

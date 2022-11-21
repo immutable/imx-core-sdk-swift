@@ -31,7 +31,8 @@ final class SignerMock: Signer {
 
     var signMessageReceivedMessage: String?
     var signMessageReceivedInvocations: [String] = []
-    var signMessageReturnValue: String! = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1a"
+    var signMessageReturnValue: String! = "0x5a263fad6f17f23e7c7ea833d058f3656d3fe464baf13f6f5ccba9a2466ba2ce" +
+        "4c4a250231bcac7beb165aec4c9b049b4ba40ad8dd287dc79b92b1ffcf20cdcf1a"
     var signMessageClosure: ((String) throws -> String)?
 
     func signMessage(_ message: String) throws -> String {

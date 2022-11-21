@@ -19,6 +19,10 @@ final class StarkSignatureTests: XCTestCase {
 
     func testSerialized() throws {
         let signature = try StarkSignature(r: BigInt(1), s: BigInt(2))
-        XCTAssertEqual(signature.serialized(), "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000002")
+        XCTAssertEqual(
+            signature.serialized(),
+            "0x000000000000000000000000000000000000000000000000000000000000000" +
+                "10000000000000000000000000000000000000000000000000000000000000002"
+        )
     }
 }
