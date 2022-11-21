@@ -204,7 +204,12 @@ final class ImmutableXTests: XCTestCase {
     // MARK: - Buy
 
     func testBuyFlowSuccessAsync() async throws {
-        let response = try await core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock())
+        let response = try await core.buy(
+            orderId: "1",
+            fees: [feeEntryStub1],
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock()
+        )
         XCTAssertEqual(response, createTradeResponseStub1)
     }
 
@@ -214,14 +219,25 @@ final class ImmutableXTests: XCTestCase {
         buyWorkflow.mock(buyCompanion, id: "1")
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await self.core.buy(orderId: "1", fees: [feeEntryStub1], signer: SignerMock(), starkSigner: StarkSignerMock())
+            _ = try await self.core.buy(
+                orderId: "1",
+                fees: [feeEntryStub1],
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock()
+            )
         }
     }
 
     // MARK: - Sell
 
     func testSellFlowSuccessAsync() async throws {
-        let response = try await core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock())
+        let response = try await core.sell(
+            asset: erc721AssetStub1,
+            sellToken: erc20AssetStub1,
+            fees: [],
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock()
+        )
         XCTAssertEqual(response, createOrderResponseStub1)
     }
 
@@ -231,7 +247,13 @@ final class ImmutableXTests: XCTestCase {
         sellWorkflow.mock(sellCompanion)
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await self.core.sell(asset: erc721AssetStub1, sellToken: erc20AssetStub1, fees: [], signer: SignerMock(), starkSigner: StarkSignerMock())
+            _ = try await self.core.sell(
+                asset: erc721AssetStub1,
+                sellToken: erc20AssetStub1,
+                fees: [],
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock()
+            )
         }
     }
 
@@ -255,7 +277,12 @@ final class ImmutableXTests: XCTestCase {
     // MARK: - Transfer
 
     func testTransferFlowSuccessAsync() async throws {
-        let response = try await core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
+        let response = try await core.transfer(
+            token: ETHAsset(quantity: "10"),
+            recipientAddress: "address",
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock()
+        )
         XCTAssertEqual(response, createTransferResponseStub1)
     }
 
@@ -265,7 +292,12 @@ final class ImmutableXTests: XCTestCase {
         transferWorkflowMock.mock(transferCompanion)
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await self.core.transfer(token: ETHAsset(quantity: "10"), recipientAddress: "address", signer: SignerMock(), starkSigner: StarkSignerMock())
+            _ = try await self.core.transfer(
+                token: ETHAsset(quantity: "10"),
+                recipientAddress: "address",
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock()
+            )
         }
     }
 

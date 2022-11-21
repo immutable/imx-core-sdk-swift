@@ -54,7 +54,9 @@ final class TradesAPIMock: TradesAPI {
 
     // MARK: - getSignableTrade
 
-    override public class func getSignableTrade(getSignableTradeRequest: GetSignableTradeRequest) async throws -> GetSignableTradeResponse {
+    override public class func getSignableTrade(
+        getSignableTradeRequest: GetSignableTradeRequest
+    ) async throws -> GetSignableTradeResponse {
         let companion = getRequests[getSignableTradeRequest.orderId]!
         if let error = companion.throwableError {
             throw error
@@ -66,7 +68,11 @@ final class TradesAPIMock: TradesAPI {
 
     // MARK: - createTrade
 
-    override public class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
+    override public class func createTrade(
+        xImxEthAddress: String,
+        xImxEthSignature: String,
+        createTradeRequest: CreateTradeRequestV1
+    ) async throws -> CreateTradeResponse {
         let companion = createRequests[createTradeRequest.orderId]!
 
         if let error = companion.throwableError {

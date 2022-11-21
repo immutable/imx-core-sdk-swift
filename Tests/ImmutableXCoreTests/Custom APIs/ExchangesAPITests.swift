@@ -13,15 +13,25 @@ final class ExchangesAPITests: XCTestCase {
     func testGetTransactionIdSuccessful() async throws {
         builderMock.mock(.success(Response(response: HTTPURLResponse(), body: transactionIdResponseStub1)))
 
-        let response = try await exchangesAPI.getTransactionId(GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay))
+        let response = try await exchangesAPI.getTransactionId(
+            GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay)
+        )
         XCTAssertEqual(response.id, 123)
     }
 
     func testGetTransactionIdFailure() async {
-        builderMock.mock(Result<Response<GetSignedMoonpayResponse>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
+        builderMock.mock(
+            Result<Response<GetSignedMoonpayResponse>,
+                ErrorResponse>.failure(.error(400, nil, nil, DummyError.something))
+        )
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await self.exchangesAPI.getTransactionId(GetTransactionIdRequest(walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f", provider: .moonpay))
+            _ = try await self.exchangesAPI.getTransactionId(
+                GetTransactionIdRequest(
+                    walletAddress: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f",
+                    provider: .moonpay
+                )
+            )
         }
     }
 
@@ -34,7 +44,10 @@ final class ExchangesAPITests: XCTestCase {
     }
 
     func testGetCurrenciesFailure() async {
-        builderMock.mock(Result<Response<[CurrencyCode]>, ErrorResponse>.failure(.error(400, nil, nil, DummyError.something)))
+        builderMock.mock(
+            Result<Response<[CurrencyCode]>,
+                ErrorResponse>.failure(.error(400, nil, nil, DummyError.something))
+        )
 
         await XCTAssertThrowsErrorAsync {
             _ = try await self.exchangesAPI.getCurrencies(address: "0xa76e3eeb2f7143165618ab8feaabcd395b6fac7f")

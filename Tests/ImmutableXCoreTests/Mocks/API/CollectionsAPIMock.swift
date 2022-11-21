@@ -53,7 +53,11 @@ final class CollectionsAPIMock: CollectionsAPI {
         return companion.returnValue
     }
 
-    override class func listCollectionFilters(address: String, pageSize: Int? = nil, nextPageToken: String? = nil) async throws -> CollectionFilter {
+    override class func listCollectionFilters(
+        address: String,
+        pageSize: Int? = nil,
+        nextPageToken: String? = nil
+    ) async throws -> CollectionFilter {
         let companion = listCollectionFiltersCompanion!
         companion.callsCount += 1
 
@@ -64,7 +68,15 @@ final class CollectionsAPIMock: CollectionsAPI {
         return companion.returnValue
     }
 
-    override class func listCollections(pageSize: Int? = nil, cursor: String? = nil, orderBy: CollectionsAPI.OrderBy_listCollections? = nil, direction: String? = nil, blacklist: String? = nil, whitelist: String? = nil, keyword: String? = nil) async throws -> ListCollectionsResponse {
+    override class func listCollections(
+        pageSize: Int? = nil,
+        cursor: String? = nil,
+        orderBy: CollectionsAPI.OrderBy_listCollections? = nil,
+        direction: String? = nil,
+        blacklist: String? = nil,
+        whitelist: String? = nil,
+        keyword: String? = nil
+    ) async throws -> ListCollectionsResponse {
         let companion = listCollectionsCompanion!
         companion.callsCount += 1
 

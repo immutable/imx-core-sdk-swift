@@ -27,7 +27,11 @@ final class RegisterWorkflowTests: XCTestCase {
         usersCompanion.throwableError = ErrorResponse.error(404, nil, nil, DummyError.something)
         usersAPI.mock(usersCompanion)
 
-        let response = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: usersAPI)
+        let response = try await RegisterWorkflow.registerOffchain(
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock(),
+            usersAPI: usersAPI
+        )
         XCTAssertEqual(response, true)
         XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 1)
@@ -39,7 +43,11 @@ final class RegisterWorkflowTests: XCTestCase {
         usersCompanion.returnValue = usersAPIResponseStub1
         usersAPI.mock(usersCompanion)
 
-        let response = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: usersAPI)
+        let response = try await RegisterWorkflow.registerOffchain(
+            signer: SignerMock(),
+            starkSigner: StarkSignerMock(),
+            usersAPI: usersAPI
+        )
         XCTAssertEqual(response, false)
         XCTAssertEqual(usersAPI.getUsersCompanion?.callsCount, 1)
         XCTAssertEqual(usersAPI.getSignableCompanion?.callsCount, 0)
@@ -52,7 +60,11 @@ final class RegisterWorkflowTests: XCTestCase {
         usersAPI.mock(usersCompanion)
 
         let error = await XCTAssertThrowsErrorAsync {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
+            _ = try await RegisterWorkflow.registerOffchain(
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock(),
+                usersAPI: self.usersAPI
+            )
         }
 
         XCTAssertTrue(error is ImmutableXError)
@@ -67,7 +79,11 @@ final class RegisterWorkflowTests: XCTestCase {
         usersAPI.mock(signableCompanion)
 
         let error = await XCTAssertThrowsErrorAsync {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
+            _ = try await RegisterWorkflow.registerOffchain(
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock(),
+                usersAPI: self.usersAPI
+            )
         }
 
         XCTAssertTrue(error is ImmutableXError)
@@ -82,7 +98,11 @@ final class RegisterWorkflowTests: XCTestCase {
         usersAPI.mock(registerCompanion)
 
         let error = await XCTAssertThrowsErrorAsync {
-            _ = try await RegisterWorkflow.registerOffchain(signer: SignerMock(), starkSigner: StarkSignerMock(), usersAPI: self.usersAPI)
+            _ = try await RegisterWorkflow.registerOffchain(
+                signer: SignerMock(),
+                starkSigner: StarkSignerMock(),
+                usersAPI: self.usersAPI
+            )
         }
 
         XCTAssertTrue(error is ImmutableXError)

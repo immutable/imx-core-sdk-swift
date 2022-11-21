@@ -18,7 +18,11 @@ class RegisterWorkflowMock: RegisterWorkflow {
         companion = nil
     }
 
-    override class func registerOffchain(signer: Signer, starkSigner: StarkSigner, usersAPI: UsersAPI.Type = UsersAPI.self) async throws -> Bool {
+    override class func registerOffchain(
+        signer: Signer,
+        starkSigner: StarkSigner,
+        usersAPI: UsersAPI.Type = UsersAPI.self
+    ) async throws -> Bool {
         let companion = companion!
         companion.callsCount += 1
 

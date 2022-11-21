@@ -18,7 +18,14 @@ class BuyWorkflowMock: BuyWorkflow {
         requests.removeAll()
     }
 
-    override class func buy(orderId: String, fees _: [FeeEntry], signer _: Signer, starkSigner _: StarkSigner, ordersAPI _: OrdersAPI.Type = OrdersAPI.self, tradesAPI _: TradesAPI.Type = TradesAPI.self) async throws -> CreateTradeResponse {
+    override class func buy(
+        orderId: String,
+        fees _: [FeeEntry],
+        signer _: Signer,
+        starkSigner _: StarkSigner,
+        ordersAPI _: OrdersAPI.Type = OrdersAPI.self,
+        tradesAPI _: TradesAPI.Type = TradesAPI.self
+    ) async throws -> CreateTradeResponse {
         let companion = requests[orderId]!
 
         if let error = companion.throwableError {

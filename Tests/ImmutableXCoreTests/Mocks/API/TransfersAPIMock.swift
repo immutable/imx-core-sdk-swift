@@ -56,7 +56,9 @@ final class TransfersAPIMock: TransfersAPI {
 
     // MARK: - getSignableTransfer
 
-    override class func getSignableTransfer(getSignableTransferRequestV2: GetSignableTransferRequest) async throws -> GetSignableTransferResponse {
+    override class func getSignableTransfer(
+        getSignableTransferRequestV2: GetSignableTransferRequest
+    ) async throws -> GetSignableTransferResponse {
         let companion = getSignableCompanion!
 
         if let error = companion.throwableError {
@@ -69,7 +71,11 @@ final class TransfersAPIMock: TransfersAPI {
 
     // MARK: - createTransfer
 
-    override class func createTransfer(xImxEthAddress: String, xImxEthSignature: String, createTransferRequestV2: CreateTransferRequest) async throws -> CreateTransferResponse {
+    override class func createTransfer(
+        xImxEthAddress: String,
+        xImxEthSignature: String,
+        createTransferRequestV2: CreateTransferRequest
+    ) async throws -> CreateTransferResponse {
         let companion = createTransferCompanion!
 
         if let error = companion.throwableError {

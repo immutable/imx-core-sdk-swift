@@ -5,11 +5,17 @@ import XCTest
 final class ECPrivateKeyTests: XCTestCase {
     func testInitNumber() throws {
         let biggerNumber = StarkCurve.N + 1
-        XCTAssertThrowsError(try ECPrivateKey(number: biggerNumber), "Should throw if number is not in the StarkCurve.N range") { error in
+        XCTAssertThrowsError(
+            try ECPrivateKey(number: biggerNumber),
+            "Should throw if number is not in the StarkCurve.N range"
+        ) { error in
             XCTAssertTrue(error is ImmutableXError)
         }
 
-        XCTAssertThrowsError(try ECPrivateKey(number: BigInt.zero), "Should throw if number is smaller than 1") { error in
+        XCTAssertThrowsError(
+            try ECPrivateKey(number: BigInt.zero),
+            "Should throw if number is smaller than 1"
+        ) { error in
             XCTAssertTrue(error is ImmutableXError)
         }
 
@@ -20,7 +26,10 @@ final class ECPrivateKeyTests: XCTestCase {
     }
 
     func testInitHex() throws {
-        XCTAssertThrowsError(try ECPrivateKey(hex: "invalid"), "Should throw if hex can't be represented as a BigInt") { error in
+        XCTAssertThrowsError(
+            try ECPrivateKey(hex: "invalid"),
+            "Should throw if hex can't be represented as a BigInt"
+        ) { error in
             XCTAssertTrue(error is ImmutableXError)
         }
 

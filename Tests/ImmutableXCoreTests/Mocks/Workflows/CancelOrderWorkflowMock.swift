@@ -18,7 +18,12 @@ class CancelOrderWorkflowMock: CancelOrderWorkflow {
         requests.removeAll()
     }
 
-    override class func cancel(orderId: String, signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type = OrdersAPI.self) async throws -> CancelOrderResponse {
+    override class func cancel(
+        orderId: String,
+        signer: Signer,
+        starkSigner: StarkSigner,
+        ordersAPI: OrdersAPI.Type = OrdersAPI.self
+    ) async throws -> CancelOrderResponse {
         let companion = requests[orderId]!
 
         if let error = companion.throwableError {

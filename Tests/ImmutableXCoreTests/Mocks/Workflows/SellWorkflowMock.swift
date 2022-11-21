@@ -18,7 +18,14 @@ class SellWorkflowMock: SellWorkflow {
         companion = nil
     }
 
-    override class func sell(asset: AssetModel, sellToken: AssetModel, fees: [FeeEntry], signer: Signer, starkSigner: StarkSigner, ordersAPI: OrdersAPI.Type) async throws -> CreateOrderResponse {
+    override class func sell(
+        asset: AssetModel,
+        sellToken: AssetModel,
+        fees: [FeeEntry],
+        signer: Signer,
+        starkSigner: StarkSigner,
+        ordersAPI: OrdersAPI.Type
+    ) async throws -> CreateOrderResponse {
         let companion = companion!
 
         if let error = companion.throwableError {

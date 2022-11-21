@@ -24,7 +24,10 @@ class RequestBuilderFactoryMock: RequestBuilderFactory {
 
 class RequestBuilderMock<T>: RequestBuilder<T> {
     @discardableResult
-    override open func execute(_ apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) -> RequestTask {
+    override open func execute(
+        _ apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue,
+        _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void
+    ) -> RequestTask {
         switch RequestBuilderFactoryMock.returnValue {
         case let .success(response):
             completion(.success(Response(response: HTTPURLResponse(), body: response.body as! T)))
