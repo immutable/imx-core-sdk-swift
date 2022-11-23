@@ -73,6 +73,13 @@ final class StarkKeyTests: XCTestCase {
             XCTAssertTrue(error is ImmutableXError)
         }
     }
+
+    func testGenerateKeyPair() throws {
+        let pair1 = try StarkKey.generateKeyPair()
+        let pair2 = try StarkKey.generateKeyPair()
+
+        XCTAssertNotEqual(pair1, pair2)
+    }
 }
 
 extension StarkKeyTests {

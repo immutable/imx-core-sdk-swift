@@ -1,6 +1,9 @@
 import Foundation
 
 public enum ImmutableXError: Error {
+    /// Error related to generating an ``ECPrivateKey``
+    case invalidPrivateKey
+
     /// Error related to deriving or parsing ``ECPrivateKey`` and ``ECPublicKey``
     case invalidKeyData
 

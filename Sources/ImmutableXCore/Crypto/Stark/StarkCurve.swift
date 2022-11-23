@@ -126,3 +126,19 @@ extension StarkCurve {
         return ECCurvePoint(x: x3, y: y3)
     }
 }
+
+extension StarkCurve {
+    /// Generates a random private key
+    static func generatePrivateKey() -> ECPrivateKey {
+        let byteCount = (StarkCurve.N - 1).as256bitLongData().bytes.count
+        var privateKey: ECPrivateKey?
+
+        repeat {
+            // Generate random bytes within the Stark Curve range
+            guard let randomBytes = try? CryptoUtil.generateRandomBytes(count: byteCount) else { continue }
+            privateKey = try? ECPrivateKey(number: BigInt(data: Data(randomBytes)))
+        } while privateKey == nil
+
+        return privateKey!
+    }
+}
