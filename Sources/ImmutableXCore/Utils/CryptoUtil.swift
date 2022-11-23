@@ -92,4 +92,19 @@ struct CryptoUtil {
                 importRecoveryParam(v).padLeft(length: 2)
         ).addHexPrefix
     }
+
+    /// Generates an array of cryptographically secure random bytes.
+    /// - Parameter count: the number of random bytes to return in the array
+    /// - Returns: an array random bytes
+    /// - Throws: ``ImmutableXError/invalidPrivateKey`` if could not generate bytes
+    static func generateRandomBytes(count: Int) throws -> [UInt8] {
+        var randomBytes = [UInt8](repeating: 0, count: count)
+        let status = SecRandomCopyBytes(kSecRandomDefault, count, &randomBytes)
+
+        if status != errSecSuccess {
+            throw ImmutableXError.invalidPrivateKey
+        }
+
+        return randomBytes
+    }
 }

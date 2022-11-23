@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `getUser(ethAddress:)` has been added to ImmutableX instance.
+- `generateKeyPair()` method has been added to `StarkKey` for generating random key pairs.
 
 ### Changed
 

@@ -72,4 +72,12 @@ final class CryptoUtilTests: XCTestCase {
                 "c1bc021cd318c734c51ae29374f2beb0e6f2dd49b4bf401"
         )
     }
+
+    func testGenerateRandomBytes() throws {
+        let bytes1 = try CryptoUtil.generateRandomBytes(count: 12)
+        let bytes2 = try CryptoUtil.generateRandomBytes(count: 12)
+        XCTAssertEqual(bytes1.count, 12)
+        XCTAssertEqual(bytes2.count, 12)
+        XCTAssertNotEqual(bytes1, bytes2)
+    }
 }

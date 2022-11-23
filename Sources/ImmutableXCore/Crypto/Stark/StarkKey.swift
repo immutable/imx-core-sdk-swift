@@ -21,6 +21,17 @@ public extension StarkKey {
         return try generateKeyPairFromRawSignature(signature, ethereumAddress: address)
     }
 
+    /// Generates a new Stark key pair
+    /// - Returns: Stark key pair as ``ECKeyPair``
+    /// - Throws: ``ImmutableXError``
+    static func generateKeyPair() throws -> ECKeyPair {
+        let newKey = StarkCurve.generatePrivateKey()
+        let unbiasedKey = grindKey(keySeed: newKey.number.asHexString())
+        let privateKey = try ECPrivateKey(hex: unbiasedKey)
+        let publicKey = try ECPublicKey(privateKey: privateKey)
+        return ECKeyPair(private: privateKey, public: publicKey)
+    }
+
     /// Generate a Stark key pair from a L1 wallet.
     /// - Parameter signature: the 's' variable of the signature
     /// - Parameter ethereumAddress: the connected wallet address

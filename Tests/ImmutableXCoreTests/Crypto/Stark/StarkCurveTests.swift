@@ -80,4 +80,11 @@ final class StarkCurveTests: XCTestCase {
             StarkCurve.multiply(StarkCurve.G, by: BigInt(5))
         )
     }
+
+    func testGeneratePrivateKey() throws {
+        let pair1 = StarkCurve.generatePrivateKey()
+        let pair2 = StarkCurve.generatePrivateKey()
+
+        XCTAssertNotEqual(pair1, pair2)
+    }
 }
