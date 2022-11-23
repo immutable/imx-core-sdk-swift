@@ -10,6 +10,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `getUser(ethAddress:)` has been added to ImmutableX instance.
+- `getDeposit(id:)` has been added to ImmutableX instance.
+- `listDeposits(pageSize:cursor:orderBy:direction:user:status:updatedMinTimestamp:updatedMaxTimestamp:tokenType:tokenId:assetId:tokenAddress:tokenName:minQuantity:maxQuantity:metadata:)` has been added to ImmutableX instance.
+- `getUser(ethAddress:)` has been added to ImmutableX instance.
+- `getAsset(tokenAddress:tokenId:includeFees:)` has been added to ImmutableX instance.
+- `listAssets(pageSize:cursor:orderBy:direction:user:status:name:metadata:sellOrders:buyOrders:includeFees:collection:updatedMinTimestamp:updatedMaxTimestamp:auxiliaryFeePercentages:auxiliaryFeeRecipients:)` has been added to ImmutableX instance.
+- `getCollection(address:)` has been added to ImmutableX instance.
+- `listCollectionFilters(address:pageSize:nextPageToken:)` has been added to ImmutableX instance.
+- `listCollections(pageSize:cursor:orderBy:direction:blacklist:whitelist:keyword:)` has been added to ImmutableX instance.
+- `getProject(id:signer:)` has been added to ImmutableX instance.
+- `getProjects(pageSize:cursor:orderBy:direction:signer:)` has been added to ImmutableX instance.
+- `getBalance(owner:address:)` has been added to ImmutableX instance.
+- `listBalances(owner:)` has been added to ImmutableX instance.
+- `getMint(id:)` has been added to ImmutableX instance.
+- `listMints(pageSize:cursor:orderBy:direction:user:status:minTimestamp:maxTimestamp:tokenType:tokenId:assetId:tokenName:tokenAddress:minQuantity:maxQuantity:metadata:)` has been added to ImmutableX instance.
+- `listWithdrawals(withdrawnToWallet:rollupStatus:pageSize:cursor:orderBy:direction:user:status:minTimestamp:maxTimestamp:tokenType:)tokenId:assetId:tokenAddress:tokenName:minQuantity:maxQuantity:metadata:)` has been added to ImmutableX instance.
+- `getWithdrawal(id:)` has been added to ImmutableX instance.
+- `getOrder(id:includeFees:auxiliaryFeePercentages:auxiliaryFeeRecipients:)` has been added to ImmutableX instance.
+- `listOrders(pageSize:cursor:orderBy:direction:user:status:minTimestamp:maxTimestamp:updatedMinTimestamp:updatedMaxTimestamp:buyTokenType:buyTokenId:buyAssetId:buyTokenAddress:buyTokenName:buyMinQuantity:buyMaxQuantity:buyMetadata:sellTokenType:sellTokenId:sellAssetId:sellTokenAddress:sellTokenName:sellMinQuantity:sellMaxQuantity:sellMetadata:auxiliaryFeePercentages:auxiliaryFeeRecipients:includeFees:)` has been added to ImmutableX instance.
+- `getTrade(id:)` has been added to ImmutableX instance.
+- `listTrades(partyAOrderId:partyATokenType:partyATokenAddress:partyBOrderId:partyBTokenType:partyBTokenAddress:partyBTokenId:p)ageSize:cursor:orderBy:direction:minTimestamp:maxTimestamp:)` has been added to ImmutableX instance.
+- `getToken(address:)` has been added to ImmutableX instance.
+- `listTokens(address:symbols:)` has been added to ImmutableX instance.
+- `getTransfer(id:)` has been added to ImmutableX instance.
+- `listTransfers(pageSize:cursor:orderBy:direction:user:receiver:status:minTimestamp:maxTimestamp:tokenType:tokenId:assetId:tokenAddress:tokenName:minQuantity:maxQuantity:metadata:)` has been added to ImmutableX instance.
+- `transfer(token:recipientAddress:signer:starkSigner:)` has been added to ImmutableX instance.
+- `batchTransfer(transfers:signer:starkSigner:)` has been added to ImmutableX instance.
 - `generateKeyPair()` method has been added to `StarkKey` for generating random key pairs.
 
 ### Changed
