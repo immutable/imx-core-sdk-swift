@@ -1,7 +1,7 @@
 import Foundation
 
-class SellWorkflow {
-    /// This is a utility function that will chain the necessary calls to sell an asset.
+class CreateOrderWorkflow {
+    /// This is a utility function that will chain the necessary calls to create an order for an ERC721 asset.
     ///
     /// - Parameters:
     ///     - asset: the asset to sell
@@ -11,7 +11,7 @@ class SellWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateOrderResponse`` that will provide the Order id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func sell(
+    class func createOrder(
         asset: AssetModel,
         sellToken: AssetModel,
         fees: [FeeEntry],

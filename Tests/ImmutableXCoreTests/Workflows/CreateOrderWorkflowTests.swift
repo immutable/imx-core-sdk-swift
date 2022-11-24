@@ -1,7 +1,7 @@
 @testable import ImmutableXCore
 import XCTest
 
-final class SellWorkflowTests: XCTestCase {
+final class CreateOrderWorkflowTests: XCTestCase {
     let ordersAPI = OrdersAPIMock.self
 
     override func setUp() {
@@ -18,8 +18,8 @@ final class SellWorkflowTests: XCTestCase {
         ordersAPI.mock(createOrderCompanion)
     }
 
-    func testSellFlowSuccess() async throws {
-        let response = try await SellWorkflow.sell(
+    func testCreateOrderFlowSuccess() async throws {
+        let response = try await CreateOrderWorkflow.createOrder(
             asset: erc721AssetStub1,
             sellToken: erc20AssetStub1,
             fees: [],
@@ -31,13 +31,13 @@ final class SellWorkflowTests: XCTestCase {
         XCTAssertEqual(response, createOrderResponseStub1)
     }
 
-    func testSellFlowFailureWhenSignableOrderThrows() async {
+    func testCreateOrderFlowFailureWhenSignableOrderThrows() async {
         let signableCompanion = OrdersAPIMockGetSignableCompanion()
         signableCompanion.throwableError = DummyError.something
         ordersAPI.mock(signableCompanion)
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await SellWorkflow.sell(
+            _ = try await CreateOrderWorkflow.createOrder(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,
                 fees: [],
@@ -48,13 +48,13 @@ final class SellWorkflowTests: XCTestCase {
         }
     }
 
-    func testSellFlowFailureWhenCreateOrderThrows() async {
+    func testCreateOrderFlowFailureWhenCreateOrderThrows() async {
         let createOrderCompanion = OrdersAPIMockCreateOrderCompanion()
         createOrderCompanion.throwableError = DummyError.something
         ordersAPI.mock(createOrderCompanion)
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await SellWorkflow.sell(
+            _ = try await CreateOrderWorkflow.createOrder(
                 asset: erc721AssetStub1,
                 sellToken: erc20AssetStub1,
                 fees: [],
