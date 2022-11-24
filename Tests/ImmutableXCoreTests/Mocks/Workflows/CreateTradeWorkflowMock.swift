@@ -1,16 +1,16 @@
 import Foundation
 @testable import ImmutableXCore
 
-class BuyWorkflowCompanion {
+class CreateTradeWorkflowCompanion {
     var throwableError: Error?
     var callsCount = 0
     var returnValue: CreateTradeResponse!
 }
 
-class BuyWorkflowMock: BuyWorkflow {
-    static var requests: [String: BuyWorkflowCompanion] = [:]
+class CreateTradeWorkflowMock: CreateTradeWorkflow {
+    static var requests: [String: CreateTradeWorkflowCompanion] = [:]
 
-    static func mock(_ companion: BuyWorkflowCompanion, id: String) {
+    static func mock(_ companion: CreateTradeWorkflowCompanion, id: String) {
         requests[id] = companion
     }
 
@@ -18,7 +18,7 @@ class BuyWorkflowMock: BuyWorkflow {
         requests.removeAll()
     }
 
-    override class func buy(
+    override class func createTrade(
         orderId: String,
         fees _: [FeeEntry],
         signer _: Signer,

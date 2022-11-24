@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-for changed features.
+- (Breaking): renamed ImmutableX's `sell(orderId:fees:signer:starkSigner:)` to `createTrade(orderId:fees:signer:starkSigner:)`
 
 ### Deprecated
 

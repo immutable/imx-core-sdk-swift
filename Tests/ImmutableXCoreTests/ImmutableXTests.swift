@@ -2,7 +2,7 @@
 import XCTest
 
 final class ImmutableXTests: XCTestCase {
-    let buyWorkflow = BuyWorkflowMock.self
+    let createTradeWorkflow = CreateTradeWorkflowMock.self
     let sellWorkflow = SellWorkflowMock.self
     let cancelOrderWorkflow = CancelOrderWorkflowMock.self
     let transferWorkflowMock = TransferWorkflowMock.self
@@ -22,7 +22,7 @@ final class ImmutableXTests: XCTestCase {
     let transfersAPIMock = TransfersAPIMock.self
 
     lazy var core = ImmutableX(
-        buyWorkflow: buyWorkflow,
+        createTradeWorkflow: createTradeWorkflow,
         sellWorkflow: sellWorkflow,
         cancelOrderWorkflow: cancelOrderWorkflow,
         transferWorkflow: transferWorkflowMock,
@@ -44,7 +44,7 @@ final class ImmutableXTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        buyWorkflow.resetMock()
+        createTradeWorkflow.resetMock()
         sellWorkflow.resetMock()
         cancelOrderWorkflow.resetMock()
         transferWorkflowMock.resetMock()
@@ -65,9 +65,9 @@ final class ImmutableXTests: XCTestCase {
 
         ImmutableX.initialize()
 
-        let buyCompanion = BuyWorkflowCompanion()
-        buyCompanion.returnValue = createTradeResponseStub1
-        buyWorkflow.mock(buyCompanion, id: "1")
+        let tradeCompanion = CreateTradeWorkflowCompanion()
+        tradeCompanion.returnValue = createTradeResponseStub1
+        createTradeWorkflow.mock(tradeCompanion, id: "1")
 
         let sellCompanion = SellWorkflowCompanion()
         sellCompanion.returnValue = createOrderResponseStub1
@@ -201,10 +201,10 @@ final class ImmutableXTests: XCTestCase {
         }
     }
 
-    // MARK: - Buy
+    // MARK: - Create Trade
 
-    func testBuyFlowSuccessAsync() async throws {
-        let response = try await core.buy(
+    func testCreateTradeWorkflowSuccessAsync() async throws {
+        let response = try await core.createTrade(
             orderId: "1",
             fees: [feeEntryStub1],
             signer: SignerMock(),
@@ -213,13 +213,13 @@ final class ImmutableXTests: XCTestCase {
         XCTAssertEqual(response, createTradeResponseStub1)
     }
 
-    func testBuyFlowFailureAsync() async {
-        let buyCompanion = BuyWorkflowCompanion()
+    func testCreateTradeWorkflowFailureAsync() async {
+        let buyCompanion = CreateTradeWorkflowCompanion()
         buyCompanion.throwableError = DummyError.something
-        buyWorkflow.mock(buyCompanion, id: "1")
+        createTradeWorkflow.mock(buyCompanion, id: "1")
 
         await XCTAssertThrowsErrorAsync {
-            _ = try await self.core.buy(
+            _ = try await self.core.createTrade(
                 orderId: "1",
                 fees: [feeEntryStub1],
                 signer: SignerMock(),

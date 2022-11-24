@@ -30,8 +30,8 @@ public struct ImmutableX {
     /// Returns the version of the sdk
     internal var sdkVersion: String = "0.4.0"
 
-    private let buyWorkflow: BuyWorkflow.Type
     private let sellWorkflow: SellWorkflow.Type
+    private let createTradeWorkflow: CreateTradeWorkflow.Type
     private let cancelOrderWorkflow: CancelOrderWorkflow.Type
     private let transferWorkflow: TransferWorkflow.Type
     private let registerWorkflow: RegisterWorkflow.Type
@@ -54,8 +54,8 @@ public struct ImmutableX {
     internal init(
         base: ImmutableXBase = .sandbox,
         logLevel: ImmutableXHTTPLoggingLevel = .none,
-        buyWorkflow: BuyWorkflow.Type = BuyWorkflow.self,
         sellWorkflow: SellWorkflow.Type = SellWorkflow.self,
+        createTradeWorkflow: CreateTradeWorkflow.Type = CreateTradeWorkflow.self,
         cancelOrderWorkflow: CancelOrderWorkflow.Type = CancelOrderWorkflow.self,
         transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self,
         registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
@@ -75,8 +75,8 @@ public struct ImmutableX {
     ) {
         self.base = base
         self.logLevel = logLevel
-        self.buyWorkflow = buyWorkflow
         self.sellWorkflow = sellWorkflow
+        self.createTradeWorkflow = createTradeWorkflow
         self.cancelOrderWorkflow = cancelOrderWorkflow
         self.transferWorkflow = transferWorkflow
         self.registerWorkflow = registerWorkflow
@@ -101,7 +101,7 @@ public struct ImmutableX {
         ImmutableX.shared = ImmutableX(base: base, logLevel: logLevel)
     }
 
-    /// This is a utility function that will chain the necessary calls to buy an existing order.
+    /// This is a utility function that will chain the necessary calls to fulfill an existing order.
     ///
     ///  - Parameters:
     ///     - orderId: the id of an existing order to be bought
@@ -110,13 +110,18 @@ public struct ImmutableX {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: a ``CreateTradeResponse`` that will provide the Trade id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    public func buy(
+    public func createTrade(
         orderId: String,
         fees: [FeeEntry] = [],
         signer: Signer,
         starkSigner: StarkSigner
     ) async throws -> CreateTradeResponse {
-        try await buyWorkflow.buy(orderId: orderId, fees: fees, signer: signer, starkSigner: starkSigner)
+        try await createTradeWorkflow.createTrade(
+            orderId: orderId,
+            fees: fees,
+            signer: signer,
+            starkSigner: starkSigner
+        )
     }
 
     /// This is a utility function that will chain the necessary calls to sell an asset.

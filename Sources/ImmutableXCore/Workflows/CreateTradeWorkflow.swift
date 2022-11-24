@@ -1,7 +1,7 @@
 import Foundation
 
-class BuyWorkflow {
-    /// This is a utility function that will chain the necessary calls to buy an existing order.
+class CreateTradeWorkflow {
+    /// This is a utility function that will chain the necessary calls to fulfill an existing order.
     ///
     /// - Parameters:
     ///     - orderId: the id of an existing order to be bought
@@ -10,7 +10,7 @@ class BuyWorkflow {
     ///     - starkSigner: represents the users L2 wallet used to sign and verify the L2 transaction
     /// - Returns: ``CreateTradeResponse`` that will provide the Trade id if successful.
     /// - Throws: A variation of ``ImmutableXError``
-    class func buy(
+    class func createTrade(
         orderId: String,
         fees: [FeeEntry],
         signer: Signer,
