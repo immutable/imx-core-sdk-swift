@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - (Breaking): renamed ImmutableX's `sell(orderId:fees:signer:starkSigner:)` to `createTrade(orderId:fees:signer:starkSigner:)`
+- (Breaking): renamed ImmutableX's `buy(asset:sellToken:fees:signer:starkSigner:)` to `createOrder(asset:sellToken:fees:signer:starkSigner:)`
 
 ### Deprecated
 

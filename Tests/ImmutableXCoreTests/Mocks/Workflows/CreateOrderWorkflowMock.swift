@@ -1,16 +1,16 @@
 import Foundation
 @testable import ImmutableXCore
 
-class SellWorkflowCompanion {
+class CreateOrderWorkflowCompanion {
     var throwableError: Error?
     var callsCount = 0
     var returnValue: CreateOrderResponse!
 }
 
-class SellWorkflowMock: SellWorkflow {
-    static var companion: SellWorkflowCompanion?
+class CreateOrderWorkflowMock: CreateOrderWorkflow {
+    static var companion: CreateOrderWorkflowCompanion?
 
-    static func mock(_ companion: SellWorkflowCompanion) {
+    static func mock(_ companion: CreateOrderWorkflowCompanion) {
         self.companion = companion
     }
 
@@ -18,7 +18,7 @@ class SellWorkflowMock: SellWorkflow {
         companion = nil
     }
 
-    override class func sell(
+    override class func createOrder(
         asset: AssetModel,
         sellToken: AssetModel,
         fees: [FeeEntry],

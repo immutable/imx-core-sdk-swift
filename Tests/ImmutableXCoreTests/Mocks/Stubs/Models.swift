@@ -4,7 +4,7 @@ import Foundation
 let coreStub1 = ImmutableX(
     base: .sandbox,
     createTradeWorkflow: CreateTradeWorkflowMock.self,
-    sellWorkflow: SellWorkflowMock.self,
+    createOrderWorkflow: CreateOrderWorkflowMock.self,
     cancelOrderWorkflow: CancelOrderWorkflowMock.self,
     transferWorkflow: TransferWorkflowMock.self,
     registerWorkflow: RegisterWorkflowMock.self
