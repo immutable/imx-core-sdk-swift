@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+for new features.
+
+### Changed
+
+for changes in existing functionality.
+
+### Deprecated
+
+for soon-to-be removed features.
+
+### Removed
+
+for removed features.
+
+### Fixed
+
+for any bug fixes.
+
+## [1.0.0-beta.1] - 2022-11-28
+
+### Added
+
 - expose all APIs, `assetsAPI`, `balancesAPI`, `collectionsAPI`, `depositsAPI`, `encodingAPI`, `metadataAPI`, `mintsAPI`, `ordersAPI`, `projectsAPI`, `tokensAPI`, `tradesAPI`, `transfersAPI`, `usersAPI` and `withdrawalAPI` as part of ImmutableX instance.
 - `getUser(ethAddress:)` has been added to ImmutableX instance.
 - `getDeposit(id:)` has been added to ImmutableX instance.
@@ -44,17 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Breaking): renamed ImmutableX's `sell(orderId:fees:signer:starkSigner:)` to `createTrade(orderId:fees:signer:starkSigner:)`
 - (Breaking): renamed ImmutableX's `buy(asset:sellToken:fees:signer:starkSigner:)` to `createOrder(asset:sellToken:fees:signer:starkSigner:)`
 
-### Deprecated
-
-for soon-to-be removed features.
-
 ### Removed
 
 - (Breaking): removed closure based APIs from ImmutableX instance.
-
-### Fixed
-
-for any bug fixes.
 
 ## [0.4.0] - 2022-10-21
 
