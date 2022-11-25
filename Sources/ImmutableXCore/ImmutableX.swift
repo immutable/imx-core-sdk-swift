@@ -36,18 +36,21 @@ public struct ImmutableX {
     private let transferWorkflow: TransferWorkflow.Type
     private let registerWorkflow: RegisterWorkflow.Type
     private let buyCryptoWorkflow: BuyCryptoWorkflow.Type
-    private let usersAPI: UsersAPI.Type
-    private let depositAPI: DepositsAPI.Type
-    private let assetsAPI: AssetsAPI.Type
-    private let collectionsAPI: CollectionsAPI.Type
-    private let projectsAPI: ProjectsAPI.Type
-    private let balancesAPI: BalancesAPI.Type
-    private let mintsAPI: MintsAPI.Type
-    private let withdrawalAPI: WithdrawalsAPI.Type
-    private let ordersAPI: OrdersAPI.Type
-    private let tradesAPI: TradesAPI.Type
-    private let tokensAPI: TokensAPI.Type
-    private let transfersAPI: TransfersAPI.Type
+
+    public let assetsAPI: AssetsAPI.Type
+    public let balancesAPI: BalancesAPI.Type
+    public let collectionsAPI: CollectionsAPI.Type
+    public let depositsAPI: DepositsAPI.Type
+    public let encodingAPI: EncodingAPI.Type
+    public let metadataAPI: MetadataAPI.Type
+    public let mintsAPI: MintsAPI.Type
+    public let ordersAPI: OrdersAPI.Type
+    public let projectsAPI: ProjectsAPI.Type
+    public let tokensAPI: TokensAPI.Type
+    public let tradesAPI: TradesAPI.Type
+    public let transfersAPI: TransfersAPI.Type
+    public let usersAPI: UsersAPI.Type
+    public let withdrawalAPI: WithdrawalsAPI.Type
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -60,18 +63,20 @@ public struct ImmutableX {
         transferWorkflow: TransferWorkflow.Type = TransferWorkflow.self,
         registerWorkflow: RegisterWorkflow.Type = RegisterWorkflow.self,
         buyCryptoWorkflow: BuyCryptoWorkflow.Type = BuyCryptoWorkflow.self,
-        usersAPI: UsersAPI.Type = UsersAPI.self,
-        depositAPI: DepositsAPI.Type = DepositsAPI.self,
         assetsAPI: AssetsAPI.Type = AssetsAPI.self,
-        collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
-        projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
         balancesAPI: BalancesAPI.Type = BalancesAPI.self,
+        collectionsAPI: CollectionsAPI.Type = CollectionsAPI.self,
+        depositsAPI: DepositsAPI.Type = DepositsAPI.self,
+        encodingAPI: EncodingAPI.Type = EncodingAPI.self,
+        metadataAPI: MetadataAPI.Type = MetadataAPI.self,
         mintsAPI: MintsAPI.Type = MintsAPI.self,
-        withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self,
         ordersAPI: OrdersAPI.Type = OrdersAPI.self,
-        tradesAPI: TradesAPI.Type = TradesAPI.self,
+        projectsAPI: ProjectsAPI.Type = ProjectsAPI.self,
         tokensAPI: TokensAPI.Type = TokensAPI.self,
-        transfersAPI: TransfersAPI.Type = TransfersAPI.self
+        tradesAPI: TradesAPI.Type = TradesAPI.self,
+        transfersAPI: TransfersAPI.Type = TransfersAPI.self,
+        usersAPI: UsersAPI.Type = UsersAPI.self,
+        withdrawalAPI: WithdrawalsAPI.Type = WithdrawalsAPI.self
     ) {
         self.base = base
         self.logLevel = logLevel
@@ -81,18 +86,20 @@ public struct ImmutableX {
         self.transferWorkflow = transferWorkflow
         self.registerWorkflow = registerWorkflow
         self.buyCryptoWorkflow = buyCryptoWorkflow
-        self.usersAPI = usersAPI
-        self.depositAPI = depositAPI
         self.assetsAPI = assetsAPI
-        self.collectionsAPI = collectionsAPI
-        self.projectsAPI = projectsAPI
         self.balancesAPI = balancesAPI
+        self.collectionsAPI = collectionsAPI
+        self.depositsAPI = depositsAPI
+        self.encodingAPI = encodingAPI
+        self.metadataAPI = metadataAPI
         self.mintsAPI = mintsAPI
-        self.withdrawalAPI = withdrawalAPI
         self.ordersAPI = ordersAPI
-        self.tradesAPI = tradesAPI
+        self.projectsAPI = projectsAPI
         self.tokensAPI = tokensAPI
+        self.tradesAPI = tradesAPI
         self.transfersAPI = transfersAPI
+        self.usersAPI = usersAPI
+        self.withdrawalAPI = withdrawalAPI
     }
 
     /// Initializes the SDK with the given ``base`` and ``logLevel`` by assigning a shared instance accessible via
@@ -234,7 +241,7 @@ public struct ImmutableX {
     /// - Throws: A variation of ``ImmutableXError``
     public func getDeposit(id: String) async throws -> Deposit {
         try await APIErrorMapper.map(caller: "Get Deposit") {
-            try await self.depositAPI.getDeposit(id: id)
+            try await self.depositsAPI.getDeposit(id: id)
         }
     }
 
@@ -280,7 +287,7 @@ public struct ImmutableX {
         metadata: String? = nil
     ) async throws -> ListDepositsResponse {
         try await APIErrorMapper.map(caller: "Get Deposit") {
-            try await self.depositAPI.listDeposits(
+            try await self.depositsAPI.listDeposits(
                 pageSize: pageSize,
                 cursor: cursor,
                 orderBy: orderBy,

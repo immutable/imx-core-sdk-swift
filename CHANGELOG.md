@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- expose all APIs, `assetsAPI`, `balancesAPI`, `collectionsAPI`, `depositsAPI`, `encodingAPI`, `metadataAPI`, `mintsAPI`, `ordersAPI`, `projectsAPI`, `tokensAPI`, `tradesAPI`, `transfersAPI`, `usersAPI` and `withdrawalAPI` as part of ImmutableX instance.
 - `getUser(ethAddress:)` has been added to ImmutableX instance.
 - `getDeposit(id:)` has been added to ImmutableX instance.
 - `listDeposits(pageSize:cursor:orderBy:direction:user:status:updatedMinTimestamp:updatedMaxTimestamp:tokenType:tokenId:assetId:tokenAddress:tokenName:minQuantity:maxQuantity:metadata:)` has been added to ImmutableX instance.

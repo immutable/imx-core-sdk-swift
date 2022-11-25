@@ -9,7 +9,7 @@ final class ImmutableXTests: XCTestCase {
     let registerWorkflowMock = RegisterWorkflowMock.self
     let buyCryptoWorkflowMock = BuyCryptoWorkflowMock.self
     let usersAPIMock = UsersAPIMock.self
-    let depositAPIMock = DepositAPIMock.self
+    let depositsAPIMock = DepositAPIMock.self
     let assetsAPIMock = AssetsAPIMock.self
     let collectionsAPIMock = CollectionsAPIMock.self
     let projectsAPIMock = ProjectsAPIMock.self
@@ -28,18 +28,18 @@ final class ImmutableXTests: XCTestCase {
         transferWorkflow: transferWorkflowMock,
         registerWorkflow: registerWorkflowMock,
         buyCryptoWorkflow: buyCryptoWorkflowMock,
-        usersAPI: usersAPIMock,
-        depositAPI: depositAPIMock,
         assetsAPI: assetsAPIMock,
-        collectionsAPI: collectionsAPIMock,
-        projectsAPI: projectsAPIMock,
         balancesAPI: balancesAPIMock,
+        collectionsAPI: collectionsAPIMock,
+        depositsAPI: depositsAPIMock,
         mintsAPI: mintsAPIMock,
-        withdrawalAPI: withdrawalsAPIMock,
         ordersAPI: ordersAPIMock,
-        tradesAPI: tradesAPIMock,
+        projectsAPI: projectsAPIMock,
         tokensAPI: tokensAPIMock,
-        transfersAPI: transfersAPIMock
+        tradesAPI: tradesAPIMock,
+        transfersAPI: transfersAPIMock,
+        usersAPI: usersAPIMock,
+        withdrawalAPI: withdrawalsAPIMock
     )
 
     override func setUp() {
@@ -51,7 +51,7 @@ final class ImmutableXTests: XCTestCase {
         registerWorkflowMock.resetMock()
         buyCryptoWorkflowMock.resetMock()
         usersAPIMock.resetMock()
-        depositAPIMock.resetMock()
+        depositsAPIMock.resetMock()
         assetsAPIMock.resetMock()
         collectionsAPIMock.resetMock()
         projectsAPIMock.resetMock()
@@ -95,11 +95,11 @@ final class ImmutableXTests: XCTestCase {
 
         let depositCompanion = DepositAPIMock.GetDepositCompanion()
         depositCompanion.returnValue = depositStub1
-        depositAPIMock.mock(depositCompanion)
+        depositsAPIMock.mock(depositCompanion)
 
         let listDepositsCompanion = DepositAPIMock.ListDepositsCompanion()
         listDepositsCompanion.returnValue = listDepositResponsesStub1
-        depositAPIMock.mock(listDepositsCompanion)
+        depositsAPIMock.mock(listDepositsCompanion)
 
         let assetCompanion = AssetsAPIMock.GetAssetCompanion()
         assetCompanion.returnValue = assetStub1
@@ -362,7 +362,7 @@ final class ImmutableXTests: XCTestCase {
     func testGetDepositFailure() async {
         let companion = DepositAPIMock.GetDepositCompanion()
         companion.throwableError = DummyError.something
-        depositAPIMock.mock(companion)
+        depositsAPIMock.mock(companion)
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.getDeposit(id: "id")
@@ -377,7 +377,7 @@ final class ImmutableXTests: XCTestCase {
     func testListDepositsFailure() async {
         let companion = DepositAPIMock.ListDepositsCompanion()
         companion.throwableError = DummyError.something
-        depositAPIMock.mock(companion)
+        depositsAPIMock.mock(companion)
 
         await XCTAssertThrowsErrorAsync {
             _ = try await core.listDeposits()
