@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-internal class TokensAPI {
+open class TokensAPI {
 
     /**
      Get details of a token
@@ -19,7 +19,7 @@ internal class TokensAPI {
      - returns: TokenDetails
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func getToken(address: String) async throws -> TokenDetails {
+    open class func getToken(address: String) async throws -> TokenDetails {
         let requestBuilder = getTokenWithRequestBuilder(address: address)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -51,7 +51,7 @@ internal class TokensAPI {
      - parameter address: (path) Token Contract Address 
      - returns: RequestBuilder<TokenDetails> 
      */
-    internal class func getTokenWithRequestBuilder(address: String) -> RequestBuilder<TokenDetails> {
+    open class func getTokenWithRequestBuilder(address: String) -> RequestBuilder<TokenDetails> {
         var localVariablePath = "/v1/tokens/{address}"
         let addressPreEscape = "\(APIHelper.mapValueToPathItem(address))"
         let addressPostEscape = addressPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -80,7 +80,7 @@ internal class TokensAPI {
      - returns: ListTokensResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func listTokens(address: String? = nil, symbols: String? = nil) async throws -> ListTokensResponse {
+    open class func listTokens(address: String? = nil, symbols: String? = nil) async throws -> ListTokensResponse {
         let requestBuilder = listTokensWithRequestBuilder(address: address, symbols: symbols)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -113,7 +113,7 @@ internal class TokensAPI {
      - parameter symbols: (query) Token symbols for the token, e.g. ?symbols&#x3D;IMX,ETH (optional)
      - returns: RequestBuilder<ListTokensResponse> 
      */
-    internal class func listTokensWithRequestBuilder(address: String? = nil, symbols: String? = nil) -> RequestBuilder<ListTokensResponse> {
+    open class func listTokensWithRequestBuilder(address: String? = nil, symbols: String? = nil) -> RequestBuilder<ListTokensResponse> {
         let localVariablePath = "/v1/tokens"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

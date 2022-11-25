@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-internal class WithdrawalsAPI {
+open class WithdrawalsAPI {
 
     /**
      Creates a withdrawal of a token
@@ -21,7 +21,7 @@ internal class WithdrawalsAPI {
      - returns: CreateWithdrawalResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func createWithdrawal(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) async throws -> CreateWithdrawalResponse {
+    open class func createWithdrawal(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) async throws -> CreateWithdrawalResponse {
         let requestBuilder = createWithdrawalWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createWithdrawalRequest: createWithdrawalRequest)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -55,7 +55,7 @@ internal class WithdrawalsAPI {
      - parameter createWithdrawalRequest: (body) create a withdrawal 
      - returns: RequestBuilder<CreateWithdrawalResponse> 
      */
-    internal class func createWithdrawalWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) -> RequestBuilder<CreateWithdrawalResponse> {
+    open class func createWithdrawalWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createWithdrawalRequest: CreateWithdrawalRequest) -> RequestBuilder<CreateWithdrawalResponse> {
         let localVariablePath = "/v1/withdrawals"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createWithdrawalRequest)
@@ -81,7 +81,7 @@ internal class WithdrawalsAPI {
      - returns: GetSignableWithdrawalResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func getSignableWithdrawal(getSignableWithdrawalRequest: GetSignableWithdrawalRequest) async throws -> GetSignableWithdrawalResponse {
+    open class func getSignableWithdrawal(getSignableWithdrawalRequest: GetSignableWithdrawalRequest) async throws -> GetSignableWithdrawalResponse {
         let requestBuilder = getSignableWithdrawalWithRequestBuilder(getSignableWithdrawalRequest: getSignableWithdrawalRequest)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -113,7 +113,7 @@ internal class WithdrawalsAPI {
      - parameter getSignableWithdrawalRequest: (body) get details of signable withdrawal 
      - returns: RequestBuilder<GetSignableWithdrawalResponse> 
      */
-    internal class func getSignableWithdrawalWithRequestBuilder(getSignableWithdrawalRequest: GetSignableWithdrawalRequest) -> RequestBuilder<GetSignableWithdrawalResponse> {
+    open class func getSignableWithdrawalWithRequestBuilder(getSignableWithdrawalRequest: GetSignableWithdrawalRequest) -> RequestBuilder<GetSignableWithdrawalResponse> {
         let localVariablePath = "/v1/signable-withdrawal-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableWithdrawalRequest)
@@ -138,7 +138,7 @@ internal class WithdrawalsAPI {
      - returns: Withdrawal
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func getWithdrawal(id: String) async throws -> Withdrawal {
+    open class func getWithdrawal(id: String) async throws -> Withdrawal {
         let requestBuilder = getWithdrawalWithRequestBuilder(id: id)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -170,7 +170,7 @@ internal class WithdrawalsAPI {
      - parameter id: (path) Withdrawal ID 
      - returns: RequestBuilder<Withdrawal> 
      */
-    internal class func getWithdrawalWithRequestBuilder(id: String) -> RequestBuilder<Withdrawal> {
+    open class func getWithdrawalWithRequestBuilder(id: String) -> RequestBuilder<Withdrawal> {
         var localVariablePath = "/v1/withdrawals/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -215,7 +215,7 @@ internal class WithdrawalsAPI {
      - returns: ListWithdrawalsResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func listWithdrawals(withdrawnToWallet: Bool? = nil, rollupStatus: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListWithdrawalsResponse {
+    open class func listWithdrawals(withdrawnToWallet: Bool? = nil, rollupStatus: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) async throws -> ListWithdrawalsResponse {
         let requestBuilder = listWithdrawalsWithRequestBuilder(withdrawnToWallet: withdrawnToWallet, rollupStatus: rollupStatus, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, user: user, status: status, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp, tokenType: tokenType, tokenId: tokenId, assetId: assetId, tokenAddress: tokenAddress, tokenName: tokenName, minQuantity: minQuantity, maxQuantity: maxQuantity, metadata: metadata)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -264,7 +264,7 @@ internal class WithdrawalsAPI {
      - parameter metadata: (query) JSON-encoded metadata filters for the withdrawn asset (optional)
      - returns: RequestBuilder<ListWithdrawalsResponse> 
      */
-    internal class func listWithdrawalsWithRequestBuilder(withdrawnToWallet: Bool? = nil, rollupStatus: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListWithdrawalsResponse> {
+    open class func listWithdrawalsWithRequestBuilder(withdrawnToWallet: Bool? = nil, rollupStatus: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, user: String? = nil, status: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil, tokenType: String? = nil, tokenId: String? = nil, assetId: String? = nil, tokenAddress: String? = nil, tokenName: String? = nil, minQuantity: String? = nil, maxQuantity: String? = nil, metadata: String? = nil) -> RequestBuilder<ListWithdrawalsResponse> {
         let localVariablePath = "/v1/withdrawals"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
