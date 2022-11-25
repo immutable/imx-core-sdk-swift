@@ -10,7 +10,7 @@ import os.log
 import MobileCoreServices
 #endif
 
-internal protocol URLSessionProtocol {
+public protocol URLSessionProtocol {
     func dataTask(with request: URLRequest, completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 }
 
@@ -26,7 +26,7 @@ class URLSessionRequestBuilderFactory: RequestBuilderFactory {
     }
 }
 
-internal typealias OpenAPIClientAPIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
+public typealias OpenAPIClientAPIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
 
 // Store the URLSession's delegate to retain its reference
 private let sessionDelegate = SessionDelegate()
@@ -40,12 +40,12 @@ private var challengeHandlerStore = SynchronizedDictionary<Int, OpenAPIClientAPI
 // Store current URLCredential for every URLSessionTask
 private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
-internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
+open class URLSessionRequestBuilder<T>: RequestBuilder<T> {
 
     /**
      May be assigned if you want to control the authentication challenges.
      */
-    internal var taskDidReceiveChallenge: OpenAPIClientAPIChallengeHandler?
+    public var taskDidReceiveChallenge: OpenAPIClientAPIChallengeHandler?
 
     /**
      May be assigned if you want to do any of those things:
@@ -53,9 +53,9 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
      - intercept and handle errors like authorization
      - retry the request.
      */
-    internal var taskCompletionShouldRetry: ((Data?, URLResponse?, Error?, @escaping (Bool) -> Void) -> Void)?
+    public var taskCompletionShouldRetry: ((Data?, URLResponse?, Error?, @escaping (Bool) -> Void) -> Void)?
 
-    required internal init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
+    required public init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
         super.init(method: method, URLString: URLString, parameters: parameters, headers: headers, requiresAuthentication: requiresAuthentication)
     }
 
@@ -63,7 +63,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
      May be overridden by a subclass if you want to control the URLSession
      configuration.
      */
-    internal func createURLSession() -> URLSessionProtocol {
+    open func createURLSession() -> URLSessionProtocol {
         return defaultURLSession
     }
 
@@ -74,7 +74,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
      Return nil to use the default behavior (inferring the Content-Type from
      the file extension).  Return the desired Content-Type otherwise.
      */
-    internal func contentTypeForFormPart(fileURL: URL) -> String? {
+    open func contentTypeForFormPart(fileURL: URL) -> String? {
         return nil
     }
 
@@ -82,7 +82,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
      May be overridden by a subclass if you want to control the URLRequest
      configuration (e.g. to override the cache policy).
      */
-    internal func createURLRequest(urlSession: URLSessionProtocol, method: HTTPMethod, encoding: ParameterEncoding, headers: [String: String]) throws -> URLRequest {
+    open func createURLRequest(urlSession: URLSessionProtocol, method: HTTPMethod, encoding: ParameterEncoding, headers: [String: String]) throws -> URLRequest {
 
         guard let url = URL(string: URLString) else {
             throw DownloadException.requestMissingURL
@@ -106,7 +106,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
     }
 
     @discardableResult
-    override internal func execute(_ apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) -> RequestTask {
+    override open func execute(_ apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) -> RequestTask {
         let urlSession = createURLSession()
 
         guard let xMethod = HTTPMethod(rawValue: method) else {
@@ -219,7 +219,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
 
     }
 
-    internal func buildHeaders() -> [String: String] {
+    open func buildHeaders() -> [String: String] {
         var httpHeaders: [String: String] = [:]
         for (key, value) in headers {
             httpHeaders[key] = value
@@ -283,7 +283,7 @@ internal class URLSessionRequestBuilder<T>: RequestBuilder<T> {
 
 }
 
-internal class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<T> {
+open class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<T> {
     override fileprivate func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
 
         if let error = error {
@@ -401,7 +401,7 @@ private class SessionDelegate: NSObject, URLSessionTaskDelegate {
     }
 }
 
-internal enum HTTPMethod: String {
+public enum HTTPMethod: String {
     case options = "OPTIONS"
     case get = "GET"
     case head = "HEAD"
@@ -413,7 +413,7 @@ internal enum HTTPMethod: String {
     case connect = "CONNECT"
 }
 
-internal protocol ParameterEncoding {
+public protocol ParameterEncoding {
     func encode(_ urlRequest: URLRequest, with parameters: [String: Any]?) throws -> URLRequest
 }
 

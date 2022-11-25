@@ -82,7 +82,7 @@ public enum DecodableRequestBuilderError: Error {
     case generalError(Error)
 }
 
-internal class Response<T> {
+open class Response<T> {
     public let statusCode: Int
     public let header: [String: String]
     public let body: T

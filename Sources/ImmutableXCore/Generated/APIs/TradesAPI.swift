@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-internal class TradesAPI {
+open class TradesAPI {
 
     /**
      Create a Trade between two parties
@@ -21,7 +21,7 @@ internal class TradesAPI {
      - returns: CreateTradeResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
+    open class func createTrade(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) async throws -> CreateTradeResponse {
         let requestBuilder = createTradeWithRequestBuilder(xImxEthAddress: xImxEthAddress, xImxEthSignature: xImxEthSignature, createTradeRequest: createTradeRequest)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -55,7 +55,7 @@ internal class TradesAPI {
      - parameter createTradeRequest: (body) create a trade 
      - returns: RequestBuilder<CreateTradeResponse> 
      */
-    internal class func createTradeWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) -> RequestBuilder<CreateTradeResponse> {
+    open class func createTradeWithRequestBuilder(xImxEthAddress: String, xImxEthSignature: String, createTradeRequest: CreateTradeRequestV1) -> RequestBuilder<CreateTradeResponse> {
         let localVariablePath = "/v1/trades"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createTradeRequest)
@@ -81,7 +81,7 @@ internal class TradesAPI {
      - returns: GetSignableTradeResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func getSignableTrade(getSignableTradeRequest: GetSignableTradeRequest) async throws -> GetSignableTradeResponse {
+    open class func getSignableTrade(getSignableTradeRequest: GetSignableTradeRequest) async throws -> GetSignableTradeResponse {
         let requestBuilder = getSignableTradeWithRequestBuilder(getSignableTradeRequest: getSignableTradeRequest)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -113,7 +113,7 @@ internal class TradesAPI {
      - parameter getSignableTradeRequest: (body) get a signable trade 
      - returns: RequestBuilder<GetSignableTradeResponse> 
      */
-    internal class func getSignableTradeWithRequestBuilder(getSignableTradeRequest: GetSignableTradeRequest) -> RequestBuilder<GetSignableTradeResponse> {
+    open class func getSignableTradeWithRequestBuilder(getSignableTradeRequest: GetSignableTradeRequest) -> RequestBuilder<GetSignableTradeResponse> {
         let localVariablePath = "/v3/signable-trade-details"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getSignableTradeRequest)
@@ -138,7 +138,7 @@ internal class TradesAPI {
      - returns: Trade
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func getTrade(id: String) async throws -> Trade {
+    open class func getTrade(id: String) async throws -> Trade {
         let requestBuilder = getTradeWithRequestBuilder(id: id)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -170,7 +170,7 @@ internal class TradesAPI {
      - parameter id: (path) Trade ID 
      - returns: RequestBuilder<Trade> 
      */
-    internal class func getTradeWithRequestBuilder(id: String) -> RequestBuilder<Trade> {
+    open class func getTradeWithRequestBuilder(id: String) -> RequestBuilder<Trade> {
         var localVariablePath = "/v1/trades/{id}"
         let idPreEscape = "\(APIHelper.mapValueToPathItem(id))"
         let idPostEscape = idPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -210,7 +210,7 @@ internal class TradesAPI {
      - returns: ListTradesResponse
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func listTrades(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) async throws -> ListTradesResponse {
+    open class func listTrades(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) async throws -> ListTradesResponse {
         let requestBuilder = listTradesWithRequestBuilder(partyAOrderId: partyAOrderId, partyATokenType: partyATokenType, partyATokenAddress: partyATokenAddress, partyBOrderId: partyBOrderId, partyBTokenType: partyBTokenType, partyBTokenAddress: partyBTokenAddress, partyBTokenId: partyBTokenId, pageSize: pageSize, cursor: cursor, orderBy: orderBy, direction: direction, minTimestamp: minTimestamp, maxTimestamp: maxTimestamp)
         let requestTask = requestBuilder.requestTask
         return try await withTaskCancellationHandler {
@@ -254,7 +254,7 @@ internal class TradesAPI {
      - parameter maxTimestamp: (query) Maximum timestamp for this trade, in ISO 8601 UTC format. Example: &#39;2022-05-27T00:10:22Z&#39; (optional)
      - returns: RequestBuilder<ListTradesResponse> 
      */
-    internal class func listTradesWithRequestBuilder(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) -> RequestBuilder<ListTradesResponse> {
+    open class func listTradesWithRequestBuilder(partyAOrderId: String? = nil, partyATokenType: String? = nil, partyATokenAddress: String? = nil, partyBOrderId: String? = nil, partyBTokenType: String? = nil, partyBTokenAddress: String? = nil, partyBTokenId: String? = nil, pageSize: Int? = nil, cursor: String? = nil, orderBy: String? = nil, direction: String? = nil, minTimestamp: String? = nil, maxTimestamp: String? = nil) -> RequestBuilder<ListTradesResponse> {
         let localVariablePath = "/v1/trades"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
