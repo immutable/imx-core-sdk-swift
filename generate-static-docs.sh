@@ -22,5 +22,11 @@ if [[ "$VERSION" == *"."* ]]; then
     exit 1
 fi
 
-$(xcrun --find docc) process-archive transform-for-static-hosting ImmutableXCore.doccarchive --output-path docs --hosting-base-path /sdk-references/core-sdk-swift/$VERSION
+echo "Building docs..."
+xcodebuild docbuild -scheme ImmutableXCore -destination generic/platform=iOS -derivedDataPath docs_build
+doccarchive=($(find docs_build -type d -name "ImmutableXCore.doccarchive"))
+echo "doccarchive at: /$doccarchive"
+echo "--------"
+echo "Processing Static docs..."
+$(xcrun --find docc) process-archive transform-for-static-hosting $doccarchive --output-path docs --hosting-base-path /sdk-references/core-sdk-swift/$VERSION
 echo "Generated under /docs using hosting-base-path: /sdk-references/core-sdk-swift/$VERSION"
