@@ -41,4 +41,35 @@ internal enum APIErrorMapper {
             throw ImmutableXError.apiFailure(caller: caller, error: error)
         }
     }
+
+    /// A helper that parses any non-``ImmutableXError`` into ``ImmutableXError.apiFailure(caller:error:)``
+    /// This handles OTP requests as well as jwt refreshes as needed
+    static func mapOTP<T>(caller: String, otpHandler: OTPHandler?, apiCall: (_ otp: String?) async throws -> T) async throws -> T {
+        do {
+            return try await apiCall(nil)
+        } catch {
+            // pretend this is an error requiring OTP
+            if error is ImmutableXError {
+                return try await APIErrorMapper.map(caller: caller) {
+                    let otp = try await otpHandler?.getOTP()
+                    return try await apiCall(otp)
+                }
+            }
+
+            // pretend this is an error requiring refreshed token
+            if error is ImmutableXError {
+                return try await APIErrorMapper.map(caller: caller) {
+                    try await otpHandler?.refreshJwt()
+                    return try await apiCall(nil)
+                }
+            }
+
+            // Any other errors
+            if error is ImmutableXError {
+                throw error
+            }
+
+            throw ImmutableXError.apiFailure(caller: caller, error: error)
+        }
+    }
 }

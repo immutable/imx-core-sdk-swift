@@ -1,5 +1,10 @@
 import Foundation
 
+public protocol OTPHandler: AnyObject {
+    func getOTP() async throws -> String
+    func refreshJwt() async throws -> Void
+}
+
 // swiftlint:disable file_length
 // swiftlint:disable type_body_length
 public struct ImmutableX {
@@ -51,6 +56,14 @@ public struct ImmutableX {
     public let transfersAPI: TransfersAPI.Type
     public let usersAPI: UsersAPI.Type
     public let withdrawalAPI: WithdrawalsAPI.Type
+
+    /// Usage:
+    /// ```
+    ///   ImmutableX.initialize()
+    ///   ImmutableX.shared.otpHandler = ImmutableXPassport.shared
+    /// ```
+    /// This way the passport sdk shared instance works as the OTP handler for the core sdk shared instance.
+    public weak var otpHandler: OTPHandler?
 
     /// Internal init method that includes dependencies. For the public facing API use ``initialize(base:logLevel:)``
     /// instead.
@@ -185,8 +198,7 @@ public struct ImmutableX {
     public func transfer(
         token: AssetModel,
         recipientAddress: String,
-        signer: Signer,
-        starkSigner: StarkSigner
+        connection: WalletConnection
     ) async throws -> CreateTransferResponse {
         try await transferWorkflow.transfer(
             transfers: [
@@ -195,8 +207,9 @@ public struct ImmutableX {
                     recipientAddress: recipientAddress
                 ),
             ],
-            signer: signer,
-            starkSigner: starkSigner
+            connection: connection,
+            otpHandler: otpHandler,
+            otp: nil
         )
     }
 
@@ -991,14 +1004,14 @@ public struct ImmutableX {
     /// - Throws: A variation of ``ImmutableXError``
     public func batchTransfer(
         transfers: [TransferData],
-        signer: Signer,
-        starkSigner: StarkSigner
+        connection: WalletConnection
     ) async throws -> CreateTransferResponse {
         try await APIErrorMapper.map(caller: "Batch Transfers") {
             try await self.transferWorkflow.transfer(
                 transfers: transfers,
-                signer: signer,
-                starkSigner: starkSigner
+                connection: connection,
+                otpHandler: otpHandler,
+                otp: nil
             )
         }
     }

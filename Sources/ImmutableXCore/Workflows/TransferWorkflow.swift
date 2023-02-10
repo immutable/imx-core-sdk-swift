@@ -10,6 +10,26 @@ public struct TransferData {
     }
 }
 
+// Internal extension, not public facing
+extension WalletConnection {
+    func getEthAddress() async throws -> String {
+        if let signer = signers.ethSigner {
+            return try await signer.getAddress()
+        }
+
+        //  get the address somehow
+        let jwt = try await signers.jwt()
+
+        if let address = try jwt?.getAddress() {
+            return address
+        }
+
+        // throw specific error if no eth signer nor jwt is set
+        throw ImmutableXError.invalidKeyData
+    }
+}
+
+
 class TransferWorkflow {
     /// This is a utility function that will chain the necessary calls to transfer a token.
     ///
@@ -22,14 +42,18 @@ class TransferWorkflow {
     /// - Throws: A variation of ``ImmutableXError``
     class func transfer(
         transfers: [TransferData],
-        signer: Signer,
-        starkSigner: StarkSigner,
+        connection: WalletConnection,
+        otpHandler: OTPHandler?,
+        otp: String?,
         transfersAPI: TransfersAPI.Type = TransfersAPI.self
     ) async throws -> CreateTransferResponse {
-        let address = try await signer.getAddress()
+        let address = try await connection.getEthAddress()
+
         let response = try await getSignableTransfer(
             address: address,
             transfers: transfers,
+            otpHandler: otpHandler,
+            otp: otp,
             api: transfersAPI
         )
 
@@ -37,46 +61,36 @@ class TransferWorkflow {
             throw ImmutableXError.invalidRequest(reason: "Invalid signable response")
         }
 
-        let starkSignatures = try await getStarkSignatures(
-            response.signableResponses,
-            starkSigner: starkSigner
+        let signatures = try await WorkflowSignatures.with(
+            connection: connection,
+            ethSignableMessage: response.signableMessage,
+            starkSignableMessages: response.signableResponses.map(\.payloadHash)
         )
-        let ethSignature = try await signer.signMessage(response.signableMessage)
-        let signatures = WorkflowSignatures(
-            ethAddress: address,
-            ethSignature: ethSignature,
-            starkSignatures: starkSignatures
-        )
+
         return try await createTransfer(
             response: response,
             signatures: signatures,
+            otpHandler: otpHandler,
+            otp: otp,
             api: transfersAPI
         )
-    }
-
-    private static func getStarkSignatures(
-        _ signableResponses: [SignableTransferResponseDetails],
-        starkSigner: StarkSigner
-    ) async throws -> [String] {
-        var signatures = [String]()
-
-        for response in signableResponses {
-            let signature = try await starkSigner.signMessage(response.payloadHash)
-            signatures.append(signature)
-        }
-
-        return signatures
     }
 
     private static func getSignableTransfer(
         address: String,
         transfers: [TransferData],
+        otpHandler: OTPHandler?,
+        otp: String?,
         api: TransfersAPI.Type
     ) async throws -> GetSignableTransferResponse {
-        try await APIErrorMapper.map(caller: "Signable transfer") {
+        try await APIErrorMapper.mapOTP(
+            caller: "Signable transfer",
+            otpHandler: otpHandler
+        ) { otp in
             try await api.getSignableTransfer(
                 getSignableTransferRequestV2: GetSignableTransferRequest(
                     senderEtherKey: address,
+                    // xImxOTP: otp,
                     signableRequests: transfers.map {
                         SignableTransferDetails(
                             amount: $0.token.quantity,
@@ -92,28 +106,37 @@ class TransferWorkflow {
     private static func createTransfer(
         response: GetSignableTransferResponse,
         signatures: WorkflowSignatures,
+        otpHandler: OTPHandler?,
+        otp: String?,
         api: TransfersAPI.Type
     ) async throws -> CreateTransferResponse {
-        try await APIErrorMapper.map(caller: "Create transfer") {
-            try await api.createTransfer(
-                xImxEthAddress: signatures.ethAddress,
-                xImxEthSignature: signatures.serializedEthSignature,
-                createTransferRequestV2: CreateTransferRequest(
-                    requests: response.signableResponses.enumerated().map { index, signableResponse in
-                        TransferRequest(
-                            amount: signableResponse.amount,
-                            assetId: signableResponse.assetId,
-                            expirationTimestamp: signableResponse.expirationTimestamp,
-                            nonce: signableResponse.nonce,
-                            receiverStarkKey: signableResponse.receiverStarkKey,
-                            receiverVaultId: signableResponse.receiverVaultId,
-                            senderVaultId: signableResponse.senderVaultId,
-                            starkSignature: signatures.starkSignatures[index]
-                        )
-                    },
-                    senderStarkKey: response.senderStarkKey
+        try await APIErrorMapper.mapOTP(
+            caller: "Signable transfer",
+            otpHandler: otpHandler
+        ) { otp in
+            try await APIErrorMapper.map(caller: "Create transfer") {
+                try await api.createTransfer(
+                    xImxEthAddress: signatures.ethAddress,
+                    xImxEthSignature: signatures.serializedEthSignature,
+                    // xImxJwt: signatures.jwt,
+                    // xImxOTP: otp,
+                    createTransferRequestV2: CreateTransferRequest(
+                        requests: response.signableResponses.enumerated().map { index, signableResponse in
+                            TransferRequest(
+                                amount: signableResponse.amount,
+                                assetId: signableResponse.assetId,
+                                expirationTimestamp: signableResponse.expirationTimestamp,
+                                nonce: signableResponse.nonce,
+                                receiverStarkKey: signableResponse.receiverStarkKey,
+                                receiverVaultId: signableResponse.receiverVaultId,
+                                senderVaultId: signableResponse.senderVaultId,
+                                starkSignature: signatures.starkSignatures[index]
+                            )
+                        },
+                        senderStarkKey: response.senderStarkKey
+                    )
                 )
-            )
+            }
         }
     }
 }
