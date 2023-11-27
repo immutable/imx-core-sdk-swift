@@ -8,6 +8,10 @@
 
 ---
 
+# 🚨 This library is no longer maintained 🚨
+
+If you're building apps with Immutable, please use [Immutable's Unified SDK](https://github.com/immutable/ts-immutable-sdk)
+
 # ImmutableX Core SDK Swift
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/maintainability)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/a7887f9758562e49b171/test_coverage)](https://codeclimate.com/repos/62be55bacb1f54014d00579d/test_coverage)
