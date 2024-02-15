@@ -1,10 +1,10 @@
 Pod::Spec.new do |spec|
     spec.name                  = 'ImmutableXCore'
-    spec.version               = '1.0.0-beta.1'
-    spec.summary               = 'The ImmutableX Core SDK Swift for applications written on the ImmutableX platform.'
+    spec.version               = '1.0.0-beta.2'
+    spec.summary               = 'The ImmutableX Core SDK Swift for applications has been deprecated.'
 
     spec.description           = <<-DESC
-    The Immutable Core SDK Swift provides convenient access to the Immutable API's for applications written on the ImmutableX platform.
+    The Immutable Core SDK Swift has been deperecated. Please use Immutable's Unified SDK instead.
                      DESC
 
     spec.homepage              = 'https://github.com/immutable/imx-core-sdk-swift'

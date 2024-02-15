@@ -5,27 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0-beta.2] - 2024-02-15
 
-### Added
-
-for new features.
-
-### Changed
-
-for changes in existing functionality.
-
-### Deprecated
-
-for soon-to-be removed features.
-
-### Removed
-
-for removed features.
-
-### Fixed
-
-for any bug fixes.
+This SDK has been deprecated. If you're building apps with Immutable, please use [Immutable's Unified SDK](https://github.com/immutable/ts-immutable-sdk)
 
 ## [1.0.0-beta.1] - 2022-11-28
 
