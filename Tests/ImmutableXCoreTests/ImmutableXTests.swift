@@ -187,7 +187,7 @@ final class ImmutableXTests: XCTestCase {
     }
 
     func testSdkVersion() {
-        XCTAssertEqual(ImmutableX.shared.sdkVersion, "1.0.0-beta.2")
+        XCTAssertEqual(ImmutableX.shared.sdkVersion, "1.0.0-beta.3")
     }
 
     func testInitialize() {

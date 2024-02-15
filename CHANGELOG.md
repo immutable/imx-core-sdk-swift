@@ -1,9 +1,10 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [1.0.0-beta.3] - 2024-02-15
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This SDK has been deprecated. If you're building apps with Immutable, please use [Immutable's Unified SDK](https://github.com/immutable/ts-immutable-sdk)
+
+Old releases can be found [here](https://github.com/immutable/imx-core-sdk-swift/releases)
 
 ## [1.0.0-beta.2] - 2024-02-15
 

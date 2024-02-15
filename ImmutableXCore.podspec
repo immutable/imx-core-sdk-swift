@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                  = 'ImmutableXCore'
-    spec.version               = '1.0.0-beta.2'
+    spec.version               = '1.0.0-beta.3'
     spec.summary               = 'The ImmutableX Core SDK Swift for applications has been deprecated.'
 
     spec.description           = <<-DESC
